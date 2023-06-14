@@ -148,7 +148,7 @@ scrape_configs:
     metrics_path: "/-/metrics"
     scheme: https
     params:
-      token: ['X1haiN2Y6tBii_F-ixs6']
+      token: ['{{ gitlab_token }}']
     static_configs:
       - targets: ['gitlab.fltechnics.com']
         labels:
