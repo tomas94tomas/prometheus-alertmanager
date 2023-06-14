@@ -1,0 +1,2320 @@
+groups:
+- name: 1. Solarwinds Events
+  rules:
+  - alert: 1.1 SolarWinds_http_respose_yellow
+    expr: probe_http_status_code{vhost="sw.fltechnics.com"} == 0 or probe_http_status_code{vhost="sw.fltechnics.com"} == 200
+    for: 1m
+    labels:
+      severity: event.yellow.solarwinds
+    annotations:
+      Inpacted_Service: Solarwinds
+      Trigger: status 0 ir 200 of Solawinds DPA system {{ $labels.vhost }} HTTP error
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Dominykas to check Docker infrastructure
+  - alert: 1.1 SolarWinds_http_respose_orange
+    expr: probe_http_status_code{vhost="sw.fltechnics.com"} == 0 or probe_http_status_code{vhost="sw.fltechnics.com"} == 200
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service: Solarwinds
+      Trigger: status 0 ir 200 of Solawinds DPA system {{ $labels.vhost }} HTTP error
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Fix 
+  - alert: 1.1 SolarWinds_http_respose_red
+    expr: probe_http_status_code{vhost="sw.fltechnics.com"} == 0 or probe_http_status_code{vhost="sw.fltechnics.com"} == 200
+    for: 30m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service: Solarwinds
+      Trigger: status 0 ir 200 of Solawinds DPA system {{ $labels.vhost }} HTTP error
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Dominykas, communication 
+  - alert: 1.2 solarwinds_last_log_fltsql
+    expr: solarwinds_last_log_fltsql > 10 or null
+    for: 10m
+    labels:
+      severity: event.yellow.solarwinds
+    annotations:
+      Inpacted_Service: Solarwinds
+      Trigger: solarwinds_last_log_fltsql > 10 or null
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available DB. If DB is not available then start DB or restore DB. If DB available then ask Dominykas to check SolarWinds Docker container is live or not. If ODB-IT VM is down ask ASG to turn on VM
+  - alert: 1.2 SolarWinds_last_Log_odb
+    expr: solarwinds_last_log_odb > 15
+    for: 10m
+    labels:
+      severity: event.yellow.solarwinds
+    annotations:
+      Inpacted_Service: Solarwinds
+      Trigger: solarwinds_last_log_odb > 10 or null
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available DB. If DB is not available then start DB or restore DB. If DB available then ask Dominykas to check SolarWinds Docker container is live or not. If ODB-IT VM is down ask ASG to turn on VM
+  - alert: 1.2 SolarWinds_last_Lo_odbit
+    expr: solarwinds_last_log_odbit > 10
+    for: 10m
+    labels:
+      severity: event.yellow.solarwinds
+    annotations:
+      Inpacted_Service: Solarwinds
+      Trigger: solarwinds_last_log_odbit > 10 or null
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available DB. If DB is not available then start DB or restore DB. If DB available then ask Dominykas to check SolarWinds Docker container is live or not. If ODB-IT VM is down ask ASG to turn on VM
+  - alert: 1.2 solarwinds_last_log_fltsql
+    expr: solarwinds_last_log_fltsql > 10
+    for: 30m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service: Solarwinds
+      Trigger: solarwinds_last_log_fltsql > 10 or null
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check SolarWinds Docker container is live or not. If live ask Tomas to check DB availability.
+  - alert: 1.2 SolarWinds_last_Log_odb
+    expr: solarwinds_last_log_odb > 15
+    for: 30m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service: Solarwinds
+      Trigger: solarwinds_last_log_odb > 10 or null
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check SolarWinds Docker container is live or not. If live ask Tomas to check DB availability.
+  - alert: 1.2 SolarWinds_last_Lo_odbit
+    expr: solarwinds_last_log_odbit > 10
+    for: 30m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service: Solarwinds
+      Trigger: solarwinds_last_log_odbit > 10 or null
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check SolarWinds Docker container is live or not. If live ask Tomas to check DB availability.
+  - alert: 1.2 solarwinds_last_log_fltsql
+    expr: solarwinds_last_log_fltsql > 10
+    for: 60m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service: Solarwinds
+      Trigger: solarwinds_last_log_fltsql > 10 or null
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Tomas and Dominykas to check SolarWinds Docker container and DB availabilities.
+  - alert: 1.2 SolarWinds_last_Log_odb
+    expr: solarwinds_last_log_odb > 15
+    for: 60m
+    labels:
+      severity: event.red 
+    annotations:
+      Inpacted_Service: Solarwinds
+      Trigger: solarwinds_last_log_odb > 10 or null
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Tomas and Dominykas to check SolarWinds Docker container and DB availabilities.
+  - alert: 1.2 SolarWinds_last_Lo_odbit
+    expr: solarwinds_last_log_odbit > 10
+    for: 60m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service: Solarwinds
+      Trigger: solarwinds_last_log_odbit > 10 or null
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Tomas and Dominykas to check SolarWinds Docker container and DB availabilities.
+- name: 2. QlikSense Events
+  rules:
+  - alert: 2.1 QlikSense_http_respose_yellow
+    expr: probe_http_status_code{instance="https://bi.fltechnics.com", job="QLIKSENSE_HTTPS"} == 0
+    for: 1m
+    labels:
+      severity: event.yellow.qliksense
+    annotations:
+      Inpacted_Service : Qlik Sense 
+      Trigger : Exporter have status 0 or 200 of QlikSense system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check DB availability and Qlik Sense applications services statuses and startup DB or run services.
+  - alert: 2.1 QlikSense_http_respose_orange
+    expr: probe_http_status_code{instance="https://bi.fltechnics.com", job="QLIKSENSE_HTTPS"} == 0
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service: Qlik Sense 
+      Trigger: Exporter have status 0 or 200 of QlikSense system {{ $labels.vhost }} HTTP error for 10m
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check DB availability and Qlik Sense applications services statuses and startup DB or run services.
+  - alert: 2.1 QlikSense_http_respose_red
+    expr: probe_http_status_code{instance="https://bi.fltechnics.com", job="QLIKSENSE_HTTPS"} == 0
+    for: 30m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Qlik Sense 
+      Trigger: Exporter have status 0 or 200 of QlikSense system {{ $labels.vhost }} HTTP error for 30m
+      responsable: Tomas Zemblys
+      summary: The Web UI {{ $labels.vhost }} is DOWN or Prometheus could not scrape.
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check DB availability and Qlik Sense applications services statuses and startup DB or run services.
+  - alert: 2.2 QlikSense_db_activity_yellow	
+    expr: qlik_db_state < 1
+    for: 10m
+    labels:
+      severity: event.yellow.qliksense
+    annotations:
+      Inpacted_Service: Qlik Sense 
+      Trigger: QlikSense DB instance is down  VALUE = {{ $value }}
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available DB. If DB is not available then start DB or restore DB. If DB available then check Qlik Sense services is running or not. If flt-qlik-prod (192.168.50.104) VM or flt-qlik-prodr1 (192.168.50.52) VM is down ask ASG to turn on VM.
+  - alert: 2.2 QlikSense_db_activity_orange	
+    expr: qlik_db_state < 1
+    for: 30m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service: Qlik Sense 
+      Trigger: QlikSense DB instance is down  VALUE = {{ $value }}
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Qlik Sense application services is running or not. If services is running ask Tomas to check DB availability.
+  - alert: 2.2 QlikSense_db_activity_red
+    expr: qlik_db_state < 1
+    for: 60m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service: Qlik Sense 
+      Trigger: QlikSense DB instance is down  VALUE = {{ $value }}
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Tomas and Eligijus to check Qlik Sense application services is running and Qlik Sense DB is available or not. Ask Tomas or Eligijus to send communication for service downtime.
+  - alert: 2.3 QlikSense_capacity_left_minutes_yellow
+    expr: mssql_qlik_analyzer_capacity_lefttime{job="sql_exporter"} <= 200
+    for: 30m
+    labels:
+      severity: event.yellow.qliksense
+    annotations:
+      Inpacted_Service: Qlik Sense 
+      Trigger: QlikSense Capacity License left minutes = {{ $value }}
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check users with "Analyzer" license. Deallocate few users with oldest used date. Allocate these free licenses for users with biggest capacity minutes.
+  - alert: 2.3 QlikSense_capacity_left_minutes_orange
+    expr: mssql_qlik_analyzer_capacity_lefttime{job="sql_exporter"} <= 200
+    for: 60m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service: Qlik Sense 
+      Trigger: QlikSense Capacity License left minutes = {{ $value }}
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: 	Check users with "Analyzer" license. Deallocate few users with oldest used date. Allocate these free licenses for users with biggest capacity minutes.
+  - alert: 2.3 QlikSense_capacity_left_minutes_red
+    expr: mssql_qlik_analyzer_capacity_lefttime{job="sql_exporter"} <= 200
+    for: 90m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service: Qlik Sense 
+      Trigger: QlikSense Capacity License left minutes = {{ $value }}
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check users with "Analyzer" license. Deallocate few users with oldest used date. Allocate these free licenses for users with biggest capacity minutes.
+
+  - alert: 2.4 QlikSense_failed_scheduler_tasks_yellow
+    expr: qlik_sense_task_failed{job="sql_exporter"} > 0
+    for: 30m
+    labels:
+      severity: event.yellow.qliksense
+    annotations:
+      Inpacted_Service: Qlik Sense 
+      Trigger: QlikSense Failed scheduler tasks = {{ $value }} 
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check failed scheduler tasks and try to run these tasks. Identify scheduler task report and try load data manually. Try to solve connection problem for data retrieve or inform employee who can do it. 
+      
+  - alert: 2.4 QlikSense_failed_scheduler_tasks_orange
+    expr: qlik_sense_task_failed{job="sql_exporter"} > 0
+    for: 60m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service: Qlik Sense 
+      Trigger: QlikSense Failed scheduler tasks = {{ $value }} 
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check failed scheduler tasks and try to run these tasks. Identify scheduler task report and try load data manually. Try to solve connection problem for data retrieve or inform employee who can do it. 
+
+  - alert: 2.4 QlikSense_failed_scheduler_tasks_red
+    expr: qlik_sense_task_failed{job="sql_exporter"} > 0
+    for: 90m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service: Qlik Sense 
+      Trigger: QlikSense Failed scheduler tasks = {{ $value }} 
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Rasita or Tomas to check failed scheduler tasks.  
+- name: 3. MSSQL Events
+  rules:
+  - alert: 3.1 FLTSQL_master_db_activity_yellow
+    expr: mssql_fltsql_db_service_state == 0 or absent(mssql_fltsql_db_service_state)
+    for: 10m
+    labels:
+      severity: event.yellow.mssql
+    annotations:
+      Inpacted_Service : MSSQL
+      Trigger : MSSQL db activity > 10 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available DB. If DB is not available then start DB or restore DB. If DB available then check MSSQL services is running or not on FLTSQL server. If FLTSQL (192.168.50.10) VM is down ask ASG to turn on VM.
+  - alert: 3.1 FLTSQL_master_db_activity_orange
+    expr: mssql_fltsql_db_service_state == 0 or absent(mssql_fltsql_db_service_state)
+    for: 15m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : MSSQL
+      Trigger : MSSQL db activity > 10 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available DB. If DB is not available then start DB or restore DB. If DB available then check MSSQL services is running or not on FLTSQL server. If FLTSQL (192.168.50.10) VM is down ask ASG to turn on VM.
+  - alert: 3.1 FLTSQL_master_db_activity_red
+    expr: mssql_fltsql_db_service_state == 0 or absent(mssql_fltsql_db_service_state)
+    for: 20m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : MSSQL
+      Trigger : MSSQL db activity > 10 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Tomas to check FLTSQL DB is available or not. Ask Tomas send communication for service downtime. 
+  - alert: 3.2 FLTSQL_others_db_activity_yellow
+    expr: mssql_fltsql_others_db_activity == 0 or absent(mssql_fltsql_others_db_activity)
+    for: 10m
+    labels:
+      severity: event.yellow.mssql
+    annotations:
+      Inpacted_Service : MSSQL
+      Trigger : MSSQL others db activity > 10 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check MSSQL services is running or not on FLTSQL server. If FLTSQL (192.168.50.10) VM is down ask ASG to turn on VM.
+  - alert: 3.2 FLTSQL_others_db_activity_orange
+    expr: mssql_fltsql_others_db_activity == 0 or absent(mssql_fltsql_others_db_activity)
+    for: 15m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : MSSQL
+      Trigger : MSSQL others db activity >  15 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check MSSQL services is running or not on FLTSQL server. If FLTSQL (192.168.50.10) VM is down ask ASG to turn on VM.
+  - alert: 3.2 FLTSQL_others_db_activity_red
+    expr: mssql_fltsql_others_db_activity == 0 or absent(mssql_fltsql_others_db_activity)
+    for: 20m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : MSSQL
+      Trigger : MSSQL others db activity > 20 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Tomas to check FLTSQL DB is available or not. Ask Tomas send communication for DB's downtime .
+  - alert: 3.3 FLTSQL_blocking_sessions_yellow
+    expr: windows_mssql_genstats_blocked_processes > 0
+    for: 5m
+    labels:
+      severity: event.yellow.mssql
+    annotations:
+      Inpacted_Service : MSSQL
+      Trigger : Blocking sessions count = <1 and time >= 5 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check blocked sessions of FLTSQL server. Kill session of the blocker.
+  - alert: 3.3 FLTSQL_blocking_sessions_orange
+    expr: windows_mssql_genstats_blocked_processes > 0
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : MSSQL
+      Trigger : blocking sessions count = <1 and time >= 10 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check blocked sessions of FLTSQL server. Kill session of the blocker.
+  - alert: 3.3 FLTSQL_blocking_sessions_red
+    expr: windows_mssql_genstats_blocked_processes > 0
+    for: 20m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : MSSQL
+      Trigger : blocking sessions count = <1 and time >= 20 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Tomas to check FLTSQL server blocked sessions and kill session of the blocker.
+  - alert: 3.4 FLTSQL_linked_servers_yellow
+    expr: mssql_linked_servers_failed{job="sql_exporter"} == 1
+    for: 5m
+    labels:
+      severity: event.yellow.mssql
+    annotations:
+      Inpacted_Service : MSSQL
+      Trigger : linked servers count >= 1
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check failed linked server in FLTSQL. Identify reason of linked server fail and fix it.
+  - alert: 3.4 FLTSQL_linked_servers_orange
+    expr: mssql_linked_servers_failed{job="sql_exporter"} == 1
+    for: 15m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : MSSQL
+      Trigger : linked servers count >= 1
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check failed linked server in FLTSQL. Identify reason of linked server fail and fix it.
+  - alert: 3.4 FLTSQL_linked_servers_red
+    expr: mssql_linked_servers_failed{job="sql_exporter"} == 1
+    for: 20m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : MSSQL
+      Trigger : linked servers count >= 1
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Tomas to check failed linked server in FLTSQL and ask to fix failed linked server.	
+  - alert: 3.5 FLTTRAIN_master_db_activity_yellow
+    expr: mssql_fltrain_db_service_state == 0 or absent(mssql_fltrain_db_service_state)
+    for: 10m
+    labels:
+      severity: event.yellow.mssql
+    annotations:
+      Inpacted_Service : MSSQL
+      Trigger : MSSQL db activity > 10 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available DB. If DB is not available then start DB or restore DB. If DB available then check MSSQL services is running or not on FLTSQL server. If FLTSQL (192.168.50.10) VM is down ask ASG to turn on VM.
+  - alert: 3.5 FLTTRAIN_master_db_activity_orange
+    expr: mssql_fltrain_db_service_state == 0 or absent(mssql_fltrain_db_service_state)
+    for: 15m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : MSSQL
+      Trigger : MSSQL db activity > 10 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available DB. If DB is not available then start DB or restore DB. If DB available then check MSSQL services is running or not on FLTSQL server. If FLTSQL (192.168.50.10) VM is down ask ASG to turn on VM.
+  - alert: 3.5 FLTTRAIN_master_db_activity_red
+    expr: mssql_fltrain_db_service_state == 0 or absent(mssql_fltrain_db_service_state)
+    for: 20m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : MSSQL
+      Trigger : MSSQL db activity > 10 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Tomas to check FLTSQL DB is available or not. Ask Tomas send communication for service downtime. 
+  - alert: 3.6 FLT_others_db_activity_yellow
+    expr: mssql_fltrain_others_db_activity == 0
+    for: 10m
+    labels:
+      severity: event.yellow.mssql
+    annotations:
+      Inpacted_Service : MSSQL
+      Trigger : MSSQL others db activity > 10 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check MSSQL services is running or not on FLTSQL server. If FLTTrain (192.168.50.18) VM is down ask ASG to turn on VM.
+  - alert: 3.6 FLTTRAIN_others_db_activity_orange
+    expr: mssql_fltsql_others_db_activity == 0
+    for: 20m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : MSSQL
+      Trigger : MSSQL others db activity >  20 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check MSSQL services is running or not on FLTSQL server. If FLTTrain (192.168.50.18) VM is down ask ASG to turn on VM.
+  - alert: 3.6 FLTTRAIN_others_db_activity_red
+    expr: mssql_fltsql_others_db_activity == 0
+    for: 30m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : MSSQL
+      Trigger : MSSQL others db activity > 20 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Tomas to check FLTTrain DB is available or not. Ask Tomas send communication for DB's downtime .
+  - alert: 3.7 FLTTRAIN_blocking_sessions_yellow
+    expr: wmi_mssql_genstats_blocked_processes{job="FLTTRAIN_metrics"} == 1
+    for: 10m
+    labels:
+      severity: event.yellow.mssql
+    annotations:
+      Inpacted_Service : MSSQL
+      Trigger : Blocking sessions count = 1 and time >= 5 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check blocked sessions of FLTSQL server. Kill session of the blocker.
+  - alert: 3.7 FLTTRAIN_blocking_sessions_orange
+    expr: wmi_mssql_genstats_blocked_processes{job="FLTTRAIN_metrics"} == 2
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : MSSQL
+      Trigger : blocking sessions count = 2 and time >= 5 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check blocked sessions of FLTTrain server. Kill session of the blocker.
+  - alert: 3.7 FLTTRAIN_blocking_sessions_red
+    expr: wmi_mssql_genstats_blocked_processes{job="FLTTRAIN_metrics"} >= 3
+    for: 10m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : MSSQL
+      Trigger : blocking sessions count = 3 and time >= 5 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Tomas to check FLTTrain server blocked sessions and kill session of the blocker.
+- name: 4. ODB Events
+  rules:
+  - alert: 4.1 ODB_sysdba_alert_yellow
+    expr: oracledb_connections_idle_sec{program="QCSYSMOD.EXE", user_name="SYSDBA"} or oracledb_connections_idle_sec{program="qcsysmod.exe", user_name="SYSDBA"} 
+    for: 4m
+    labels:
+      severity: event.yellow.eams
+    annotations:
+      Inpacted_Service : ODB
+      Trigger : (upper(program) = "QCSYSMOD.EXE") AND (upper(user_name) = "SYSDBA")
+      responsable: Karolis Kondra
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Connect user, ask to disconnect or reconnect with own username. Ask for reason why system user was used.
+  - alert: 4.1 ODB_sysdba_alert_orange
+    expr: oracledb_connections_idle_sec{program="QCSYSMOD.EXE", user_name="SYSDBA"} 
+    for: 20m
+    labels:
+      severity: event.orange.eams
+    annotations:
+      Inpacted_Service : ODB
+      Trigger : (upper(program) = "QCSYSMOD.EXE") AND (upper(user_name) = "SYSDBA")
+      responsable: Karolis Kondra
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Connect user, ask to disconnect or reconnect with own username. Ask for reason why system user was used.
+  - alert: 4.1 ODB_sysdba_alert_red
+    expr: oracledb_connections_idle_sec{program="QCSYSMOD.EXE", user_name="SYSDBA"} 
+    for: 40m
+    labels:
+      severity: event.red.eams
+    annotations:
+      Inpacted_Service : ODB
+      Trigger : (upper(program) = "QCSYSMOD.EXE") AND (upper(user_name) = "SYSDBA")
+      responsable: Karolis Kondra
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Connect user, ask to disconnect or reconnect with own username. Ask for reason why system user was used. Kill user session.
+  - alert: 4.2 ODB_db_activity_yellow
+    expr: oracledb_up {job="oracledb_exporter"} == 0 or absent(oracledb_up {job="oracledb_exporter"})
+    for: 10m
+    labels:
+      severity: event.yellow.odb
+    annotations:
+      Inpacted_Service : ODB
+      Trigger : db activity > 10 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available Oracle DB CCTL instance. If DB is not available then start DB or restore DB. If DB available then check Oracle DB CCTL instance services is running or not on ODB server. If ODB (192.168.50.180) VM is down ask ASG to turn on VM.
+  - alert: 4.2 ODB_db_activity_orange
+    expr: oracledb_up {job="oracledb_exporter"} == 0 or absent(oracledb_up {job="oracledb_exporter"})
+    for: 20m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : ODB
+      Trigger : db activity > 15 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available Oracle DB CCTL instance. If DB is not available then start DB or restore DB. If DB available then check Oracle DB CCTL instance services is running or not on ODB server. If ODB (192.168.50.180) VM is down ask ASG to turn on VM.
+  - alert: 4.2 ODB_db_activity_red
+    expr: oracledb_up {job="oracledb_exporter"} == 0 or absent(oracledb_up {job="oracledb_exporter"})
+    for: 40m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : ODB
+      Trigger : db activity > 20 min
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Tomas to check ODB (192.168.50.180) VM Oracle DB CCTL instance is available or not. Ask Tomas send communication for service downtime.
+  - alert: 4.3 ODB_blocking_sessions_yellow
+    expr: oracledb_resource_current_utilization{job="oracledb_exporter", resource_name="temporary_table_locks"} > 0
+    for: 10m
+    labels:
+      severity: event.yellow.odb
+    annotations:
+      Inpacted_Service : ODB
+      Trigger : db activity > 10 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check blocked sessions of ODB server CCTL instance. Kill session of the blocker.
+  - alert: 4.3 ODB_blocking_sessions_orange
+    expr: oracledb_resource_current_utilization{job="oracledb_exporter", resource_name="temporary_table_locks"} > 1
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : ODB
+      Trigger : db activity > 10 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check blocked sessions of ODB server CCTL instance. Kill session of the blocker.
+  - alert: 4.3 ODB_blocking_sessions_red
+    expr: oracledb_resource_current_utilization{job="oracledb_exporter", resource_name="temporary_table_locks"} > 2
+    for: 10m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : ODB
+      Trigger : db activity > 10 min
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check blocked sessions of ODB server CCTL instance. Kill session of the blocker.
+  - alert: 4.4. ODB_D_disk_space_yellow
+    expr: label_replace(({__name__=~"^windows_logical_disk_size_bytes.*", job=~"ODB_metrics", volume="D:"} - {__name__=~"^windows_logical_disk_free_bytes.*", job=~"ODB_metrics", volume="D:"}) / {__name__=~"^windows_logical_disk_size_bytes.*", job=~"ODB_metrics",volume="D:"} * 100, "name", "$1", "__name__", "(.*)" ) > 85
+    for: 10m
+    labels:
+      severity: event.yellow.odb
+    annotations:
+      Inpacted_Service : ODB
+      Trigger : used disk space >= 85% 
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check free space of ODB server drive D (installed Oracle DB for Quantum). If need more space ask Dominykas to order more resources.
+  - alert: 4.4. ODB_D_disk_space_orange
+    expr: label_replace(({__name__=~"^windows_logical_disk_size_bytes.*", job=~"ODB_metrics", volume="D:"} - {__name__=~"^windows_logical_disk_free_bytes.*", job=~"ODB_metrics", volume="D:"}) / {__name__=~"^windows_logical_disk_size_bytes.*", job=~"ODB_metrics",volume="D:"} * 100, "name", "$1", "__name__", "(.*)" ) > 90
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : ODB
+      Trigger : used disk space >= 90%
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check free space of ODB server drive D (installed Oracle DB for Quantum). If need more space ask Dominykas to order more resources.
+  - alert: 4.4. ODB_D_disk_space_red
+    expr: label_replace(({__name__=~"^windows_logical_disk_size_bytes.*", job=~"ODB_metrics", volume="D:"} - {__name__=~"^windows_logical_disk_free_bytes.*", job=~"ODB_metrics", volume="D:"}) / {__name__=~"^windows_logical_disk_size_bytes.*", job=~"ODB_metrics",volume="D:"} * 100, "name", "$1", "__name__", "(.*)" ) > 95 
+    for: 10m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : ODB
+      Trigger : used disk space >= 95%
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check free space of ODB server drive D (installed Oracle DB for Quantum). If need more space ask Dominykas to order more resources.
+  - alert: 4.5 ODB_IT_db_activity_yellow
+    expr: oracledb_up {job="oracledb_exporter_odbit"} == 0 or absent(oracledb_up {job="oracledb_exporter_odbit"})
+    for: 10m
+    labels:
+      severity: event.yellow.odb
+    annotations:
+      Inpacted_Service : ODB_IT
+      Trigger : db activity > 10 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available Oracle DB ODBIT instance. If DB is not available then start DB or restore DB. If DB available then check Oracle DB ODBIT instance services is running or not on ODB-IT server. If ODB-IT (192.168.50.157) VM is down ask ASG to turn on VM.
+  - alert: 4.5 ODB_IT_db_activity_orange
+    expr: oracledb_up {job="oracledb_exporter_odbit"} == 0 or absent(oracledb_up {job="oracledb_exporter_odbit"})
+    for: 20m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : ODB_IT
+      Trigger : db activity > 15 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: 	Check if available Oracle DB ODBIT instance. If DB is not available then start DB or restore DB. If DB available then check Oracle DB ODBIT instance services is running or not on ODB-IT server. If ODB-IT (192.168.50.157) VM is down ask ASG to turn on VM.
+  - alert: 4.5 ODB_IT_db_activity_red
+    expr: oracledb_up {job="oracledb_exporter_odbit"} == 0 or absent(oracledb_up {job="oracledb_exporter_odbit"})
+    for: 40m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : ODB_IT
+      Trigger : db activity > 20 min
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Tomas to check ODB-IT (192.168.50.157) VM Oracle DB ODBIT instance is available or not. Ask Tomas send communication for service downtime.
+  - alert: 4.6 ODB_IT_blocking_sessions_yellow
+    expr: oracledb_resource_current_utilization{job="oracledb_exporter_odbit", resource_name="temporary_table_locks"} > 0
+    for: 10m
+    labels:
+      severity: event.yellow.odb
+    annotations:
+      Inpacted_Service : ODB_IT
+      Trigger : blocking sessions count >= 1 and time >= 5 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check blocked sessions of ODB server CCTL instance. Kill session of the blocker.
+  - alert: 4.6 ODB_IT_blocking_sessions_orange
+    expr: oracledb_resource_current_utilization{job="oracledb_exporter_odbit", resource_name="temporary_table_locks"} > 1
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : ODB_IT
+      Trigger : blocking sessions count >= 2 and time >= 5 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check blocked sessions of ODB-IT server ODBIT instance. Kill session of the blocker.
+  - alert: 4.6 ODB_IT_blocking_sessions_red
+    expr: oracledb_resource_current_utilization{job="oracledb_exporter_odbit", resource_name="temporary_table_locks"} > 2
+    for: 10m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : ODB_IT
+      Trigger : 	blocking sessions count >= 3 and time >= 5 min
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action:	Ask Tomas to check ODB-IT server ODBIT instance blocked sessions and kill session of the blocker.
+  - alert: 4.7. ODB_IT_C_disk_space_yellow
+    expr: label_replace(({__name__=~"^windows_logical_disk_size_bytes.*", job=~"ODB_it_metrics", volume="C:"} - {__name__=~"^windows_logical_disk_free_bytes.*", job=~"ODB_it_metrics",volume="C:"}) / {__name__=~"^windows_logical_disk_size_bytes.*", job=~"ODB_it_metrics", volume="C:"} * 100, "name", "$1", "__name__", "(.*)") > 85
+    for: 10m
+    labels:
+      severity: event.yellow.odb
+    annotations:
+      Inpacted_Service : ODB_IT
+      Trigger : used disk space >= 85% 
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check free space of ODB-IT server drive C (installed Oracle DB). If need more space ask Dominykas to order more resources.
+  - alert: 4.7. ODB_IT_C_disk_space_orange
+    expr: label_replace(({__name__=~"^windows_logical_disk_size_bytes.*", job=~"ODB_it_metrics", volume="C:"} - {__name__=~"^windows_logical_disk_free_bytes.*", job=~"ODB_it_metrics",volume="C:"}) / {__name__=~"^windows_logical_disk_size_bytes.*", job=~"ODB_it_metrics", volume="C:"} * 100, "name", "$1", "__name__", "(.*)") > 90
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : ODB_IT
+      Trigger : used disk space >= 90%
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check free space of ODB server drive C (installed Oracle DB). If need more space ask Dominykas to order more resources.
+  - alert: 4.7. ODB_IT_C_disk_space_red
+    expr: label_replace(({__name__=~"^windows_logical_disk_size_bytes.*", job=~"ODB_it_metrics", volume="C:"} - {__name__=~"^windows_logical_disk_free_bytes.*", job=~"ODB_it_metrics",volume="C:"}) / {__name__=~"^windows_logical_disk_size_bytes.*", job=~"ODB_it_metrics", volume="C:"} * 100, "name", "$1", "__name__", "(.*)") > 95 
+    for: 10m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : ODB_IT
+      Trigger : used disk space >= 95%
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Tomas to check free space of ODB server drive C (installed Oracle DB). If need more space ask Dominykas to order more resources.
+  - alert: 4.8. WB_AMOS_PROD_db_activity_yellow
+    expr: oracledb_up{job="oracledb_exporter_wb_amos_prod"} == 0 or absent(oracledb_up{job="oracledb_exporter_wb_amos_prod"})
+    for: 10m
+    labels:
+      severity: event.yellow.odb
+    annotations:
+      Inpacted_Service : wb_amos_prod
+      Trigger : db activity > 10 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available Oracle DB WBS instance. If DB is not available then start DB or restore DB. If DB available then check Oracle DB WBS instance services is running or not on WB-AMOS-DB-PROD server. If WB-AMOS-DB-PROD (192.168.243.27) VM is down ask ASG to turn on VM.
+  - alert: 4.8. WB_AMOS_PROD_db_activity_orange
+    expr: oracledb_up{job="oracledb_exporter_wb_amos_prod"} == 0 or absent(oracledb_up{job="oracledb_exporter_wb_amos_prod"})
+    for: 20m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : wb_amos_prod
+      Trigger : db activity > 15 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available Oracle DB WBS instance. If DB is not available then start DB or restore DB. If DB available then check Oracle DB WBS instance services is running or not on WB-AMOS-DB-PROD server. If WB-AMOS-DB-PROD (192.168.243.27) VM is down ask ASG to turn on VM.
+  - alert: 4.8. WB_AMOS_PROD_db_activity_red
+    expr: oracledb_up{job="oracledb_exporter_wb_amos_prod"} == 0 or absent(oracledb_up{job="oracledb_exporter_wb_amos_prod"})
+    for: 40m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : wb_amos_prod
+      Trigger : db activity > 20 min
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Tomas to check WB-AMOS-DB-PROD (192.168.243.27) VM Oracle DB WBS instance is available or not. Ask Tomas send communication for service downtime.
+  - alert: 4.9. WB_AMOS_PROD_blocking_sessions_yellow
+    expr: oracledb_resource_current_utilization{job="oracle_db_exporter_wb_amos_prod", resource_name="temporary_table_locks"} > 0
+    for: 10m
+    labels:
+      severity: event.yellow.odb
+    annotations:
+      Inpacted_Service : wb_amos_prod
+      Trigger : blocking sessions count >= 1 and time >= 5 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check blocked sessions of WB-AMOS-DB-PROD server WBS instance. Kill session of the blocker..
+  - alert: 4.9. WB_AMOS_PROD_blocking_sessions_orange
+    expr: oracledb_resource_current_utilization{job="oracle_db_exporter_wb_amos_prod", resource_name="temporary_table_locks"} > 1
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : wb_amos_prod
+      Trigger : blocking sessions count >= 2 and time >= 5 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check blocked sessions of WB-AMOS-DB-PROD server WBS instance. Kill session of the blocker.
+  - alert: 4.9. WB_AMOS_PROD_blocking_sessions_red
+    expr: oracledb_resource_current_utilization{job="oracle_db_exporter_wb_amos_prod", resource_name="temporary_table_locks"} > 2
+    for: 10m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : wb_amos_prod
+      Trigger : 	blocking sessions count >= 3 and time >= 5 min
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action:	Ask Tomas to check WB-AMOS-DB-PROD server WBS instance blocked sessions and kill session of the blocker.
+  - alert: 4.10. WB_AMOS_PROD_E_disk_space_yellow
+    expr:  label_replace(({__name__=~"^windows_logical_disk_size_bytes.*", job="AMOS Wheels and Brakes", name="wb-amos-db-prod", volume="E:"} - {__name__=~"^windows_logical_disk_free_bytes.*", job="AMOS Wheels and Brakes", name="wb-amos-db-prod", volume="E:"}) / {__name__=~"^windows_logical_disk_size_bytes.*", job="AMOS Wheels and Brakes", name="wb-amos-db-prod", volume="E:"} * 100, "name", "$1", "__name__", "(.*)") > 85
+    for: 10m
+    labels:
+      severity: event.yellow.odb
+    annotations:
+      Inpacted_Service : wb_amos_prod
+      Trigger : used disk space >= 85% 
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check free space of WB-AMOS-DB-PROD server drive E (Oracle DB datafiles). If need more space ask Dominykas to order more resources.
+  - alert: 4.10. WB_AMOS_PROD_E_disk_space_orange
+    expr: label_replace(({__name__=~"^windows_logical_disk_size_bytes.*", job="AMOS Wheels and Brakes", name="wb-amos-db-prod", volume="E:"} - {__name__=~"^windows_logical_disk_free_bytes.*", job="AMOS Wheels and Brakes", name="wb-amos-db-prod", volume="E:"}) / {__name__=~"^windows_logical_disk_size_bytes.*", job="AMOS Wheels and Brakes", name="wb-amos-db-prod", volume="E:"} * 100, "name", "$1", "__name__", "(.*)") > 90 
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : wb_amos_prod
+      Trigger : used disk space >= 90%
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check free space of WB-AMOS-DB-PROD server drive E (Oracle DB datafiles). If need more space ask Dominykas to order more resources.
+  - alert: 4.10. WB_AMOS_PROD_E_disk_space_red
+    expr:  label_replace(({__name__=~"^windows_logical_disk_size_bytes.*", job="AMOS Wheels and Brakes", name="wb-amos-db-prod", volume="E:"} - {__name__=~"^windows_logical_disk_free_bytes.*", job="AMOS Wheels and Brakes", name="wb-amos-db-prod", volume="E:"}) / {__name__=~"^windows_logical_disk_size_bytes.*", job="AMOS Wheels and Brakes", name="wb-amos-db-prod", volume="E:"} * 100, "name", "$1", "__name__", "(.*)") > 95 
+    for: 10m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : wb_amos_prod
+      Trigger : used disk space >= 95%
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Tomas to check free space of WB-AMOS-DB-PROD server drive E (Oracle DB datafiles). If need more space ask Dominykas to order more resources.
+- name: 5. Gitlab Events
+  rules:
+  - alert: 5.1 gitlab_http_respose_yellow
+    expr: probe_http_status_code{instance="gitlab.fltechnics.com", job="UI_APP_INFRASTRUCTURE_HTTPS"} != 200
+    for: 1m
+    labels:
+      severity: event.yellow.gitlab
+    annotations:
+      Inpacted_Service : Gitlab
+      Trigger : Exporter have status 0 or other of GitLab system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Dominykas Šivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check FLT-GitLab (192.168.231.136) VM if available check Gitlab Docker container status. 
+  - alert: 5.1 gitlab_http_respose_orange
+    expr: probe_http_status_code{instance="gitlab.fltechnics.com", job="UI_APP_INFRASTRUCTURE_HTTPS"} != 200
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Gitlab
+      Trigger : Exporter have status 0 or other of GitLab system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Dominykas Šivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check FLT-GitLab (192.168.231.136) VM if available check Gitlab Docker container status. 
+  - alert: 5.1 gitlab_http_respose_red
+    expr: probe_http_status_code{instance="gitlab.fltechnics.com", job="UI_APP_INFRASTRUCTURE_HTTPS"} != 200
+    for: 30m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Gitlab
+      Trigger : Exporter have status 0 or other of GitLab system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Dominykas about GitLab availability and healthcheck
+  - alert: 5.2 gitlab_db_activity_yellow
+    expr: pg_up{instance="192.168.231.136:9187", job="gitlab_postgres_exporter", name="gitlab_postgres_exporter"} != 1
+    for: 5m
+    labels:
+      severity: event.yellow.gitlab
+    annotations:
+      Inpacted_Service : GitLab
+      Trigger : Gitlab postgresql DB status >= 0 and time >= 5 min
+      responsable: Dominykas Sivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Posgresql DB status on console. if not running restart DB service on container or restart whole gitlab container 
+  - alert: 5.2 gitlab_db_activity_orange
+    expr: pg_up{instance="192.168.231.136:9187", job="gitlab_postgres_exporter", name="gitlab_postgres_exporter"} != 1
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Gitlab
+      Trigger : Gitlab postgresql DB status >= 0 and time >= 10 min
+      responsable: Dominykas Sivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action:  Check Posgresql DB status on console. if not running restart DB service on container or restart whole gitlab container 
+  - alert: 5.2 gitlab_db_activity_red
+    expr: pg_up{instance="192.168.231.136:9187", job="gitlab_postgres_exporter", name="gitlab_postgres_exporter"} != 1
+    for: 20m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Gitlab
+      Trigger : Gitlab postgresql DB status >= 0 and time >= 15 min
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Dominykas Sivickas to check Postgres is available or not. Ask Dominykas send communication for DB's downtime.
+- name: 6. Teampass Events
+  rules:
+  - alert: 6.1 teampass_http_respose_yellow
+    expr: probe_http_status_code{instance="tp.fltechnics.com", job="UI_APP_INFRASTRUCTURE_HTTPS"} != 200
+    for: 1m
+    labels:
+      severity: event.yellow.teampass
+    annotations:
+      Inpacted_Service : Teampass
+      Trigger : Exporter have status 0 or other of Teampass system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Dominykas Šivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Teampass availability and docker statuses and startup or restart services.
+  - alert: 6.1 teampass_http_respose_orange
+    expr: probe_http_status_code{instance="tp.fltechnics.com", job="UI_APP_INFRASTRUCTURE_HTTPS"} != 200
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Teampass
+      Trigger : Exporter have status 0 or other of Teampass system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Dominykas Šivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Teampass availability and docker statuses and startup or restart services.
+  - alert: 6.1 teampass_http_respose_red
+    expr: probe_http_status_code{instance="tp.fltechnics.com", job="UI_APP_INFRASTRUCTURE_HTTPS"} != 200
+    for: 30m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Teampass
+      Trigger : Exporter have status 0 or other of Teampass system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Dominykas about Teampass availability, communication
+  - alert: 6.2 teampass_db_activity_yellow
+    expr: mysql_up{instance="192.168.231.235:9104", job="teampass_mysql_exporter", name="mysql_teampass_exporter"} == 0
+    for: 5m
+    labels:
+      severity: event.yellow.teampass
+    annotations:
+      Inpacted_Service : Teampass
+      Trigger : Teampass MySQL DB status >= 0 and time >= 5 min
+      responsable: Dominykas Sivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check MYSQL docker container is running or not on FLT-MM-BS server. If FLT-MM-BS (192.168.50.54) VM is down ask ASG to turn on VM.
+  - alert: 6.2 teampass_db_activity_orange
+    expr: mysql_up{instance="192.168.231.235:9104", job="teampass_mysql_exporter", name="mysql_teampass_exporter"} == 0
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Teampass
+      Trigger : Teampass MySQL db activity > 10 min
+      responsable: Dominykas Sivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action:  Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check MYSQL docker container is running or not on FLT-MM-BS server. If FLT-MM-BS (192.168.50.54) VM is down ask ASG to turn on VM.
+  - alert: 6.2 teampass_db_activity_red
+    expr: mysql_up{instance="192.168.231.235:9104", job="teampass_mysql_exporter", name="mysql_teampass_exporter"} == 0
+    for: 15m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Teampass
+      Trigger : Teampass MySQL DB status >= 0 and time >= 15 min
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Dominykas Sivickas to check MySQL is available or not. Ask Dominykas send communication for DB's downtime .
+- name: 7. Nomad Events
+  rules:
+  - alert: 7.1 nomad_http_respose_yellow
+    expr: probe_http_status_code{instance="https://rnd-nomad-live.fltechnics.com", job="Nomad_cluster_https"} != 200
+    for: 1m
+    labels:
+      severity: event.yellow.nomad
+    annotations:
+      Inpacted_Service : Nomad
+      Trigger : Exporter have status 0 or other of Nomad system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Dominykas Šivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Nomad service statuses and startup or restart service.
+  - alert: 7.1 nomad_http_respose_orange
+    expr: probe_http_status_code{instance="https://rnd-nomad-live.fltechnics.com", job="Nomad_cluster_https"} != 200
+    for: 5m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Nomad
+      Trigger : Exporter have status 0 or other of Nomad system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Dominykas Šivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Nomad service statuses and startup or restart service.
+  - alert: 7.1 nomad_http_respose_red
+    expr: probe_http_status_code{instance="https://rnd-nomad-live.fltechnics.com", job="Nomad_cluster_https"} != 200
+    for: 10m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Nomad
+      Trigger : Exporter have status 0 or other of Nomad system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Dominykas about Nomad availability and healthcheck.
+  - alert: 7.2 nomad_cluster_health_yellow
+    expr: nomad_nomad_autopilot_healthy{job="nomad_metrics_live"} != 1
+    for: 1m
+    labels:
+      severity: event.yellow.nomad
+    annotations:
+      Inpacted_Service : Nomad
+      Trigger : Exporter have status 0 or other of Nomad system {{ $labels.vhost }} Cluster Autopilot error for 1m
+      responsable: Dominykas Šivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Nomad service statuses and startup or restart service.
+  - alert: 7.2 nomad_cluster_health_orange
+    expr: nomad_nomad_autopilot_healthy{job="nomad_metrics_live"} != 1
+    for: 5m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Nomad
+      Trigger : Exporter have status 0 or other of Nomad system {{ $labels.vhost }} Cluster Autopilot error for 1m
+      responsable: Dominykas Šivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Nomad service statuses and startup or restart service.
+  - alert: 7.2 nomad_cluster_health_red
+    expr: nomad_nomad_autopilot_healthy{job="nomad_metrics_live"} != 1
+    for: 10m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Nomad
+      Trigger : Exporter have status 0 or other of Nomad system {{ $labels.vhost }} Cluster Autopilot error for 1m
+      responsable: Dominykas Šivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Dominykas about Nomad availability and healthcheck.
+  - alert: 7.3 nomad_jobs_lost_yellow
+    expr: nomad_nomad_job_status_pending{job="nomad_metrics_live"} > 3
+    for: 1m
+    labels:
+      severity: event.yellow.nomad
+    annotations:
+      Inpacted_Service : Nomad
+      Trigger : Exporter have status 3 or other of Nomad system {{ $labels.vhost }} have 3 Pending Jobs for 1m
+      responsable: Dominykas Šivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Nomad job and client statuses and check errors of allocation
+  - alert: 7.3 nomad_jobs_lost_orange
+    expr: nomad_nomad_job_status_pending{job="nomad_metrics_live"} > 3
+    for: 5m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Nomad
+      Trigger : Exporter have status 3 or other of Nomad system {{ $labels.vhost }} have 3 Pending Jobs for 5m
+      responsable: Dominykas Šivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Nomad job and client statuses and check errors of allocation
+  - alert: 7.3 nomad_jobs_lost_red
+    expr: nomad_nomad_job_status_pending{job="nomad_metrics_live"} > 3
+    for: 10m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Nomad
+      Trigger : Exporter have status 3 or other of Nomad system {{ $labels.vhost }} have 3 Pending Jobs for 10m
+      responsable: Dominykas Šivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Dominykas about Nomad Jobs and healthcheck.
+- name: 8. Consul Events
+  rules:
+  - alert: 8.1 Consul_http_respose_yellow
+    expr: probe_http_status_code{instance="https://rnd-Consul-live.fltechnics.com", job="Consul_cluster_https"} != 200
+    for: 1m
+    labels:
+      severity: event.yellow.consul
+    annotations:
+      Inpacted_Service : Consul
+      Trigger : Exporter have status 0 or other of Consul system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Dominykas Šivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Consul service statuses and startup or restart service.
+  - alert: 8.1 Consul_http_respose_orange
+    expr: probe_http_status_code{instance="https://rnd-consul-live.fltechnics.com", job="Consul_cluster_https"} != 200
+    for: 5m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Consul
+      Trigger : Exporter have status 0 or other of Consul system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Dominykas Šivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Consul service statuses and startup or restart service.
+  - alert: 8.1 Consul_http_respose_red
+    expr: probe_http_status_code{instance="https://rnd-consul-live.fltechnics.com", job="Consul_cluster_https"} != 200
+    for: 10m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Consul
+      Trigger : Exporter have status 0 or other of Consul system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Dominykas about Consul availability and healthcheck.
+  - alert: 8.2 consul_cluster_status_yellow
+    expr: consul_up{job="rnd_consul_live"} != 1
+    for: 5m
+    labels:
+      severity: event.yellow.consul
+    annotations:
+      Inpacted_Service : Consul
+      Trigger : Exporter have status 0 or other of Consul system {{ $labels.vhost }} for 1m
+      responsable: Dominykas Šivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Consul servers availability if servers available check consul service status 
+  - alert: 8.2 consul_cluster_status_orange
+    expr: consul_up{job="rnd_consul_live"} != 1
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Consul
+      Trigger : Exporter have status 0 or other of Consul Cluster system {{ $labels.vhost }} for 1m
+      responsable: Dominykas Šivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Consul servers availability if servers available check consul service status 
+  - alert: 8.2 consul_cluster_status_red
+    expr: consul_up{job="rnd_consul_live"} != 1
+    for: 30m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Consul
+      Trigger : Exporter have status 0 or other of Consul cluster system {{ $labels.vhost }} for 1m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Dominykas about Consul Cluster availability and healthcheck.
+  - alert: 8.3 consul_catalog_status_yellow
+    expr: consul_catalog_service_node_healthy{job="rnd_consul_live"} != 1
+    for: 5m
+    labels:
+      severity: event.yellow.consul
+    annotations:
+      Inpacted_Service : Consul
+      Trigger : Exporter have status 0 or other of Consul Catalog system {{ $labels.vhost }} for 1m
+      responsable: Dominykas Šivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Consul catalog availability if servers available check consul service and Application status 
+  - alert: 8.3 consul_catalog_status_orange
+    expr: consul_catalog_service_node_healthy{job="rnd_consul_live"} != 1
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Consul
+      Trigger : Exporter have status 0 or other of Consul Catalog system {{ $labels.vhost }} for 1m
+      responsable: Dominykas Šivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Consul catalog availability if servers available check consul service and Application status 
+  - alert: 8.3 consul_catalog_status_red
+    expr: consul_catalog_service_node_healthy{job="rnd_consul_live"} != 1
+    for: 30m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Consul
+      Trigger : Exporter have status 0 or other of Consul Catalog system {{ $labels.vhost }} for 1m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Dominykas about Consul Cluster availability and healthcheck.
+- name: 9. Vault Events
+  rules:
+  - alert: 9.1 Vualt_http_respose_yellow
+    expr: probe_http_status_code{instance="https://rnd-vault-live.fltechnics.com", job="Vault_cluster_https"} != 200
+    for: 1m
+    labels:
+      severity: event.yellow.vault
+    annotations:
+      Inpacted_Service : Vault
+      Trigger : Exporter have status 0 or other of Vualt system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Dominykas Šivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Vault service statuses and startup or restart service.
+  - alert: 9.1 Vault_http_respose_orange
+    expr: probe_http_status_code{instance="https://rnd-vault-live.fltechnics.com", job="Vault_cluster_https"} != 200
+    for: 5m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Vault
+      Trigger : Exporter have status 0 or other of Vault system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Dominykas Šivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Vault service statuses and startup or restart service.
+  - alert: 9.1 Vault_http_respose_red
+    expr: probe_http_status_code{instance="https://rnd-vault-live.fltechnics.com", job="Vault_cluster_https"} != 200
+    for: 10m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Vault
+      Trigger : Exporter have status 0 or other of Vault system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Dominykas about Vault availability and healthcheck.
+- name: 10. Traefik Events
+  rules:
+  - alert: 10.1 traefik_http_respose_yellow
+    expr: probe_http_status_code{instance="https://rnd-traefik.fltechnics.com", job="traefik_https"} != 401
+    for: 1m
+    labels:
+      severity: event.yellow.traefik
+    annotations:
+      Inpacted_Service : Traefik
+      Trigger : Exporter have status 0 or other of Traefik system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Dominykas Šivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Traefik service statuses and startup or restart service.
+  - alert: 10.1 traefik_http_respose_orange
+    expr: probe_http_status_code{instance="https://rnd-traefik.fltechnics.com", job="traefik_https"} != 401
+    for: 5m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Traefik
+      Trigger : Exporter have status 0 or other of Traefik system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Dominykas Šivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Traefik service statuses and startup or restart service.
+  - alert: 10.1 traefik_http_respose_red
+    expr: probe_http_status_code{instance="https://rnd-traefik.fltechnics.com", job="traefik_https"} != 401
+    for: 10m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Traefik
+      Trigger : Exporter have status 0 or other of Traefik system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Dominykas about Traefik availability and healthcheck.
+- name: 11. Nexus Events
+  rules:
+  - alert: 11.1 nexus_http_respose_yellow
+    expr: probe_http_status_code{instance="repository.fltechnics.com", job="UI_APP_INFRASTRUCTURE_HTTPS"} != 200
+    for: 1m
+    labels:
+      severity: event.yellow.nexus
+    annotations:
+      Inpacted_Service : Nexus
+      Trigger : Exporter have status 0 or other of Nexus system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Dominykas Šivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Nexus service statuses and startup or restart service.
+  - alert: 11.1 nexus_http_respose_orange
+    expr: probe_http_status_code{instance="repository.fltechnics.com", job="UI_APP_INFRASTRUCTURE_HTTPS"} != 200
+    for: 5m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Nexus
+      Trigger : Exporter have status 0 or other of Nexus system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Dominykas Šivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Nexus service statuses and startup or restart service.
+  - alert: 11.1 nexus_http_respose_red
+    expr: probe_http_status_code{instance="repository.fltechnics.com", job="UI_APP_INFRASTRUCTURE_HTTPS"} != 200
+    for: 10m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Nexus
+      Trigger : Exporter have status 0 or other of  Nexus system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Dominykas about Nexus availability and healthcheck.
+  - alert: 11.2 nexus_freespace_yellow
+    expr: nexus_filestore_usable_space_bytes{fsname="/dev/mapper/LVMNexus-nexusVG", fstype="ext4", instance="192.168.231.180:9184", job="Nexus_metrics", mount_point="/nexus-data", readonly="False"} < 21474836480
+    for: 1m
+    labels:
+      severity: event.yellow.nexus
+    annotations:
+      Inpacted_Service : Nexus
+      Trigger : used disk space less than 20GB {{ $labels.vhost }}  for 1m
+      responsable: Dominykas Šivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check free space FLT-Nexus dev/mapper/LVMNexus-nexusVG. If need more space ask Dominykas to order more resources.
+  - alert: 11.2 nexus_freespace_orange
+    expr: pnexus_filestore_usable_space_bytes{fsname="/dev/mapper/LVMNexus-nexusVG", fstype="ext4", instance="192.168.231.180:9184", job="Nexus_metrics", mount_point="/nexus-data", readonly="False"} < 21474836480
+    for: 12h
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Nexus
+      Trigger : used disk space less than 20GB {{ $labels.vhost }}  for 1m
+      responsable: Dominykas Šivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check free space FLT-Nexus dev/mapper/LVMNexus-nexusVG. If need more space ask Dominykas to order more resources.
+  - alert: 11.2 nexus_freespace_red
+    expr: nexus_filestore_usable_space_bytes{fsname="/dev/mapper/LVMNexus-nexusVG", fstype="ext4", instance="192.168.231.180:9184", job="Nexus_metrics", mount_point="/nexus-data", readonly="False"} < 21474836480
+    for: 24h
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Nexus
+      Trigger : used disk space less than 20GB {{ $labels.vhost }}  for 1m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Dominykas  to check free space of Check free space FLT-Nexus - dev/mapper/LVMNexus-nexusVG. If need more space ask Dominykas to order more resources. If need more space ask Dominykas to order more resources.
+- name: 12. KB
+  rules:
+  - alert: 12.1 kb_http_respose_yellow
+    expr: probe_http_status_code{instance="kb.fltechnics.com", job="UI_APP_INFRASTRUCTURE_HTTPS"} != 200
+    for: 1m
+    labels:
+      severity: event.yellow.kb
+    annotations:
+      Inpacted_Service : KB (Bookstack)
+      Trigger : Exporter have status 0 or other of KB system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Dominykas Šivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check KB service statuses and startup or restart service.
+  - alert: 12.1 kb_http_respose_orange
+    expr: probe_http_status_code{instance="kb.fltechnics.com", job="UI_APP_INFRASTRUCTURE_HTTPS"} != 200
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : KB (Bookstack)
+      Trigger : Exporter have status 0 or other of KB system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Dominykas Šivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check KB service statuses and startup or restart service.
+  - alert: 12.1 kb_http_respose_red
+    expr: probe_http_status_code{instance="kb.fltechnics.com", job="UI_APP_INFRASTRUCTURE_HTTPS"} != 200
+    for: 10m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : KB (Bookstack)
+      Trigger : Exporter have status 0 or other of KB system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Dominykas about Nexus availability and healthcheck.
+  - alert: 12.2 kb_db_activity_yellow
+    expr: mysql_up{instance="192.168.231.235:9105", job="kb_mysql_exporter", name="kb_teampass_exporter"} == 0
+    for: 5m
+    labels:
+      severity: event.yellow.kb
+    annotations:
+      Inpacted_Service : KB 
+      Trigger : Teampass MySQL DB status >= 0 and time >= 5 min
+      responsable: Dominykas Sivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check MYSQL docker container is running or not on FLT-MM-BS server. If FLT-MM-BS (192.168.50.54) VM is down ask ASG to turn on VM.
+  - alert: 12.2 kb_db_activity_orange
+    expr: mysql_up{instance="192.168.231.235:9105", job="kb_mysql_exporter", name="kb_exporter"} == 0
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : KB
+      Trigger : KB MySQL db activity > 10 min
+      responsable: Dominykas Sivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action:  Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check MYSQL docker container is running or not on FLT-MM-BS server. If FLT-MM-BS (192.168.50.54) VM is down ask ASG to turn on VM.
+  - alert: 12.2 kb_db_activity_red
+    expr: mysql_up{instance="192.168.231.235:9105", job="kb_mysql_exporter", name="kb_exporter"} == 0
+    for: 15m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : KB
+      Trigger :  KB MySQL DB status >= 0 and time >= 15 min
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Dominykas Sivickas to check MySQL is available or not. Ask Dominykas send communication for DB's downtime .
+- name: 13. Ramco Events
+  rules:
+  - alert: 13.1 ramco_http_respose_yellow
+    expr: probe_http_status_code{instance="http://ramco", job="RAMCO_SHAREPOINT_HTTP"} != 200
+    for: 1m
+    labels:
+      severity: event.yellow.ramco
+    annotations:
+      Inpacted_Service : Ramco
+      Trigger : Exporter have status 0 or other of Ramco system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Karolis Dimitrevičius
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Ramco availability and Webservice statuses and do startup or restart services.
+  - alert: 13.1 ramco_http_respose_orange
+    expr: probe_http_status_code{instance="http://ramco", job="RAMCO_SHAREPOINT_HTTP"} != 200
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Ramco
+      Trigger : Exporter have status 0 or other of Ramco system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Karolis Dimitrevičius
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Teampass availability and docker statuses and startup or restart services.
+  - alert: 13.1 ramco_http_respose_red
+    expr: probe_http_status_code{instance="http://ramco", job="RAMCO_SHAREPOINT_HTTP"} != 200
+    for: 20m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Ramco
+      Trigger : Exporter have status 0 or other of Ramco system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Karolis about RAMCO availability, communication.
+  - alert: 13.2 ramco_sharepoint_http_respose_yellow
+    expr: probe_http_status_code{instance="http://docs:81", job="RAMCO_SHAREPOINT_HTTP"} != 401
+    for: 1m
+    labels:
+      severity: event.yellow.ramco
+    annotations:
+      Inpacted_Service : Ramco Sharepoint
+      Trigger : Exporter have status 0 or other of Ramco Sharepoint system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Karolis Dimitrevičius
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Ramco availability and Webservice statuses and do startup or restart services.
+  - alert: 13.2 ramco_sharepoint_http_respose_orange
+    expr: probe_http_status_code{instance="http://docs:81", job="RAMCO_SHAREPOINT_HTTP"} != 401
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Ramco Sharepoint
+      Trigger : Exporter have status 0 or other of Ramco Sharepoint system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Karolis Dimitrevičius
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Ramco Sharepoint availability and docker statuses and startup or restart services.
+  - alert: 13.2 ramco_sharepoint_http_respose_red
+    expr: probe_http_status_code{instance="http://docs:81", job="RAMCO_SHAREPOINT_HTTP"} != 401
+    for: 20m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Ramco Sharepoint
+      Trigger : Exporter have status 0 or other of Ramco Sharepoint system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Karolis about RAMCO Sharepoint availability, communication.
+- name: 14. Genesis Events
+  rules:
+  - alert: 14.1 genesis_api_http_response_yellow
+    expr: probe_http_status_code{job="jira_genesis_api_check"} != 200
+    for: 10m
+    labels:
+      severity: event.yellow.jira
+    annotations:
+      Inpacted_Service : Genesis
+      Trigger : Exporter have status 0 or Genesis system HTTP error for 10m
+      responsable: K.Gagac
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Raise Ticket to ASG Genesis
+  - alert: 14.1 genesis_api_http_response_orange
+    expr: probe_http_status_code{job="jira_genesis_api_check"} != 200
+    for: 20m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Genesis
+      Trigger : Exporter have status 0 or Genesis system HTTP error for 20m
+      responsable: K.Gagac
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Raise Ticket to ASG Genesis
+  - alert: 14.1 genesis_api_http_response_red
+    expr: probe_http_status_code{job="jira_genesis_api_check"} != 200
+    for: 30m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Genesis
+      Trigger : Exporter have status 0 or Genesis system HTTP error for 30m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask K.Gagac about Genesis availability, communication.
+- name: 15. Jira Events
+  rules:
+  - alert: 15.1 jira_Customer_portal_http_response_yellow
+    expr: probe_http_status_code{job="jira_customer_portal"} != 200
+    for: 10m
+    labels:
+      severity: event.yellow.jira
+    annotations:
+      Inpacted_Service : Jira
+      Trigger : Exporter have status 0 or other of Jira system {{ $labels.vhost }} HTTP error for 10m
+      responsable: K.Gagac
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Raise Ticket to Atlassian
+  - alert: 15.1 jira_Customer_portal_http_response_orange
+    expr: probe_http_status_code{job="jira_customer_portal"} != 200
+    for: 20m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Jira
+      Trigger : Exporter have status 0 or other of Jira system {{ $labels.vhost }} HTTP error for 20m
+      responsable: K.Gagac
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Raise Ticket to Atlassian
+  - alert: 15.1 jira_Customer_portal_http_response_red
+    expr: probe_http_status_code{job="jira_customer_portal"} != 200
+    for: 30m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Jira
+      Trigger : Exporter have status 0 or other of Jira system {{ $labels.vhost }} HTTP error for 30m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask K.Gagac about Customer Portal availability, communication.
+  - alert: 15.2 jira_administration_portal_http_response_yellow
+    expr: probe_http_status_code{instance="192.168.231.235:9115", job="jira_administration_portal"} != 200
+    for: 10m
+    labels:
+      severity: event.yellow.jira
+    annotations:
+      Inpacted_Service : Jira
+      Trigger : Exporter have status 0 or other of Jira Administration system {{ $labels.vhost }} HTTP error for 10m
+      responsable: K.Gagac
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Raise Ticket to Atlassian
+  - alert: 15.2 jira_administration_portal_http_response_orange
+    expr: probe_http_status_code{instance="192.168.231.235:9115", job="jira_administration_portal"} != 200
+    for: 20m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Jira
+      Trigger : Exporter have status 0 or other of Jira Administration system {{ $labels.vhost }} HTTP error for 20m
+      responsable: K.Gagac
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Raise Ticket to Atlassian
+  - alert: 15.2 jira_administration_portal_http_response_red
+    expr: probe_http_status_code{instance="192.168.231.235:9115", job="jira_administration_portal"} != 200
+    for: 30m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Jira
+      Trigger : Exporter have status 0 or other of Jira Administration system {{ $labels.vhost }} HTTP error for 30m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask K.Gagac about Customer Portal availability, communication.
+- name: 16. Insight Events
+  rules:
+  - alert: 16.1 jira_insight_portal_http_response_yellow
+    expr: probe_http_status_code{job="jira_customer_portal"} != 200
+    for: 10m
+    labels:
+      severity: event.yellow.jira
+    annotations:
+      Inpacted_Service : Insight
+      Trigger : Exporter have status 0 or other of Insight system {{ $labels.vhost }} HTTP error for 10m
+      responsable: K.Gagac
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Raise Ticket to Atlassian
+  - alert: 16.1 jira_insight_portal_http_response_orange
+    expr: probe_http_status_code{job="jira_customer_portal"} != 200
+    for: 20m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Insight
+      Trigger : Exporter have status 0 or other of Insight system {{ $labels.vhost }} HTTP error for 20m
+      responsable: K.Gagac
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Raise Ticket to Atlassian
+  - alert: 16.1 jira_insight_portal_http_response_red
+    expr: probe_http_status_code{job="jira_customer_portal"} != 200
+    for: 30m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Insight
+      Trigger : Exporter have status 0 or other of Insight system {{ $labels.vhost }} HTTP error for 30m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask K.Gagac about Customer Portal availability, communication.
+- name: 17. Tempo Events
+  rules:
+  - alert: 17.1 jira_tempo_token_status_yellow
+    expr: mssql_jira_tempo_token_status != 1
+    for: 10m
+    labels:
+      severity: event.yellow.jira
+    annotations:
+      Inpacted_Service : Tempo
+      Trigger : Exporter have status 0 of Teampo token status
+      responsable: K.Gagac
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Raise Ticket to Atlassian
+  - alert: 17.1 jira_tempo_token_status_orange
+    expr: mssql_jira_tempo_token_status != 1
+    for: 20m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Tempo
+      Trigger : Exporter have status 0 of Teampo token status
+      responsable: K.Gagac
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Raise Ticket to Atlassian
+  - alert: 17.1 jira_tempo_token_status_red
+    expr: mssql_jira_tempo_token_status != 1
+    for: 30m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Tempo
+      Trigger : Exporter have status 0 of Teampo token status
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask K.Gagac about Customer Portal availability, communication.
+- name: Linux Server Events
+  rules:
+  - record: instance:node_cpu:rate:sum
+    expr: sum(rate(node_cpu{mode!="idle",mode!="iowait"}[3m]))
+      BY (instance)
+  - record: instance:node_filesystem_usage:sum
+    expr: sum((node_filesystem_size{mountpoint="/"} - node_filesystem_free{mountpoint="/"}))
+      BY (instance)
+  - record: instance:node_network_receive_bytes:rate:sum
+    expr: sum(rate(node_network_receive_bytes[3m])) BY (instance)
+  - record: instance:node_network_transmit_bytes:rate:sum
+    expr: sum(rate(node_network_transmit_bytes[3m])) BY (instance)
+  - record: instance:node_cpu:ratio
+    expr: sum(rate(node_cpu{mode!="idle",mode!="iowait"}[5m])) WITHOUT (cpu, mode) / ON(instance)
+      GROUP_LEFT() count(sum(node_cpu) BY (instance, cpu)) BY (instance)
+  - record: cluster:node_cpu:sum_rate5m
+    expr: sum(rate(node_cpu{mode!="idle",mode!="iowait"}[5m]))
+  - record: cluster:node_cpu:ratio
+    expr: cluster:node_cpu:rate5m / count(sum(node_cpu) BY (instance, cpu))
+  - alert: NodeDiskRunningFull (Predicted within 24 hours)
+    expr: predict_linear(node_filesystem_free[6h], 3600 * 24) < 0
+    for: 30m
+    labels:
+      severity: warning
+    annotations:
+      description: device {{$labels.device}} on node {{$labels.instance}} is running
+        full within the next 24 hours (mounted at {{$labels.mountpoint}})
+      summary: Node disk is running full within 24 hours
+  - alert: NodeDiskRunningFull (Predicted within 2 hours)
+    expr: predict_linear(node_filesystem_free[30m], 3600 * 2) < 0
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: device {{$labels.device}} on node {{$labels.instance}} is running
+        full within the next 2 hours (mounted at {{$labels.mountpoint}})
+      summary: Node disk is running full within 2 hours
+  - alert: HostSwapIsFillingUp
+    expr: (1 - (node_memory_SwapFree_bytes / node_memory_SwapTotal_bytes)) * 100 > 90
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      summary: Host swap is filling up (instance {{ $labels.instance }})
+      description: "Swap is filling up (>80%)\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+  - alert: HostProcessOverload
+    expr: node_procs_running > 40
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      summary: Host is have 40 Proces o (instance {{ $labels.instance }})
+      description: "Proces is overloading  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+  - alert: HostMemoryUnderMemoryPressure
+    expr: rate(node_vmstat_pgmajfault[1m]) > 1000
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      summary: Host memory under memory pressure (instance {{ $labels.instance }})
+      description: "The node is under heavy memory pressure. High rate of major page faults\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+  - alert: LowMemory
+    expr:  100 - ((node_memory_MemAvailable_bytes * 100) / node_memory_MemTotal_bytes) > 85
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      text: '{{ $labels.name }} memory usage is {{ $value }}.'
+  - alert: High_CPU_Usage
+    expr: 100 - (avg by(instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 90
+    for: 1m
+    annotations:
+      description: '{{ $labels.name }} CPU usage has exceeded the threshold with a value of {{ $value }}.'
+      summary: Instance {{ $labels.instance }} CPU usage is dangerously high
+  - alert: TooManyOpenFileDescriptors
+    expr: 100 * (process_open_fds / process_max_fds) > 95
+    for: 10m
+    labels:
+      severity: critical
+    annotations:
+      description: '{{$labels.name }}) is using {{ $value }}% of the available file/socket descriptors.'
+      summary: too many open file descriptors
+  - alert: DiskRunningFull
+    expr: 100 - ((node_filesystem_avail_bytes{mountpoint="/",fstype!="rootfs"} * 100) / node_filesystem_size_bytes{mountpoint="/",fstype!="rootfs"}) > 100
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: device {{$labels.device}} on node {{$labels.instance}} is running
+        full within the next 24 hours (mounted at {{$labels.mountpoint}})
+      summary: Node disk is running full 
+  - alert: Disk_90proc
+    expr: 100 - ((node_filesystem_avail_bytes{mountpoint="/",fstype!="rootfs"} * 100) / node_filesystem_size_bytes{mountpoint="/",fstype!="rootfs"}) > 90
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      description: device {{$labels.device}} on node {{$labels.instance}} is running
+        80% within the next 24 hours (mounted at {{$labels.mountpoint}})
+      summary: Node disk is running on 90%
+  - alert: HostUnusualDiskReadRate
+    expr: sum by (instance) (rate(node_disk_read_bytes_total[2m])) / 1024 / 1024 > 50
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: Host unusual disk read rate (instance {{ $labels.instance }})
+      description: "Disk is probably reading too much data (> 50 MB/s)\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+  - alert: DiskisnearFull
+    expr: 100 - ((node_filesystem_avail_bytes{mountpoint="/",fstype!="rootfs"} * 100) / node_filesystem_size_bytes{mountpoint="/",fstype!="rootfs"}) > 85
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: device {{$labels.device}} on node {{$labels.instance}} is running
+        65% within the next 24 hours (mounted at {{$labels.mountpoint}})
+      summary: Node disk is running on 70%
+  - alert: HostUnusualNetworkThroughputIn
+    expr: sum by (instance) (rate(node_network_receive_bytes_total[2m])) / 1024 / 1024 > 100
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: Host unusual network throughput in (instance {{ $labels.instance }})
+      description: "Host network interfaces are probably receiving too much data (> 100 MB/s)\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+  - alert: HostUnusualNetworkThroughputOut 
+    expr: sum by (instance) (rate(node_network_transmit_bytes_total[2m])) / 1024 / 1024 > 100
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      summary: Host unusual network throughput out (instance {{ $labels.instance }})
+      description: "Host network interfaces are probably sending too much data (> 100 MB/s)\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+- name: MSSQL Events
+  rules:
+  - alert: Server FLTSQL Down
+    expr: up{job="FLTSQL_metrics"} == 0
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: Prometheus could not scrape for more than 10m,
+        server may be down 
+      summary: The Server is DOWN or Prometheus could not scrape a {{ $labels.job }} exporter
+  - alert: DB service of FLTSQL Down
+    expr: mssql_fltsql_db_service_state == 0
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      description: DB service of FLTSQL Down
+      summary: FLTSQL database may not work
+  - alert: DB service of FLTrain Down
+    expr: mssql_fltrain_db_service_state == 0
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      description: DB service of FLTSQL Down
+      summary: FLTSQL database may not work
+  - alert: Server FLTTRAIN Down
+    expr: up{job="FLTTRAIN_metrics"} == 0
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: Prometheus could not scrape for more than 10m,
+        server may be down 
+      summary: The Server is DOWN or Prometheus could not scrape a {{ $labels.job }} exporter
+  - alert: Server FLT App (Ramco application server) Down
+    expr: up{job="FLTapp"} == 0
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: Prometheus could not scrape for more than 10m,
+        server may be down 
+      summary: The Server is DOWN or Prometheus could not scrape a {{ $labels.job }} exporter
+  - alert: Server KYC Database Down
+    expr: up{job="KYC_DB_metrics"} == 0
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: Prometheus could not scrape for more than 10m,
+        server may be down 
+      summary: The Server is DOWN or Prometheus could not scrape a {{ $labels.job }} exporter      
+- name: ODB Events
+  rules:
+  - alert: ODB Service Down
+    expr: oracledb_up < 1
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      summary: Oracle DB service (not whole server) down (instance {{ $labels.instance }})
+      description: "Oracle Service instance is down\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+  - alert: ODB Server dml_locks
+    expr: avg_over_time(oracledb_resource_current_utilization{resource_name="dml_locks"}[10m]) > 200
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: ODB Server dml_locks (instance {{ $labels.instance }})
+      description: "ODB Server is having some dml_locks.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+  - alert: Server ODB Database Down
+    expr: up{job="ODB_metrics"} == 0
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: Prometheus could not scrape for more than 10m,
+        server may be down 
+      summary: The Server is DOWN or Prometheus could not scrape a {{ $labels.job }} exporter
+  - alert: Server ODB DEV Database Down
+    expr: up{job="ODBdev_metrics"} == 0
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: Prometheus could not scrape for more than 10m,
+        server may be down 
+      summary: The Server is DOWN or Prometheus could not scrape a {{ $labels.job }} exporter
+  - alert: Server ODB UAT Database Down
+    expr: up{job="ODBuat_metrics"} == 0
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: Prometheus could not scrape for more than 10m,
+        server may be down 
+      summary: The Server is DOWN or Prometheus could not scrape a {{ $labels.job }} exporter
+  - alert: Server ODB IT Database Down
+    expr: up{job="ODB_it_metrics"} == 0
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: Prometheus could not scrape for more than 10m,
+        server may be down 
+      summary: The Server is DOWN or Prometheus could not scrape a {{ $labels.job }} exporter
+- name: HashiCorp Cluster Events
+  rules:
+  - alert: Server of RND DEV orchestration cluster Down
+    expr: up{job="Nomad DEV Cluster"} == 0
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: Prometheus could not scrape {{ $labels.name }} for more than 10m,
+        or exporters have disappeared from discovery
+      summary: The Server is DOWN or Prometheus could not scrape a {{ $labels.name }} exporter server
+  - alert: Server of RND UAT orchestration cluster Down
+    expr: up{job="Nomad UAT Cluster"} == 0
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: Prometheus could not scrape {{ $labels.name }} for more than 10m,
+        or exporters have disappeared from discovery
+      summary: The Server is DOWN or Prometheus could not scrape a {{ $labels.name }} exporter server
+  - alert: Server of RND Live orchestration cluster Down
+    expr: up{job="Nomad Live Cluster"} == 0
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: Prometheus could not scrape {{ $labels.name }} for more than 10m,
+        or exporters have disappeared from discovery
+      summary: The Server is DOWN or Prometheus could not scrape a {{ $labels.name }} exporter server
+- name: DevOps infrastucture Events
+  rules:
+  - alert: Server of DevOps Infrastructure Down
+    expr: up{job="DevOps Infrastructure"} == 0
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: Prometheus could not scrape {{ $labels.name }}  for more than 10m,
+        or exporters have disappeared from discovery
+      summary: The Server is DOWN or Prometheus could not scrape a {{ $labels.name }} exporter
+  - alert: Container GitLab Down
+    expr: sum(docker_container_running_state{ name ="gitlab"}) without (__name__) == 0
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: Prometheus could not scrape for more than 10m,
+        container may be down on server IP ={{ $labels.instance }}
+      summary: The Container is DOWN
+  - alert: Container Nexus Down
+    expr: sum(docker_container_running_state{ name ="nexus"}) without (__name__) == 0
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: Prometheus could not scrape for more than 10m,
+        container may be down on server IP ={{ $labels.instance }}
+      summary: The Container is DOWN
+  - alert: Container haproxy Down
+    expr: sum(docker_container_running_state{ name ="haproxy"}) without (__name__) == 0
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: Prometheus could not scrape for more than 10m,
+        container may be down on server IP ={{ $labels.instance }}
+      summary: The Container haproxy is DOWN
+  - alert: Container analytics-jenkins Down
+    expr: sum(docker_container_running_state{ name ="analytics-jenkins"}) without (__name__) == 0
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: Prometheus could not scrape for more than 10m,
+        container may be down on server IP ={{ $labels.instance }}
+      summary: The Container analytics-jenkins is DOWN
+  - alert: Container analytics-rapiddeploy-agent Down
+    expr: sum(docker_container_running_state{ name ="analytics-rapiddeploy-agent"}) without (__name__) == 0
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: Prometheus could not scrape for more than 10m,
+        container may be down on server IP ={{ $labels.instance }}
+      summary: The Container analytics-rapiddeploy-agent is DOWN
+  - alert: Container 	analytics-rapiddeploy-server Down
+    expr: sum(docker_container_running_state{ name ="analytics-rapiddeploy-server"}) without (__name__) == 0
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: Prometheus could not scrape for more than 10m,
+        container may be down on server IP ={{ $labels.instance }}
+      summary: The Container analytics-rapiddeploy-server is DOWN
+  - alert: Container analytics-sonarqube Down
+    expr: sum(docker_container_running_state{ name ="analytics-sonarqube"}) without (__name__) == 0
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: Prometheus could not scrape for more than 10m,
+        container may be down on server IP ={{ $labels.instance }}
+      summary: The Container analytics-sonarqube is DOWN
+  - alert: Container analytics-docker-shell-runner Down
+    expr: sum(docker_container_running_state{ name ="analytics-docker-shell-runner"}) without (__name__) == 0
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: Prometheus could not scrape for more than 10m,
+        container may be down on server IP ={{ $labels.instance }}
+      summary: The Container analytics-docker-shell-runner is DOWN
+  - alert: Container training-docker-shell-runner
+    expr: sum(docker_container_running_state{ name ="training-docker-shell-runner"}) without (__name__) == 0
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: Prometheus could not scrape for more than 10m,
+        container may be down on server IP ={{ $labels.instance }}
+      summary: The Container training-docker-shell-runner is DOWN
+- name: Bussnes systems Events
+  rules:
+  - alert: Bussines system UI HTTP error (Yellow)
+    expr: probe_http_status_code{job="UI_APP_LIVE_HTTPS"} == 0 or probe_http_status_code{job="UI_APP_LIVE_HTTPS"} == 200
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      description: Exporter have status 0 ir 200 of Bussines system {{ $labels.vhost }} HTTP error
+      summary: The Web UI {{ $labels.vhost }} is DOWN or Prometheus could not scrape.
+  - alert: Bussines system UI HTTP error (Orange)
+    expr: probe_http_status_code{job="UI_APP_LIVE_HTTPS"} == 0 or probe_http_status_code{job="UI_APP_LIVE_HTTPS"} == 200
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      description: Exporter have status 0 ir 200 of Bussines system {{ $labels.vhost }} HTTP error
+      summary: The Web UI {{ $labels.vhost }} is DOWN or Prometheus could not scrape.
+  - alert: Bussines system UI HTTP error (Red)
+    expr: probe_http_status_code{job="UI_APP_LIVE_HTTPS"} == 0 or probe_http_status_code{job="UI_APP_LIVE_HTTPS"} == 200
+    for: 15m
+    labels:
+      severity: event.red
+    annotations:
+      description: Exporter have status 0 ir 200 of Bussines system {{ $labels.vhost }} HTTP error
+      summary: The Web UI {{ $labels.vhost }} is DOWN or Prometheus could not scrape.
+  - alert: OUTSIDE Bussines system UI HTTP error 
+    expr: probe_http_status_code{job="OUTSIDE_FLTECHNICS_HTTPS"} == 0 or probe_http_status_code{job="OUTSIDE_FLTECHNICS_HTTPS"} == 200
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      description: Exporter have status 0 ir 200 of Bussines system {{ $labels.vhost }} HTTP error
+      summary: The Web UI {{ $labels.vhost }} is DOWN or Prometheus could not scrape.
+- name: Jira Events
+  rules:
+  - alert: Alert for Insight sync SQL
+    expr: mssql_insights_sync_sql == 0 and ON() hour() > 2 < 8
+    for: 2m
+    labels:
+      {'env': 'jira'}
+    annotations:
+      description: Status change to 0.
+      summary: Insight sync is not working
+- name: AMOS WB 
+  rules:
+  - alert: Server AMOS Wheels And Brakes Down
+    expr: up{job="AMOS Wheels and Brakes"} == 0
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      description: Prometheus could not scrape for more than 10m,
+        server may be down 
+      summary: The Server is DOWN or Prometheus could not scrape a {{ $labels.job }} exporter
+  - alert: AMOS UAT Database Down
+    expr: up{job="oracledb_exporter_wb_amos_uat"} == 0
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      description: Prometheus could not scrape for more than 10m,
+        server may be down 
+      summary: The Database is DOWN or Prometheus could not scrape a {{ $labels.job }} exporter
+  - alert: AMOS TEST Database Down
+    expr: up{job="oracledb_exporter_wb_amos_test"} == 0
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      description: Prometheus could not scrape for more than 10m,
+        server may be down 
+      summary: The Database is DOWN or Prometheus could not scrape a {{ $labels.job }} exporter
+- name: IT support Unit Events
+  rules:
+  - alert: Server of IT Unit Support Down
+    expr: up{job="IT Unit Support"} == 0
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: Prometheus could not scrape {{ $labels.name }} for more than 10m,
+        server may be down 
+      summary: Prometheus could not scrape a {{ $labels.name }} exporter
+- name: RND Server Events
+  rules:
+  - alert: Server of RND Down
+    expr: up{job="RND-Servers"} == 0
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      description: Prometheus could not scrape {{ $labels.name }} for more than 10m,
+        server may be down 
+      summary: Prometheus could not scrape a {{ $labels.name }} exporter
+- name: Smailer Events
+  rules:
+  - alert: Alert for Smailer processing indicator
+    expr: mssql_smailer_processing_indicator < 50 and ON() hour() > 10 < 11
+    for: 10m 
+    labels:
+      {'env': 'jira'}
+    annotations:
+      description: Status change to 0.
+      summary: Smailer processing indicator result less than 50
+- name: Files Events
+  rules:
+  - alert: File_server_availability_yellow
+    expr: up{job="IT Unit Support",name="FLT-Files"} == 0
+    for: 3m
+    labels:
+      severity: event.yellow.files
+    annotations:
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      responsable: Konstantinas Starkutis
+      Trigger: Server is unavailable
+      Inpacted_Service: Files Server
+      Action: Check server availability.
+
+  - alert: File_server_availability_orange
+    expr: up{job="IT Unit Support",name="FLT-Files"} == 0
+    for: 10m 
+    labels:
+      severity: event.orange
+    annotations:
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      responsable: Konstantinas Starkutis
+      Trigger: Server is unavailable
+      Inpacted_Service: Files Server
+      Action: Check server availability.
+
+  - alert: File_server_availability_red
+    expr: up{job="IT Unit Support",name="FLT-Files"} == 0
+    for: 10m 
+    labels:
+      severity: event.red
+    annotations:
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      responsable: Konstantinas Starkutis
+      Trigger: Server is unavailable
+      Inpacted_Service: Files Server
+      Action: Check server availability.
+
+  - alert: File_server_DiskUsage_yellow
+    expr: 100 - 100 * ((windows_logical_disk_free_bytes{instance="FLT-Files", volume!~"R:"} / 1024 / 1024) / (windows_logical_disk_size_bytes{instance="FLT-Files",volume!~"R:"} / 1024 / 1024)) > 98
+    for: 10m
+    labels:
+      severity: event.yellow.files
+    annotations:
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      responsable: Konstantinas Starkutis
+      Trigger: Disk usage is more than 95%
+      Inpacted_Service: Files Server
+      Action: Check server Disk Uasge 
+
+  - alert: File_server_DiskUsage_orange
+    expr: 100 - 100 * ((windows_logical_disk_free_bytes{instance="FLT-Files", volume!~"R:"} / 1024 / 1024) / (windows_logical_disk_size_bytes{instance="FLT-Files",volume!~"R:"} / 1024 / 1024)) > 98
+    for: 30m
+    labels:
+      severity: event.orange
+    annotations:
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      responsable: Konstantinas Starkutis
+      Trigger: Disk usage is more than 95%
+      Inpacted_Service: Files Server
+      Action: Check server Disk Uasge 
+
+  - alert: File_server_DiskUsage_red
+    expr: 100 - 100 * ((windows_logical_disk_free_bytes{instance="FLT-Files", volume!~"R:"} / 1024 / 1024) / (windows_logical_disk_size_bytes{instance="FLT-Files",volume!~"R:"} / 1024 / 1024)) > 98 
+    for: 60m
+    labels:
+      severity: event.red
+    annotations:
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      responsable: Konstantinas Starkutis
+      Trigger: Disk usage is more than 95%
+      Inpacted_Service: Files Server
+      Action: Check server Disk Uasge
+- name: Test Events
+  rules:
+  - alert: 4.1 Server_yellow
+    expr: up{job="IT Unit Support",name="temi"} == 0
+    labels:
+      severity: event.yellow.test
+    annotations:
+      Action: Check server availability

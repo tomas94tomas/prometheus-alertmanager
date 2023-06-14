@@ -1,0 +1,435 @@
+global:
+  # The smarthost and SMTP sender used for mail notifications.
+  smtp_smarthost: 'mail.aviasg.com:25'
+  smtp_from: 'grafana@fltechnics.com'
+  smtp_require_tls: false
+
+# The directory from which notification templates are read.
+templates:
+- '/etc/alertmanager/*.tmpl'
+
+# The root route on which each incoming alert enters.
+route:
+  # The labels by which incoming alerts are grouped together. For example,
+  # multiple alerts coming in for cluster=A and alertname=LatencyHigh would
+  # be batched into a single group.
+  group_by: ["alertname"]
+
+  # When a new group of alerts is created by an incoming alert, wait at
+  # least 'group_wait' to send the initial notification.
+  # This way ensures that you get multiple alerts for the same group that start
+  # firing shortly after another are batched together on the first
+  # notification.
+  group_wait: 30s
+
+  # When the first notification was sent, wait 'group_interval' to send a batch
+  # of new alerts that started firing for that group.
+  group_interval: 5m
+
+  # If an alert has successfully been sent, wait 'repeat_interval' to
+  # resend them.
+  repeat_interval: 168h
+
+  # A default receiver
+  receiver: team-default
+
+  # All the above attributes are inherited by all child routes and can
+  # overwritten on each.
+  routes:
+  - match:
+      severity: warning
+    receiver: team-warning
+  - match:
+      env: 'jira'
+    receiver: team-jira
+  - match:
+      severity: critical
+    receiver: team-critical
+  - match:
+      severity: event.yellow.test
+    receiver: event.yellow.test
+  - match:
+      severity: event.yellow.solarwinds
+    receiver: event.yellow.solarwinds
+  - match:
+      severity: event.orange
+    receiver: event.orange
+  - match:
+      severity: event.red
+    receiver: event.red
+  - match:
+      severity: event.yellow.qliksense
+    receiver: event.yellow.qliksense
+  - match:
+      severity: event.yellow.mssql
+    receiver: event.yellow.mssql
+  - match:
+      severity: event.yellow.gitlab
+    receiver: event.yellow.gitlab
+  - match:
+      severity: event.yellow.teampass
+    receiver: event.yellow.teampass
+  - match:
+      severity: event.yellow.nomad
+    receiver: event.yellow.nomad
+  - match:
+      severity: event.yellow.consul
+    receiver: event.yellow.consul
+  - match:
+      severity: event.yellow.vault
+    receiver: event.yellow.vault
+  - match:
+      severity: event.yellow.traefik
+    receiver: event.yellow.traefik
+  - match:
+      severity: event.yellow.nexus
+    receiver: event.yellow.nexus
+  - match:
+      severity: event.yellow.kb
+    receiver: event.yellow.kb
+  - match:
+      severity: event.yellow.ramco
+    receiver: event.yellow.ramco
+  - match:
+      severity: event.yellow.jira
+    receiver: event.yellow.jira
+  - match:
+      severity: event.yellow.files
+    receiver: event.yellow.files
+  - match:
+      severity: event.yellow.test
+    receiver: event.yellow.test
+  - match:
+      severity: event.orange.test
+    receiver: event.orange.test
+  - match:
+      severity: event.red.test
+    receiver: event.red.test
+  - match:
+      severity: event.yellow.eams
+    receiver: event.yellow.eams
+  - match:
+      severity: event.orange.eams
+    receiver: event.orange.eams
+  - match:
+      severity: event.red.eams
+    receiver: event.red.eams
+
+# Inhibition rules allow to mute a set of alerts given that another alert is
+# firing.
+# We use this to mute any warning-level notifications if the same alert is
+
+inhibit_rules:
+- source_match:
+    severity: 'critical'
+  target_match:
+    severity: 'warning'
+  # Apply inhibition if the alertname is the same.
+  equal: ['alertname']
+
+receivers:
+- name: 'team-default'
+  email_configs:
+  - to: 'grafana.monitoring@fltechnics.com'
+    send_resolved: true
+
+- name: 'team-warning'
+  email_configs:
+  - to: 'grafana.monitoring@fltechnics.com'
+    send_resolved: true
+
+- name: 'team-jira'
+  email_configs:
+  - to: 'konstantin.gagac@fltechnics.com'
+    send_resolved: true
+
+- name: 'team-critical'
+  email_configs:
+  - to: 'helpdesk@fltechnics.com'
+    send_resolved: true
+
+- name: 'event.yellow.solarwinds'
+  email_configs:
+  - to: 'tomas.zemblys@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.yellow.qliksense'
+  email_configs:
+  - to: 'tomas.zemblys@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+  - to: 'rasita.teiserskiene@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.yellow.mssql'
+  email_configs:
+  - to: 'tomas.zemblys@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.yellow.gitlab'
+  email_configs:
+  - to: 'dominykas.sivickas@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.yellow.teampass'
+  email_configs:
+  - to: 'dominykas.sivickas@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.yellow.files'
+  email_configs:
+  - to: 'konstantinas.starkutis@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.yellow.ramco'
+  email_configs:
+  - to: 'karolis.dimitrevicius@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.yellow.nomad'
+  email_configs:
+  - to: 'dominykas.sivickas@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.yellow.consul'
+  email_configs:
+  - to: 'dominykas.sivickas@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.yellow.vault'
+  email_configs:
+  - to: 'dominykas.sivickas@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.yellow.traefik'
+  email_configs:
+  - to: 'dominykas.sivickas@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.yellow.nexus'
+  email_configs:
+  - to: 'dominykas.sivickas@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.yellow.kb'
+  email_configs:
+  - to: 'dominykas.sivickas@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.yellow.jira'
+  email_configs:
+  - to: 'konstantin.gagac@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+    
+- name: 'event.yellow.test'
+  email_configs:
+  - to: 'dominykas.sivickas@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.orange.test'
+  email_configs:  
+  - to: 'dominykas.sivickas@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-orange.subject" . }}'
+    html: '{{ template "email-orange.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.red.test'
+  email_configs:  
+  - to: 'dominykas.sivickas@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-red.subject" . }}'
+    html: '{{ template "email-red.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.yellow.eams'
+  email_configs:
+  - to: 'karolis.kondra@fltechnics.com'
+    from: 'alerts@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow-eams.subject" . }}'
+    html: '{{ template "email-yellow-eams.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.orange.eams'
+  email_configs:  
+  - to: 'valdemar.seibak@fltechnics.com, karolis.kondra@fltechnics.com'
+    from: 'alerts@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-orange-eams.subject" . }}'
+      CC: 'karolis.kondra@fltechnics.com'
+    html: '{{ template "email-orange-eams.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.red.eams'
+  email_configs:  
+  - to: 'andrej.volodko@fltechnics.com, valdemar.seibak@fltechnics.com, karolis.kondra@fltechnics.com'
+    from: 'alerts@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-red-eams.subject" . }}'
+      CC: 'valdemar.seibak@fltechnics.com, karolis.kondra@fltechnics.com'
+    html: '{{ template "email-red-eams.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.orange'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
+    http_config:
+      follow_redirects: true
+      tls_config:
+        insecure_skip_verify: true
+    send_resolved: true
+  email_configs:
+  - to: 'dominykas.sivickas@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-orange.subject" . }}'
+    html: '{{ template "email-orange.html" . }}'
+    require_tls: false
+    send_resolved: true
+  - to: 'andrius.kubickas@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-orange.subject" . }}'
+    html: '{{ template "email-orange.html" . }}'
+    require_tls: false
+    send_resolved: true    
+
+- name: 'event.red'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
+    http_config:
+      follow_redirects: true
+      tls_config:
+        insecure_skip_verify: true
+    send_resolved: true
+  - url: 'http://192.168.231.235:8081/send'
+    send_resolved: true
+  email_configs:
+  - to: 'dominykas.sivickas@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-red.subject" . }}'
+    html: '{{ template "email-red.html" . }}'
+    require_tls: false
+    send_resolved: true
+  - to: 'andrius.kubickas@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-red.subject" . }}'
+    html: '{{ template "email-red.html" . }}'
+    require_tls: false
+    send_resolved: true
+  - to: 'vadimas.klepko@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-red.subject" . }}'
+    html: '{{ template "email-red.html" . }}'
+    require_tls: false
+    send_resolved: true
+  - to: 'tomas.zemblys@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-red.subject" . }}'
+    html: '{{ template "email-red.html" . }}'
+    require_tls: false
+    send_resolved: true
+  - to: 'lina.baliuniene@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-red.subject" . }}'
+    html: '{{ template "email-red.html" . }}'
+    require_tls: false
+    send_resolved: true
+  - to: 'titas.pirugis@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-red.subject" . }}'
+    html: '{{ template "email-red.html" . }}'
+    require_tls: false
+    send_resolved: true

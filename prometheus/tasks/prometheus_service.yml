@@ -1,0 +1,76 @@
+---
+- name: Create a Prometheus configuration directory
+  file:
+    path: /etc/prometheus
+    state: directory
+    mode: '0755'
+    owner: "1001"
+    group: "1001"
+
+- name: Create a Prometheus data directory
+  file:
+    path: /home/prometheus-data
+    state: directory
+
+- name: Copy Prometheus prometheus_web.yml files
+  copy:
+    src: prometheus/files/prometheus_web.yml
+    dest: /etc/prometheus/prometheus_web.yml
+
+- name: Copy certs
+  copy:
+    src: certs
+    dest: /etc/prometheus/
+
+- name: Copy Prometheus alerts/rules files
+  copy:
+    src: "{{ item }}"
+    dest: /etc/prometheus/{{ item }}
+    validate: docker run -v %s:/tmp/{{ item }} dnanexus/promtool:2.9.2 check rules /tmp/{{ item }}
+  with_items:
+  - base.alerts
+  - windows.alerts
+  notify: reload prometheus
+
+- name: Create a docker volume for prometheuswith options
+  docker_volume:
+    name: prometheus-data
+    driver_options:
+      type: block
+      device: /home/prometheus-data
+      o: bind
+
+- name: Start Prometheus
+  docker_container:
+    name: prometheus
+    image: prom/prometheus:v2.43.0
+    networks:
+      - name: fltechnics
+    state: started
+    restart_policy: always
+    published_ports:
+      - "9090:9090"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/prometheus/:/etc/prometheus/
+      - prometheus-data:/prometheus
+    command: 
+      - '--config.file=/etc/prometheus/prometheus.yaml'
+      - '--web.config.file=/etc/prometheus/prometheus_web.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+      - '--storage.tsdb.retention=1460h'
+      - '--web.enable-admin-api'
+      - '--web.enable-lifecycle'
+      - '--query.max-concurrency=50'
+
+- name: Copy Prometheus configuration
+  template:
+    src: prometheus.yaml.j2
+    dest: /etc/prometheus/prometheus.yaml
+    mode: 0644
+    owner: "1001"
+    group: "1001"
+    validate: docker run -v /etc/prometheus:/tmp -v %s:/tmp/prometheus.yaml dnanexus/promtool:2.9.2 check config /tmp/prometheus.yaml
+  notify: reload prometheus

@@ -1,0 +1,881 @@
+# my global config
+global:
+  scrape_interval:     15s # By default, scrape targets every 15 seconds.
+  evaluation_interval: 15s # By default, scrape targets every 15 seconds.
+  # scrape_timeout is set to the global default (10s).
+
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+  - "base.alerts"
+  - "windows.alerts"
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  # The job name is added as a label  to any timeseries scraped from this config.
+  - job_name: 'prometheus'
+    basic_auth:
+      username: admin
+      password: '{{ prometheus_web_password }}'
+    # Override the global default and scrape targets from this job every 5 seconds.
+    scrape_interval: 5s
+
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+
+    static_configs:
+      - targets: ['localhost:9090']
+        labels:
+          app: 'prometheus'
+          name: 'localhost'
+
+  - job_name: 'DevOps Infrastructure'
+    static_configs:
+
+{% for host in groups['DevOps_Infrastructure'] %}
+      - targets: ['{{ hostvars[host]['ansible_host'] | default (host) }}:9100']
+        labels:
+          name: '{{ hostvars[host]['inventory_hostname'] }}'
+{% endfor %}
+    relabel_configs:
+    - source_labels: [name]
+      separator: ;
+      regex: (.*)
+      target_label: instance
+      replacement: ${1}
+      action: replace
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
+
+  - job_name: 'Nomad DEV Cluster'
+    static_configs:
+
+{% for host in groups['rnd-dev-servers'] %}
+      - targets: ['{{ hostvars[host]['ansible_host'] | default (host) }}:9100']
+        labels:
+          name: '{{ hostvars[host]['inventory_hostname'] }}'
+{% endfor %}
+    relabel_configs:
+    - source_labels: [name]
+      separator: ;
+      regex: (.*)
+      target_label: instance
+      replacement: ${1}
+      action: replace
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
+    
+  - job_name: 'Nomad UAT Cluster'
+    static_configs:
+
+{% for host in groups['rnd-uat-servers'] %}
+      - targets: ['{{ hostvars[host]['ansible_host'] | default (host) }}:9100']
+        labels:
+          name: '{{ hostvars[host]['inventory_hostname'] }}'
+{% endfor %}
+    relabel_configs:
+    - source_labels: [name]
+      separator: ;
+      regex: (.*)
+      target_label: instance
+      replacement: ${1}
+      action: replace
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
+
+  - job_name: 'Nomad Live Cluster'
+    static_configs:
+
+{% for host in groups['rnd-live-servers'] %}
+      - targets: ['{{ hostvars[host]['ansible_host'] | default (host) }}:9100']
+        labels:
+          name: '{{ hostvars[host]['inventory_hostname'] }}'
+{% endfor %}
+    relabel_configs:
+    - source_labels: [name]
+      separator: ;
+      regex: (.*)
+      target_label: instance
+      replacement: ${1}
+      action: replace
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
+
+  - job_name: 'IT Unit Support'
+    static_configs:
+
+{% for host in groups['IT-unit'] %}
+      - targets: ['{{ hostvars[host]['ansible_host'] | default (host) }}:9182']
+        labels:
+          name: '{{ hostvars[host]['inventory_hostname'] }}'
+{% endfor %}
+    relabel_configs:
+    - source_labels: [name]
+      separator: ;
+      regex: (.*)
+      target_label: instance
+      replacement: ${1}
+      action: replace
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
+
+  - job_name: 'AMOS Wheels and Brakes'
+    static_configs:
+
+{% for host in groups['AMOS_WB'] %}
+      - targets: ['{{ hostvars[host]['ansible_host'] | default (host) }}:9182']
+        labels:
+          name: '{{ hostvars[host]['inventory_hostname'] }}'
+{% endfor %}
+    relabel_configs:
+    - source_labels: [name]
+      separator: ;
+      regex: (.*)
+      target_label: instance
+      replacement: ${1}
+      action: replace
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
+
+  - job_name: 'gitlab'
+    metrics_path: "/-/metrics"
+    scheme: https
+    params:
+      token: ['X1haiN2Y6tBii_F-ixs6']
+    static_configs:
+      - targets: ['gitlab.fltechnics.com']
+        labels:
+          name: 'gitlab'
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
+
+  - job_name: 'Gitlab_RND-shared-docker-shell-runner'
+    metrics_path: "/metrics"
+    static_configs:
+      - targets: ['192.168.231.55:9253']
+        labels:
+          name: 'RND-shared-docker-shell-runner'
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
+
+  - job_name: 'Gitlab_TEST-shared-docker-shell-runner'
+    metrics_path: "/metrics"
+    static_configs:
+      - targets: ['192.168.231.55:9252']
+        labels:
+          name: 'RND-shared-docker-shell-runner'
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
+      
+  - job_name: 'Gitlab_cicd_metrics_exporter'
+    metrics_path: "/metrics"
+    static_configs:
+      - targets: ['192.168.231.235:8080']
+        labels:
+          name: 'gitlab_cicd_metrics'
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
+
+  - job_name: 'FLT-CICD-Analytics'
+    metrics_path: "/prometheus"
+    static_configs:
+      - targets: ['192.168.231.179:8080']
+        labels:
+          name: 'FLT-CICD-Analytics'
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
+
+  - job_name: 'haproxy_exporter'
+    metrics_path: "/metrics"
+    static_configs:
+      - targets: ['192.168.231.183:9101']
+        labels:
+          name: 'haproxy'
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
+
+  - job_name: 'sql_exporter'
+    metrics_path: "/metrics"
+    static_configs:
+      - targets: ['sql_exporter:9399']
+        labels:
+          name: 'sql_exporter'
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
+    scrape_interval: 120s
+    scrape_timeout: 119s
+
+  - job_name: 'fltrain_exporter'
+    metrics_path: "/metrics"
+    static_configs:
+      - targets: ['192.168.231.235:9400']
+        labels:
+          name: 'fltrain_exporter'
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
+  
+  - job_name: 'RND-Servers'
+    static_configs:
+
+{% for host in groups['RND'] %}
+      - targets: ['{{ hostvars[host]['ansible_host'] | default (host) }}:9100']
+        labels:
+          name: '{{ hostvars[host]['inventory_hostname'] }}'
+{% endfor %}
+    relabel_configs:
+    - source_labels: [name]
+      separator: ;
+      regex: (.*)
+      target_label: instance
+      replacement: ${1}
+      action: replace
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
+
+  - job_name: 'Monitoring_docker_metrics'
+    metrics_path: "/metrics"
+    static_configs:
+    - targets: ['192.168.231.235:9417']
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
+
+  - job_name: 'RND_docker_metrics'
+    metrics_path: "/metrics"
+    static_configs:
+    - targets: ['192.168.231.55:9417']
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
+
+  - job_name: 'Analytics_docker_metrics'
+    metrics_path: "/metrics"
+    static_configs:
+    - targets: ['192.168.231.179:9417']
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
+
+  - job_name: 'Proxy_docker_metrics'
+    metrics_path: "/metrics"
+    static_configs:
+    - targets: ['192.168.231.183:9417']
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
+  
+  - job_name: 'Gitlab_docker_metrics'
+    metrics_path: "/metrics"
+    static_configs:
+    - targets: ['192.168.231.136:9417']
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
+
+  - job_name: 'Traefik_live_metrics'
+    static_configs:
+    - targets: ['192.168.231.23:8080']
+
+  - job_name: 'Nexus_docker_metrics'
+    metrics_path: "/metrics"
+    static_configs:
+    - targets: ['192.168.231.180:9417']
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
+
+  - job_name: 'Ngnix_docker_metrics'
+    metrics_path: "/metrics"
+    static_configs:
+    - targets: ['192.168.231.18:9417']
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
+
+  - job_name: 'Boockstack_docker_metrics'
+    metrics_path: "/metrics"
+    static_configs:
+    - targets: ['192.168.50.54:9417']
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
+
+  - job_name: 'Nexus_metrics'
+    metrics_path: "/metrics"
+    static_configs:
+    - targets: ['192.168.231.180:9184']
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
+
+  - job_name: 'Alertmanager_metrics'
+    basic_auth:
+      username: admin
+      password: 'rEQVW-t,x]C}LAMCb4Lk'
+    metrics_path: "/metrics"
+    static_configs:
+    - targets: ['192.168.231.235:9093']
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
+
+  - job_name: 'Grafana_metrics'
+    metrics_path: "/metrics"
+    static_configs:
+    - targets: ['192.168.231.235:3000']
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
+
+  - job_name: 'FLTSQL_metrics'
+    metrics_path: "/metrics"
+    static_configs:
+    - targets: ['192.168.50.10:9182']
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
+
+  - job_name: 'FLTapp'
+    metrics_path: "/metrics"
+    static_configs:
+    - targets: ['192.168.50.235:9182']
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
+  
+  - job_name: 'ODB_metrics'
+    metrics_path: "/metrics"
+    static_configs:
+    - targets: ['192.168.50.180:9182']
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
+
+  - job_name: 'ODBdev_metrics'
+    metrics_path: "/metrics"
+    static_configs:
+    - targets: ['192.168.50.129:9182']
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
+
+  - job_name: 'ODBuat_metrics'
+    metrics_path: "/metrics"
+    static_configs:
+    - targets: ['192.168.208.10:9182']
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
+    
+  - job_name: 'ODB_it_metrics'
+    metrics_path: "/metrics"
+    static_configs:
+    - targets: ['192.168.50.157:9182']
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
+      
+  - job_name: 'KYC_DB_metrics'
+    metrics_path: "/metrics"
+    static_configs:
+    - targets: ['192.168.50.179:9182']
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
+
+  - job_name: 'FLTTRAIN_metrics'
+    metrics_path: "/metrics"
+    static_configs:
+    - targets: ['192.168.50.18:9182']
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
+
+  - job_name: 'oracledb_exporter'
+    metrics_path: "/metrics"
+    static_configs:
+      - targets: ['192.168.50.247:9161']
+        labels:
+          name: 'oracle_db_exporter'
+
+  - job_name: 'oracledb_exporter_dev'
+    metrics_path: "/metrics"
+    static_configs:
+      - targets: ['192.168.50.247:9163']
+        labels:
+          name: 'oracledb_exporter_dev'
+
+  - job_name: 'oracledb_exporter_uat'
+    metrics_path: "/metrics"
+    static_configs:
+      - targets: ['192.168.50.247:9162']
+        labels:
+          name: 'oracle_db_exporter_uat'
+
+  - job_name: 'oracledb_exporter_odbit'
+    metrics_path: "/metrics"
+    static_configs:
+      - targets: ['192.168.231.235:9161']
+        labels:
+          name: 'oracle_db_exporter_odbit'
+
+  - job_name: 'oracledb_exporter_wb_amos_test'
+    metrics_path: "/metrics"
+    static_configs:
+      - targets: ['192.168.231.235:9162']
+        labels:
+          name: 'oracle_db_exporter_wb_amos_test'
+
+  - job_name: 'oracledb_exporter_wb_amos_uat'
+    metrics_path: "/metrics"
+    static_configs:
+      - targets: ['192.168.231.235:9163']
+        labels:
+          name: 'oracle_db_exporter_wb_amos_uat'
+
+  - job_name: 'oracledb_exporter_wb_amos_prod'
+    metrics_path: "/metrics"
+    static_configs:
+      - targets: ['192.168.231.235:9164']
+        labels:
+          name: 'oracle_db_exporter_wb_amos_prod'
+
+  - job_name: 'oracledb_metrics_ext'
+    metrics_path: "/metrics"
+    static_configs:
+      - targets: ['192.168.50.33:23231']
+        labels:
+          name: 'oracle_metrics_ext'
+
+  - job_name: 'teampass_mysql_exporter'
+    metrics_path: "/metrics"
+    static_configs:
+      - targets: ['192.168.231.235:9104']
+        labels:
+          name: 'mysql_teampass_exporter'
+
+  - job_name: 'kb_mysql_exporter'
+    metrics_path: "/metrics"
+    static_configs:
+      - targets: ['192.168.231.235:9105']
+        labels:
+          name: 'kb_teampass_exporter'
+
+  - job_name: 'gitlab_postgres_exporter'
+    metrics_path: "/metrics"
+    static_configs:
+      - targets: ['192.168.231.136:9187']
+        labels:
+          name: 'gitlab_postgres_exporter'
+
+  - job_name: 'jira_sql_exporter'
+    metrics_path: "/metrics"
+    static_configs:
+      - targets: ['192.168.231.235:9401']
+        labels:
+          name: 'jira_sql_exporter'
+
+  - job_name: 'rnd_consul_live'
+    metrics_path: "/metrics"
+    scrape_interval: 15s
+    static_configs:
+      - targets: ['192.168.231.5:9107']
+
+  - job_name: nomad_metrics_live
+    params:
+      format:
+        - prometheus
+    scrape_interval: 5s
+    scrape_timeout: 5s
+    metrics_path: /v1/metrics
+    scheme: https
+    consul_sd_configs:
+    - server: https://rnd-consul-live.fltechnics.com
+      datacenter: flt-rnd-live
+      token: '{{ rnd_consul_live_token }}'
+      tag_separator: ','
+      scheme: https
+      services:
+      - nomad-client
+      - nomad
+    tls_config:
+      cert_file: 'certs/rnd-nomad-live-cli.pem'
+      key_file: 'certs/rnd-nomad-live-cli-key.pem'
+      ca_file: 'certs/rnd-nomad-live-nomad-ca.pem'
+      insecure_skip_verify: true
+    relabel_configs:
+    - source_labels: [__meta_consul_tags]
+      separator: ;
+      regex: (.*)http(.*)
+      replacement: $1
+      action: keep
+    - source_labels: [__meta_consul_address]
+      separator: ;
+      regex: (.*)
+      target_label: __meta_consul_service_address
+      replacement: $1
+      action: replace        
+ 
+  - job_name: nomad_metrics_dev
+    params:
+      format:
+        - prometheus
+    scrape_interval: 5s
+    scrape_timeout: 5s
+    metrics_path: /v1/metrics
+    scheme: https
+    consul_sd_configs:
+    - server: https://rnd-consul-dev.fltechnics.com
+      datacenter: flt-rnd-dev
+      token: '{{ rnd_consul_dev_token }}'
+      tag_separator: ','
+      scheme: https
+      services:
+      - nomad-client
+      - nomad
+    tls_config:
+      cert_file: 'certs/rnd-nomad-dev-cli.pem'
+      key_file: 'certs/rnd-nomad-dev-cli-key.pem'
+      ca_file: 'certs/rnd-nomad-dev-nomad-ca.pem'
+      insecure_skip_verify: true
+    relabel_configs:
+    - source_labels: [__meta_consul_tags]
+      separator: ;
+      regex: (.*)http(.*)
+      replacement: $1
+      action: keep
+    - source_labels: [__meta_consul_address]
+      separator: ;
+      regex: (.*)
+      target_label: __meta_consul_service_address
+      replacement: $1
+      action: replace
+
+  - job_name: nomad_metrics_uat
+    params:
+      format:
+        - prometheus
+    scrape_interval: 5s
+    scrape_timeout: 5s
+    metrics_path: /v1/metrics
+    scheme: https
+    consul_sd_configs:
+    - server: https://rnd-consul-uat.fltechnics.com
+      datacenter: flt-rnd-uat
+      token: '{{ rnd_consul_uat_token }}'
+      tag_separator: ','
+      scheme: https
+      services:
+      - nomad-client
+      - nomad
+    tls_config:
+      cert_file: 'certs/rnd-nomad-uat-cli.pem'
+      key_file: 'certs/rnd-nomad-uat-cli-key.pem'
+      ca_file: 'certs/rnd-nomad-uat-nomad-ca.pem'
+      insecure_skip_verify: true
+    relabel_configs:
+    - source_labels: [__meta_consul_tags]
+      separator: ;
+      regex: (.*)http(.*)
+      replacement: $1
+      action: keep
+    - source_labels: [__meta_consul_address]
+      separator: ;
+      regex: (.*)
+      target_label: __meta_consul_service_address
+      replacement: $1
+      action: replace
+
+  - job_name: 'rnd_vault_live'
+    scrape_interval: 30s
+    scrape_timeout: 10s
+    metrics_path: '/v1/sys/metrics'
+    scheme: 'https'
+    static_configs:
+      - targets:
+          - 'rnd-vault-live.fltechnics.com'
+    bearer_token: '{{ rnd_vault_dev_token }}'
+    tls_config:
+      insecure_skip_verify: true
+
+  - job_name: 'rnd_vault_dev'
+    scrape_interval: 30s
+    scrape_timeout: 10s
+    metrics_path: '/v1/sys/metrics'
+    scheme: 'https'
+    static_configs:
+      - targets:
+          - 'rnd-vault-dev.fltechnics.com'
+    bearer_token: '{{ rnd_vault_dev_token }}'
+    tls_config:
+      insecure_skip_verify: true
+
+  - job_name: Nomad_cluster_https
+    metrics_path: /probe
+    params:
+      module: [ http_2xx_example ]  # Look for a HTTP 200 response.
+    static_configs:
+      - targets:
+        - https://rnd-nomad-live.fltechnics.com
+        - https://rnd-nomad-uat.fltechnics.com
+        - https://rnd-nomad-dev.fltechnics.com
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+
+  - job_name: Consul_cluster_https
+    metrics_path: /probe
+    params:
+      module: [ http_2xx_example ]  # Look for a HTTP 200 response.
+    static_configs:
+      - targets:
+        - https://rnd-consul-live.fltechnics.com
+        - https://rnd-consul-uat.fltechnics.com
+        - https://rnd-consul-dev.fltechnics.com
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+
+  - job_name: vault_cluster_https
+    metrics_path: /probe
+    params:
+      module: [ http_2xx_example ]  # Look for a HTTP 200 response.
+    static_configs:
+      - targets:
+        - https://rnd-vault-live.fltechnics.com
+        - https://rnd-vault-uat.fltechnics.com
+        - https://rnd-vault-dev.fltechnics.com
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+
+  - job_name: traefik_https
+    metrics_path: /probe
+    params:
+      module: [ http_2xx_example ]  # Look for a HTTP 200 response.
+    static_configs:
+      - targets:
+        - https://rnd-traefik.fltechnics.com
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+
+
+  - job_name: UI_APP_LIVE_HTTPS
+    metrics_path: /probe
+    params:
+      module: [ http_2xx_example ]  # Look for a HTTP 200 response.
+    dns_sd_configs:
+      - names:
+          - bi2.fltechnics.com
+          - kyc.fltechnics.com
+          - flint.fltechnics.com
+          - old-it-dashboard.fltechnics.com
+          - sw.fltechnics.com
+          - smailer.fltechnics.com
+        type: A
+        port: 443
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+      - source_labels: [__meta_dns_name]
+        target_label: __param_hostname  # Make domain name become 'Host' header for probe requests
+      - source_labels: [__meta_dns_name]
+        target_label: vhost  # and store it in 'vhost' label
+
+  - job_name: UI_APP_INFRASTRUCTURE_HTTPS
+    metrics_path: /probe
+    params:
+      module: [ http_2xx_example ]  # Look for a HTTP 200 response.
+    static_configs:
+      - targets:
+          - gitlab.fltechnics.com
+          - kb.fltechnics.com
+          - tp.fltechnics.com
+          - repository.fltechnics.com
+          - grafana.fltechnics.com
+          - grafana-tv.fltechnics.com
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+      - source_labels: [__meta_dns_name]
+        target_label: vhost  # and store it in 'vhost' label
+
+  - job_name: QLIKSENSE_HTTPS
+    metrics_path: /probe
+    params:
+      module: [ http_2xx_example ]  # Look for a HTTP 200 response.
+    static_configs:
+      - targets:
+        - https://bi.fltechnics.com
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+  
+  - job_name: RAMCO_SHAREPOINT_HTTP
+    metrics_path: /probe
+    params:
+      module: [ http_2xx_example ]  # Look for a HTTP 200 response.
+    static_configs:
+      - targets:
+        - http://docs:81
+        - http://ramco
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+ 
+  - job_name: 'jira_genesis_api_check'
+    scrape_interval: 10m
+    scrape_timeout: 10s
+    metrics_path: /probe
+    params:
+      module: [ http_2xx_example ]  # Look for a HTTP 200 response.
+    static_configs:
+      - targets:
+        - http://192.168.231.235:5000
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+
+  - job_name: 'jira_customer_portal'
+    metrics_path: /probe
+    params:
+      module: [ http_2xx_example ]  # Look for a HTTP 200 response.
+    static_configs:
+      - targets:
+        - https://fl-technics.atlassian.net/servicedesk/customer/portals
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+
+  - job_name: 'jira_administration_portal'
+    metrics_path: /probe
+    params:
+      module: [http_2xx_with_auth]  # Use the name of the module you defined in the Blackbox Exporter configuration
+      target: ['https://fl-technics.atlassian.net/rest/api/3/search/?jql=project%20in%20(FLT.ADM.CPL)']  # Replace with the URL of the API endpoint you want to monitor
+    static_configs:
+      - targets:
+        - 192.168.231.235:9115  # Replace with the address and port where the Blackbox Exporter is running
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.231.235:9115 
+
+  - job_name: 'jira_insight_api'
+    metrics_path: /probe
+    params:
+      module: [http_2xx_with_auth]  # Use the name of the module you defined in the Blackbox Exporter configuration
+      target: ['https://api.atlassian.com/jsm/insight/workspace/6d14c587-3d7e-4baf-8613-b81e9c03a0c2/v1/iql/objects?iql=objectType%20IN%20(%22Computer%22)&resultPerPage=500&page=0']  # Replace with the URL of the API endpoint you want to monitor
+    static_configs:
+      - targets:
+        - 192.168.231.235:9115  # Replace with the address and port where the Blackbox Exporter is running
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.231.235:9115 
+
+  - job_name: OUTSIDE_FLTECHNICS_HTTPS
+    metrics_path: /probe
+    params:
+      module: [ http_2xx_example ]  # Look for a HTTP 200 response.
+    dns_sd_configs:
+      - names:
+        - fltechnics.com
+        - 147training.com
+        type: A
+        port: 443
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+
+  - job_name: ICMP to SQL
+    metrics_path: /probe
+    params:
+      module: [icmp_example]  # Look for a HTTP 200 response.
+    static_configs:
+      - targets:
+        - 192.168.50.10
+        - 192.168.50.180
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.231.235:9115 # The blackbox exporter's real hostname:port.
+
+alerting:
+  alertmanagers:
+  - scheme: http
+    basic_auth:
+      username: admin
+      password: '{{ alertmanager_web_password }}'
+    static_configs:
+    - targets:
+      - "alertmanager:9093"

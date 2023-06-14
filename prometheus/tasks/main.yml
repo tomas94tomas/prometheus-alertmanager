@@ -1,0 +1,5 @@
+- name: Start Prometheus service
+  import_tasks: prometheus_service.yml
+
+- name: Start Alertmanager service
+  include_tasks: alertmanager_service.yml
