@@ -293,6 +293,43 @@ receivers:
     html: '{{ template "email-yellow.html" . }}'
     require_tls: false
     send_resolved: true
+
+- name: 'event.yellow.bi2'
+  email_configs:
+  - to: 'vadimas.klepko@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.yellow.mssql.bi2'
+  email_configs:
+  - to: 'vadimas.klepko@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.yellow.mssql.bi2'
+  email_configs:
+  - to: 'vadimas.klepko@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+    - to: 'tomas.zemblys@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
     
 - name: 'event.yellow.test'
   email_configs:
