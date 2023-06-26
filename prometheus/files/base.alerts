@@ -1805,7 +1805,7 @@ groups:
     expr: mssql_fltsql_db_service_bi2_state < 2 or absent(mssql_fltsql_db_service_bi2_state)
     for: 5m
     labels:
-      severity: event.yellow.mssql.bi2
+      severity: event.yellow.bi2_DB
     annotations:
       Inpacted_Service : BI2
       Trigger : Bi2, Bi2_erp MSSQL DB status >= 0 and time >= 5 min

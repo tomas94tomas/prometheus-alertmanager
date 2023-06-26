@@ -94,6 +94,12 @@ route:
       severity: event.yellow.jira
     receiver: event.yellow.jira
   - match:
+      severity: event.yellow.bi2
+    receiver: event.yellow.bi2
+  - match:
+      severity: event.yellow.bi2_DB
+    receiver: event.yellow.bi2_DB
+  - match:
       severity: event.yellow.files
     receiver: event.yellow.files
   - match:
@@ -304,7 +310,7 @@ receivers:
     require_tls: false
     send_resolved: true
 
-- name: 'event.yellow.mssql.bi2'
+- name: 'event.yellow.bi2_DB'
   email_configs:
   - to: 'vadimas.klepko@fltechnics.com'
     from: 'grafana@fltechnics.com'
