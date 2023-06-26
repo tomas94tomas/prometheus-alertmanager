@@ -1836,7 +1836,7 @@ groups:
       responsable: Tomas Zemblys
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Ask Tomas Zemblys to check MSSQL is DB BI2 and BI2_erp available or not. Ask Tomas Zemblys send communication for DB's downtime .
+      Action: Ask Tomas Zemblys to check MSSQL is DB BI2 and BI2_erp available or not. Ask Tomas Zemblys send communication for DB's downtime.
   - alert: 18.2 BI2_kiosk_activity_yellow
     expr: mssql_entrance_KUN_HGR_kiosk_status == 0 or mssql_entrance_KUN_WH_kiosk_status == 0 or mssql_entrance_VNO_ADM_1a_1_kiosk_status == 0 or mssql_entrance_VNO_ADM_1a_2_kiosk_status == 0 or mssql_entrance_VNO_HGR_kiosk_status == 0 or mssql_entrance_VTA_kiosk_status == 0
     for: 30m
