@@ -1768,7 +1768,7 @@ groups:
   rules:
   - alert: 18.1 bi2_http_respose_yellow
     expr: probe_http_status_code{instance="bi2.fltechnics.com", job="UI_APP_INFRASTRUCTURE_HTTPS"} != 200
-    for: 1m
+    for: 5m
     labels:
       severity: event.yellow.bi2
     annotations:
@@ -1781,6 +1781,7 @@ groups:
   - alert: 18.1 bi2_http_respose_orange
     expr: probe_http_status_code{instance="bi2.fltechnics.com", job="UI_APP_INFRASTRUCTURE_HTTPS"} != 200
     labels:
+    for: 10m
       severity: event.orange
     annotations:
       Inpacted_Service : bi2
@@ -1791,7 +1792,7 @@ groups:
       Action: Check BI2 availability and docker statuses and do startup or restart services.
   - alert: 18.1 bi2_http_respose_red
     expr: probe_http_status_code{instance="bi2.fltechnics.com", job="UI_APP_INFRASTRUCTURE_HTTPS"} != 200
-    for: 10m
+    for: 15m
     labels:
       severity: event.red
     annotations:
@@ -1800,7 +1801,7 @@ groups:
       responsable: Andrius Kubickas
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Ask Dominykas about BI2 availability, communication
+      Action: Ask Vadimas Klepko about BI2 availability, communication
   - alert: 18.2 BI2_db_activity_yellow
     expr: mssql_fltsql_db_service_bi2_state < 2 or absent(mssql_fltsql_db_service_bi2_state)
     for: 5m
@@ -1873,6 +1874,118 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Vadimas Klepko to check Kiosk is available or not. 
+- name: 19. FLINT 
+  rules:
+  - alert: 19.1 flint_http_respose_yellow
+    expr: probe_http_status_code{job="UI_APP_LIVE_HTTPS", vhost="flint.fltechnics.com"} != 400
+    for: 5m
+    labels:
+      severity: event.yellow.flint
+    annotations:
+      Inpacted_Service : flint
+      Trigger : Exporter have status 0 or other of flint system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Vadimas Klepko
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check flint availability and docker statuses and do startup or restart services.
+  - alert: 19.1 flint_http_respose_orange
+    expr: probe_http_status_code{job="UI_APP_LIVE_HTTPS", vhost="flint.fltechnics.com"} != 400
+    labels:
+    for: 10m
+      severity: event.orange
+    annotations:
+      Inpacted_Service : flint
+      Trigger : Exporter have status 0 or other of flint system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Vadimas Klepko
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check flint availability and docker statuses and do startup or restart services.
+  - alert: 19.1 flint_http_respose_red
+    expr: probe_http_status_code{job="UI_APP_LIVE_HTTPS", vhost="flint.fltechnics.com"} != 400
+    for: 15m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : flint
+      Trigger : Exporter have status 0 or other of flint system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Vadimas Klepko about flint availability, communication
+- name: 20. Parcel 
+  rules:
+  - alert: 20.1 parcel_http_respose_yellow
+    expr: probe_http_status_code{instance="web-dev.fltechnics.com", job="UI_APP_INFRASTRUCTURE_HTTPS"} != 200
+    for: 5m
+    labels:
+      severity: event.yellow.parcel
+    annotations:
+      Inpacted_Service : parcel
+      Trigger : Exporter have status 0 or other of parcel system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Vadimas Klepko
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check parcel availability and docker statuses and do startup or restart services.
+  - alert: 19.1 parcel_http_respose_orange
+    expr: probe_http_status_code{instance="web-dev.fltechnics.com", job="UI_APP_INFRASTRUCTURE_HTTPS"} != 200
+    labels:
+    for: 15m
+      severity: event.orange
+    annotations:
+      Inpacted_Service : parcels
+      Trigger : Exporter have status 0 or other of parcel system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Vadimas Klepko
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check parcel availability and docker statuses and do startup or restart services.
+  - alert: 19.1 parcel_http_respose_red
+    expr: probe_http_status_code{instance="web-dev.fltechnics.com", job="UI_APP_INFRASTRUCTURE_HTTPS"} != 200
+    for: 20m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : parcel
+      Trigger : Exporter have status 0 or other of parcel system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Dominykas about parcel availability, communication 
+  - alert: 20.2 parcelv2_http_respose_yellow
+    expr: probe_http_status_code{instance="parcel-dev.fltechnics.com", job="UI_APP_INFRASTRUCTURE_HTTPS"} != 200
+    for: 5m
+    labels:
+      severity: event.yellow.parcel
+    annotations:
+      Inpacted_Service : parcel V2
+      Trigger : Exporter have status 0 or other of parcel system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Vadimas Klepko
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check parcel availability and docker statuses and do startup or restart services.
+  - alert: 20.2 parcel_http_respose_orange
+    expr: probe_http_status_code{instance="parcel-dev.fltechnics.com", job="UI_APP_INFRASTRUCTURE_HTTPS"} != 200
+    labels:
+    or: 10m
+      severity: event.orange
+    annotations:
+      Inpacted_Service : parcel V2
+      Trigger : Exporter have status 0 or other of parcel system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Vadimas Klepko
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check parcel availability and docker statuses and do startup or restart services.
+  - alert: 20.2 parcel_http_respose_red
+    expr: probe_http_status_code{instance="parcel-dev.fltechnics.com", job="UI_APP_INFRASTRUCTURE_HTTPS"} != 200
+    for: 20m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : parcel V2
+      Trigger : Exporter have status 0 or other of parcel system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Dominykas about parcel availability, communication   
 - name: Linux Server Events
   rules:
   - record: instance:node_cpu:rate:sum

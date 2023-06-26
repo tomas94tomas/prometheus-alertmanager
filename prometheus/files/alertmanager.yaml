@@ -100,6 +100,12 @@ route:
       severity: event.yellow.bi2_DB
     receiver: event.yellow.bi2_DB
   - match:
+      severity: event.yellow.flint
+    receiver: event.yellow.flint
+  - match:
+      severity: event.yellow.parcel
+    receiver: event.yellow.parcel
+  - match:
       severity: event.yellow.files
     receiver: event.yellow.files
   - match:
@@ -330,6 +336,26 @@ receivers:
     require_tls: false
     send_resolved: true
   - to: 'tomas.zemblys@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.yellow.flint'
+  email_configs:
+  - to: 'vadimas.klepko@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.yellow.parcel'
+  email_configs:
+  - to: 'vadimas.klepko@fltechnics.com'
     from: 'grafana@fltechnics.com'
     headers:
       Subject: '{{ template "email-yellow.subject" . }}'
