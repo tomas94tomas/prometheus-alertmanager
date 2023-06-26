@@ -1780,8 +1780,8 @@ groups:
       Action: Check BI2 availability and docker statuses and do startup or restart services.
   - alert: 18.1 bi2_http_respose_orange
     expr: probe_http_status_code{instance="bi2.fltechnics.com", job="UI_APP_INFRASTRUCTURE_HTTPS"} != 200
-    labels:
     for: 10m
+    labels:
       severity: event.orange
     annotations:
       Inpacted_Service : bi2
@@ -1890,8 +1890,8 @@ groups:
       Action: Check flint availability and docker statuses and do startup or restart services.
   - alert: 19.1 flint_http_respose_orange
     expr: probe_http_status_code{job="UI_APP_LIVE_HTTPS", vhost="flint.fltechnics.com"} != 400
-    labels:
     for: 10m
+    labels:
       severity: event.orange
     annotations:
       Inpacted_Service : flint
@@ -1928,8 +1928,8 @@ groups:
       Action: Check parcel availability and docker statuses and do startup or restart services.
   - alert: 19.1 parcel_http_respose_orange
     expr: probe_http_status_code{instance="web-dev.fltechnics.com", job="UI_APP_INFRASTRUCTURE_HTTPS"} != 200
-    labels:
     for: 15m
+    labels:
       severity: event.orange
     annotations:
       Inpacted_Service : parcels
@@ -1964,8 +1964,8 @@ groups:
       Action: Check parcel availability and docker statuses and do startup or restart services.
   - alert: 20.2 parcel_http_respose_orange
     expr: probe_http_status_code{instance="parcel-dev.fltechnics.com", job="UI_APP_INFRASTRUCTURE_HTTPS"} != 200
+    for: 10m
     labels:
-    or: 10m
       severity: event.orange
     annotations:
       Inpacted_Service : parcel V2
