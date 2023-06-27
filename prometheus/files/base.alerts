@@ -2023,7 +2023,43 @@ groups:
       responsable: Andrius Kubickas
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Ask Vadimas Klepko about Contracts-playbook availability, communication 
+      Action: Ask Vadimas Klepko about Contracts-playbook availability, communication
+  - alert: 21.2 Contracts-playbook_db_activity_yellow
+    expr: mssql_fltsql_db_service_legal < 1 or absent(mssql_fltsql_db_service_legal)
+    for: 5m
+    labels:
+      severity: event.yellow.legal
+    annotations:
+      Inpacted_Service : legal
+      Trigger : legal MSSQL DB status >= 0 and time >= 5 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check legal database on FLTSQL server. If FLT-SQL-DEV (192.168.50.210) VM is down ask ASG to turn on VM.
+  - alert: 21.2 Contracts-playbook_db_activity_orange
+    expr: mssql_fltsql_db_service_legal_state < 1 or absent(mssql_fltsql_db_service_legal_state)
+    for: 15m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : legal
+      Trigger : legal, legal_erp MSSQL DB status >= 0 and time >= 10 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check legal database on FLTSQL server. If FLT-SQL-DEV (192.168.50.210) VM is down ask ASG to turn on VM.
+  - alert: 21.2 Contracts-playbook_db_activity_red
+    expr: mssql_fltsql_db_service_legal < 1 or absent(mssql_fltsql_db_service_legal)
+    for: 20m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : legal
+      Trigger : legal, legal_erp MSSQL DB status >= 0 and time >= 15 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Tomas Zemblys to check FLT-SQL-DEV is DB legal available or not. Ask Tomas Zemblys send communication for DB's downtime.
 - name: 22. Safety
   rules:
   - alert: 22.1 Contracts-playbook_http_respose_yellow
@@ -2062,42 +2098,6 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Dominykas about safety availability, communication 
-  - alert: 22.2 legal_db_activity_yellow
-    expr: mssql_fltsql_db_service_legal < 2 or absent(mssql_fltsql_db_service_legal)
-    for: 5m
-    labels:
-      severity: event.yellow.legal
-    annotations:
-      Inpacted_Service : legal
-      Trigger : legal MSSQL DB status >= 0 and time >= 5 min
-      responsable: Tomas Zemblys
-      timestamp: >
-        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check legal database on FLTSQL server. If FLT-SQL-DEV (192.168.50.210) VM is down ask ASG to turn on VM.
-  - alert: 22.2 legal_db_activity_orange
-    expr: mssql_fltsql_db_service_legal_state < 2 or absent(mssql_fltsql_db_service_legal_state)
-    for: 15m
-    labels:
-      severity: event.orange
-    annotations:
-      Inpacted_Service : legal
-      Trigger : legal, legal_erp MSSQL DB status >= 0 and time >= 10 min
-      responsable: Tomas Zemblys
-      timestamp: >
-        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check legal database on FLTSQL server. If FLT-SQL-DEV (192.168.50.210) VM is down ask ASG to turn on VM.
-  - alert: 22.2 legal_db_activity_red
-    expr: mssql_fltsql_db_service_legal < 2 or absent(mssql_fltsql_db_service_legal)
-    for: 20m
-    labels:
-      severity: event.red
-    annotations:
-      Inpacted_Service : legal
-      Trigger : legal, legal_erp MSSQL DB status >= 0 and time >= 15 min
-      responsable: Tomas Zemblys
-      timestamp: >
-        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Ask Tomas Zemblys to check FLT-SQL-DEV is DB legal available or not. Ask Tomas Zemblys send communication for DB's downtime.
 - name: 23. Smailer
   rules:
   - alert: 23.1 smailer_http_respose_yellow
