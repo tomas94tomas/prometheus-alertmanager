@@ -2037,7 +2037,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check legal database on FLTSQL server. If FLT-SQL-DEV (192.168.50.210) VM is down ask ASG to turn on VM.
   - alert: 21.2 Contracts-playbook_db_activity_orange
-    expr: mssql_fltsql_db_service_legal_state < 1 or absent(mssql_fltsql_db_service_legal_state)
+    expr: mssql_fltsql_db_service_legal_state == 0 or absent(mssql_fltsql_db_service_legal_state)
     for: 15m
     labels:
       severity: event.orange
