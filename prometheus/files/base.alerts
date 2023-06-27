@@ -2035,9 +2035,9 @@ groups:
       responsable: Tomas Zemblys
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check legal database on FLTSQL server. If FLT-SQL-DEV (192.168.50.210) VM is down ask ASG to turn on VM.
+      Action: Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check legal database on FLT-SQL-DEV server. If FLT-SQL-DEV (192.168.50.210) VM is down ask ASG to turn on VM.
   - alert: 21.2 Contracts-playbook_db_activity_orange
-    expr: mssql_fltsql_db_service_legal_state == 0 or absent(mssql_fltsql_db_service_legal_state)
+    expr: mssql_fltsql_db_service_legal == 0 or absent(mssql_fltsql_db_service_legal_state)
     for: 15m
     labels:
       severity: event.orange
@@ -2047,7 +2047,7 @@ groups:
       responsable: Tomas Zemblys
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check legal database on FLTSQL server. If FLT-SQL-DEV (192.168.50.210) VM is down ask ASG to turn on VM.
+      Action: Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check legal database on FLT-SQL-DEV server. If FLT-SQL-DEV (192.168.50.210) VM is down ask ASG to turn on VM.
   - alert: 21.2 Contracts-playbook_db_activity_red
     expr: mssql_fltsql_db_service_legal == 0 or absent(mssql_fltsql_db_service_legal)
     for: 20m
@@ -2182,6 +2182,42 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Vadimas Klepko about bi2v2 availability, communication 
+  - alert: 24.2 bi2v2_db_activity_yellow
+    expr: mssql_fltsql_db_service_bi2v2 == 0 or absent(mssql_fltsql_db_service_bi2v2)
+    for: 5m
+    labels:
+      severity: event.yellow.bi2v2
+    annotations:
+      Inpacted_Service : bi2v2
+      Trigger : bi2v2 MSSQL DB status >= 0 and time >= 5 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check bi2v2 database on FLTSQL server. If FLT-SQL-DEV (192.168.50.210) VM is down ask ASG to turn on VM.
+  - alert: 24.2 bi2v2_db_activity_orange
+    expr: mssql_fltsql_db_service_bi2v2 == 0 or absent(mssql_fltsql_db_service_bi2v2)
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : bi2v2
+      Trigger : bi2v2 MSSQL DB status >= 0 and time >= 10 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check bi2v2 database on FLTSQL server. If FLT-SQL-DEV (192.168.50.210) VM is down ask ASG to turn on VM.
+  - alert: 24.2 bi2v2_db_activity_red
+    expr: mssql_fltsql_db_service_bi2v2 == 0 or absent(mssql_fltsql_db_service_bi2v2)
+    for: 15m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : bi2v2
+      Trigger : bi2v2 MSSQL DB status >= 0 and time >= 15 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Tomas Zemblys to check FLT-SQL-DEV is DB bi2v2 available or not. Ask Tomas Zemblys send communication for DB's downtime.
 - name: Linux Server Events
   rules:
   - record: instance:node_cpu:rate:sum
