@@ -491,6 +491,13 @@ scrape_configs:
         labels:
           name: 'jira_sql_exporter'
 
+  - job_name: 'flt_sql_dev_exporter'
+    metrics_path: "/metrics"
+    static_configs:
+      - targets: ['192.168.231.235:9402']
+        labels:
+          name: 'flt_sql_dev_exporter'
+
   - job_name: 'rnd_consul_live'
     metrics_path: "/metrics"
     scrape_interval: 15s
@@ -707,6 +714,8 @@ scrape_configs:
           - smailer.fltechnics.com
           - parcels-dev.fltechnics.com
           - web-dev.fltechnics.com
+          - contracts-playbook.fltechnics.com
+          - bi2-v2-uat.fltechnics.com
         type: A
         port: 443
     relabel_configs:

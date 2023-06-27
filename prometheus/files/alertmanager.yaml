@@ -106,6 +106,18 @@ route:
       severity: event.yellow.parcel
     receiver: event.yellow.parcel
   - match:
+      severity: event.yellow.contracts-playbook
+    receiver: event.yellow.contracts-playbook
+  - match:
+      severity: event.yellow.safety
+    receiver: event.yellow.safety
+  - match:
+      severity: event.yellow.smailer
+    receiver: event.yellow.smailer
+  - match:
+      severity: event.yellow.bi2v2
+    receiver: event.yellow.bi2v2
+  - match:
       severity: event.yellow.files
     receiver: event.yellow.files
   - match:
@@ -354,6 +366,46 @@ receivers:
     send_resolved: true
 
 - name: 'event.yellow.parcel'
+  email_configs:
+  - to: 'vadimas.klepko@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.yellow.contracts-playbook'
+  email_configs:
+  - to: 'vadimas.klepko@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.yellow.safety'
+  email_configs:
+  - to: 'vadimas.klepko@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.yellow.smailer'
+  email_configs:
+  - to: 'vadimas.klepko@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.yellow.bi2v2'
   email_configs:
   - to: 'vadimas.klepko@fltechnics.com'
     from: 'grafana@fltechnics.com'
