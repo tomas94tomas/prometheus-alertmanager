@@ -2025,7 +2025,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Vadimas Klepko about Contracts-playbook availability, communication
   - alert: 21.2 Contracts-playbook_db_activity_yellow
-    expr: mssql_fltsql_db_service_legal < 1 or absent(mssql_fltsql_db_service_legal)
+    expr: mssql_fltsql_db_service_legal == 0 or absent(mssql_fltsql_db_service_legal)
     for: 5m
     labels:
       severity: event.yellow.legal
@@ -2049,7 +2049,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check legal database on FLTSQL server. If FLT-SQL-DEV (192.168.50.210) VM is down ask ASG to turn on VM.
   - alert: 21.2 Contracts-playbook_db_activity_red
-    expr: mssql_fltsql_db_service_legal < 1 or absent(mssql_fltsql_db_service_legal)
+    expr: mssql_fltsql_db_service_legal == 0 or absent(mssql_fltsql_db_service_legal)
     for: 20m
     labels:
       severity: event.red
