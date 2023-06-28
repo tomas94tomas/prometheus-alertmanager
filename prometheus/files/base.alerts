@@ -1912,6 +1912,42 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Vadimas Klepko about flint availability, communication
+   - alert: 19.2 flint_db_activity_yellow
+    expr: oracledb_oracledb_db_flint_value == 0 or absent(oracledb_oracledb_db_flint_value)
+    for: 5m
+    labels:
+      severity: event.yellow.flint
+    annotations:
+      Inpacted_Service : flint
+      Trigger : flint ODB IT DB status >= 0 and time >= 5 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check flint database on ODB IT server. If ODB IT (192.168.50.157) VM is down ask ASG to turn on VM.
+  - alert: 19.2 flint_db_activity_orange
+    expr: oracledb_oracledb_db_flint_value == 0 or absent(oracledb_oracledb_db_flint_value)
+    for: 15m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : flint
+      Trigger : flint MSSQL DB status >= 0 and time >= 10 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check flint database on ODB IT server. If ODB IT (192.168.50.157) VM is down ask ASG to turn on VM.
+  - alert: 19.2 flint_db_activity_red
+    expr: oracledb_oracledb_db_flint_value == 0 or absent(oracledb_oracledb_db_flint_value)
+    for: 20m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : flint
+      Trigger : flint MSSQL DB status >= 0 and time >= 15 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Tomas Zemblys to check ODB IT is DB flint available or not. Ask Tomas Zemblys send communication for DB's downtime.
 - name: 20. Parcel 
   rules:
   - alert: 20.1 parcel_http_respose_yellow
@@ -2144,42 +2180,42 @@ groups:
     annotations:
       description: Status change to 0.
       summary: Smailer processing indicator result less than 50
-  - alert: 23.2 BI2_db_activity_yellow
-    expr: mssql_fltsql_db_service_bi2_state < 2 or absent(mssql_fltsql_db_service_bi2_state)
+  - alert: 23.2 smailer_db_activity_yellow
+    expr: mssql_fltsql_db_service_smailer == 0 or absent(mssql_fltsql_db_service_smailer)
     for: 5m
     labels:
       severity: event.yellow.smailer
     annotations:
-      Inpacted_Service : BI2
-      Trigger : Bi2, Bi2_erp MSSQL DB status >= 0 and time >= 5 min
+      Inpacted_Service : smailer
+      Trigger : smailer MSSQL DB status >= 0 and time >= 5 min
       responsable: Tomas Zemblys
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check BI2 database on FLTSQL server. If FLTSQL (192.168.50.10) VM is down ask ASG to turn on VM.
-  - alert: 23.2 BI2_db_activity_orange
-    expr: mssql_fltsql_db_service_bi2_state < 2 or absent(mssql_fltsql_db_service_bi2_state)
+      Action: Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check smailer database on FLTSQL server. If FLTSQL (192.168.50.10) VM is down ask ASG to turn on VM.
+  - alert: 23.2 smailer_db_activity_orange
+    expr: mssql_fltsql_db_service_smailer == 0 or absent(mssql_fltsql_db_service_smailer)
     for: 15m
     labels:
       severity: event.orange
     annotations:
-      Inpacted_Service : BI2
-      Trigger : Bi2, Bi2_erp MSSQL DB status >= 0 and time >= 10 min
+      Inpacted_Service : smailer
+      Trigger : smailer MSSQL DB status >= 0 and time >= 10 min
       responsable: Tomas Zemblys
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: n	Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check BI2 database on FLTSQL server. If FLTSQL (192.168.50.10) VM is down ask ASG to turn on VM.
-  - alert: 23.2 BI2_db_activity_red
-    expr: mssql_fltsql_db_service_bi2_state < 2 or absent(mssql_fltsql_db_service_bi2_state)
+      Action: n	Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check smailer database on FLTSQL server. If FLTSQL (192.168.50.10) VM is down ask ASG to turn on VM.
+  - alert: 23.2 smailer_db_activity_red
+    expr: mssql_fltsql_db_service_smailer == 0 or absent(mssql_fltsql_db_service_smailer)
     for: 20m
     labels:
       severity: event.red
     annotations:
-      Inpacted_Service : BI2
-      Trigger : Bi2, Bi2_erp MSSQL DB status >= 0 and time >= 15 min
+      Inpacted_Service : smailer
+      Trigger : smailer MSSQL DB status >= 0 and time >= 15 min
       responsable: Tomas Zemblys
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Ask Tomas Zemblys to check MSSQL is DB BI2 and BI2_erp available or not. Ask Tomas Zemblys send communication for DB's downtime.
+      Action: Ask Tomas Zemblys to check MSSQL is DB smailer available or not. Ask Tomas Zemblys send communication for DB's downtime.
 - name: 24. Bi2v2
   rules:
   - alert: 24.1 bi2v2_http_respose_yellow
