@@ -1467,7 +1467,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Dominykas about Nexus availability and healthcheck.
   - alert: 12.2 kb_db_activity_yellow
-    expr: mysql_up{instance="192.168.231.235:9105", job="kb_mysql_exporter", name="kb_teampass_exporter"} == 0
+    expr: mysql_up{instance="192.168.231.235:9105", job="kb_mysql_exporter", name="kb_exporter"} == 0
     for: 5m
     labels:
       severity: event.yellow.kb
@@ -1912,7 +1912,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Vadimas Klepko about flint availability, communication
-   - alert: 19.2 flint_db_activity_yellow
+  - alert: 19.2 flint_db_activity_yellow
     expr: oracledb_oracledb_db_flint_value == 0 or absent(oracledb_oracledb_db_flint_value)
     for: 5m
     labels:
@@ -2133,7 +2133,77 @@ groups:
       responsable: Andrius Kubickas
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Ask Dominykas about safety availability, communication 
+      Action: Ask Dominykas about safety availability, communication
+  - alert: 22.2 safety_db_activity_yellow
+    expr: mysql_up{instance="192.168.231.235:9106", job="safety_mysql_exporter", name="safety_exporter"} == 0
+    for: 5m
+    labels:
+      severity: event.yellow.safety
+    annotations:
+      Inpacted_Service : safety 
+      Trigger : Teampass MySQL DB status >= 0 and time >= 5 min
+      responsable: Dominykas Sivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check MYSQL docker container is running or not on FLT-MM-BS server. If FLT-MM-BS (192.168.50.54) VM is down ask ASG to turn on VM.
+  - alert: 22.2 safety_db_activity_orange
+    expr: mysql_up{instance="192.168.231.235:9106", job="safety_mysql_exporter", name="safety_exporter"} == 0
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : safety
+      Trigger : safety MySQL db activity > 10 min
+      responsable: Dominykas Sivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action:  Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check MYSQL docker container is running or not on FLT-MM-BS server. If FLT-MM-BS (192.168.50.54) VM is down ask ASG to turn on VM.
+  - alert: 22.2 safety_db_activity_red
+    expr: mysql_up{instance="192.168.231.235:9106", job="safety_mysql_exporter", name="safety_exporter"} == 0
+    for: 15m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : safety
+      Trigger :  safety MySQL DB status >= 0 and time >= 15 min
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Dominykas Sivickas to check MySQL is available or not. Ask Dominykas send communication for DB's downtime .
+  - alert: 22.3 safety_db_activity_DiskRunningFull_yellow
+    expr: 100 - ((node_filesystem_avail_bytes{mountpoint="/home/app/share/safety"} * 100) / node_filesystem_size_bytes{mountpoint="/home/app/share/safety"}) > 90
+    for: 10m
+    labels:
+      severity: event.yellow.safety
+    annotations:
+      Inpacted_Service : safety 
+      Trigger : File system on FLT-App-Samba server on mountpoint="/home/app/share/safety" is more than 90proc
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check SMB Volume size on FLT-App-Samba server on mountpoint="/home/app/share/safety"
+  - alert: 22.3 safety_db_activity_DiskRunningFull_orange
+    expr: 100 - ((node_filesystem_avail_bytes{mountpoint="/home/app/share/safety"} * 100) / node_filesystem_size_bytes{mountpoint="/home/app/share/safety"}) > 90
+    for: 20m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : safety 
+      Trigger : File system on FLT-App-Samba server on mountpoint="/home/app/share/safety" is more than 90proc
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check SMB Volume size on FLT-App-Samba server on mountpoint="/home/app/share/safety"
+  - alert: 22.3 safety_db_activity_DiskRunningFull_red
+    expr: 100 - ((node_filesystem_avail_bytes{mountpoint="/home/app/share/safety"} * 100) / node_filesystem_size_bytes{mountpoint="/home/app/share/safety"}) > 90
+    for: 30m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : safety 
+      Trigger : File system on FLT-App-Samba server on mountpoint="/home/app/share/safety" is more than 90proc
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check SMB Volume size on FLT-App-Samba server on mountpoint="/home/app/share/safety"
+    
 - name: 23. Smailer
   rules:
   - alert: 23.1 smailer_http_respose_yellow
