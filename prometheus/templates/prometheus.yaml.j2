@@ -124,6 +124,25 @@ scrape_configs:
     metric_relabel_configs:
     - regex: 'id'
       action: labeldrop
+  
+   - job_name: 'MySQL-DB'
+    static_configs:
+
+{% for host in groups['MySQL-DB'] %}
+      - targets: ['{{ hostvars[host]['ansible_host'] | default (host) }}:9182']
+        labels:
+          name: '{{ hostvars[host]['inventory_hostname'] }}'
+{% endfor %}
+    relabel_configs:
+    - source_labels: [name]
+      separator: ;
+      regex: (.*)
+      target_label: instance
+      replacement: ${1}
+      action: replace
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
 
   - job_name: 'AMOS Wheels and Brakes'
     static_configs:
