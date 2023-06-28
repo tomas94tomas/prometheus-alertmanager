@@ -2203,7 +2203,6 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check SMB Volume size on FLT-App-Samba server on mountpoint="/home/app/share/safety"
-    
 - name: 23. Smailer
   rules:
   - alert: 23.1 smailer_http_respose_yellow

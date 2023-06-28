@@ -343,6 +343,14 @@ scrape_configs:
     - regex: 'id'
       action: labeldrop
 
+  - job_name: 'FLTSQL_DEV_metrics'
+    metrics_path: "/metrics"
+    static_configs:
+    - targets: ['192.168.50.210:9182']
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
+
   - job_name: 'FLTSQL_metrics'
     metrics_path: "/metrics"
     static_configs:
