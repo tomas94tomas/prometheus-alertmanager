@@ -125,7 +125,7 @@ scrape_configs:
     - regex: 'id'
       action: labeldrop
   
-   - job_name: 'MySQL-DB'
+  - job_name: 'MySQL-DB'
     static_configs:
 
 {% for host in groups['MySQL-DB'] %}
