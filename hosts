@@ -48,6 +48,8 @@ AirNavX-Data ansible_host=192.168.50.202
 FLT-Boeing ansible_host=192.168.50.22
 FLT-Web-DEV ansible_host=192.168.231.117
 FLT-Files ansible_host=192.168.50.100
+Quantum-new ansible_host=192.168.50.121
+Quantum-ODB-new ansible_host=192.168.50.181
 
 [AMOS_WB]
 wb-amos-app-prod ansible_host=192.168.243.23
