@@ -156,7 +156,7 @@ receivers:
   email_configs:
   - to: 'grafana.monitoring@fltechnics.com'
     send_resolved: true
-  - to: 'it.administrators.team@fltechnics.com'
+  - to: 'it.monitoring@fltechnics.com'
     send_resolved: true
 
 - name: 'team-warning'
