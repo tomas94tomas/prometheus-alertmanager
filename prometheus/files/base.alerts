@@ -477,7 +477,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Tomas to check FLTSQL DB is available or not. Ask Tomas send communication for service downtime. 
-  - alert: 3.6 FLT_others_db_activity_yellow
+  - alert: 3.6 FLTTRAIN_others_db_activity_yellow
     expr: mssql_fltrain_others_db_activity == 0
     for: 10m
     labels:
@@ -490,7 +490,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check MSSQL services is running or not on FLTSQL server. If FLTTrain (192.168.50.18) VM is down ask ASG to turn on VM.
   - alert: 3.6 FLTTRAIN_others_db_activity_orange
-    expr: mssql_fltsql_others_db_activity == 0
+    expr: mssql_fltrain_others_db_activity == 0
     for: 20m
     labels:
       severity: event.orange
@@ -502,7 +502,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check MSSQL services is running or not on FLTSQL server. If FLTTrain (192.168.50.18) VM is down ask ASG to turn on VM.
   - alert: 3.6 FLTTRAIN_others_db_activity_red
-    expr: mssql_fltsql_others_db_activity == 0
+    expr: mssql_fltrain_others_db_activity == 0
     for: 30m
     labels:
       severity: event.red
