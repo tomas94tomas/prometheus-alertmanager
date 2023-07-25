@@ -2468,7 +2468,9 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Tomas Zemblys to check FLT-SQL-DEV is DB bi2v2 available or not. Ask Tomas Zemblys send communication for DB's downtime.
 - name: 25. QUANTUM
+  rules:
 - name: 26. Sensus
+  rules:
   - alert: 26.1 Sensus_http_respose_yellow
     expr: probe_http_status_code{instance="sensus.fltechnics.com", job="UI_APP_INFRASTRUCTURE_HTTPS"} != 200
     for: 5m
@@ -2542,6 +2544,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Karolis Dimitrevičius about Sensus availability, communication
 - name: 27. OPEN-FLT
+  rules:
   - alert: 26.1 open_http_respose_yellow
     expr: probe_http_status_code{instance="open.fltechnics.com", job="UI_APP_INFRASTRUCTURE_HTTPS"} != 200
     for: 5m
@@ -2579,6 +2582,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Karolis Dimitrevičius about open availability, communication
 - name: 28. Sensus-TimeTracking
+  rules:
 - name: Linux Server Events
   rules:
   - record: instance:node_cpu:rate:sum
