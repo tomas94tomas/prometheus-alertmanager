@@ -748,7 +748,6 @@ scrape_configs:
           - sensus.fltechnics.com
           - sensusmro.fltechnics.com
           - open.fltechnics.com
-          - sensus-ext.fltechnics.com/time-tracking-terminal
         type: A
         port: 443
     relabel_configs:
@@ -792,6 +791,21 @@ scrape_configs:
     static_configs:
       - targets:
         - https://bi.fltechnics.com
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+
+  - job_name: SENSUS_EXT_TIMETRACKING_HTTPS
+    metrics_path: /probe
+    params:
+      module: [ http_2xx_example ]  # Look for a HTTP 200 response.
+    static_configs:
+      - targets:
+        - https://sensus-ext.fltechnics.com/time-tracking-terminal
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target

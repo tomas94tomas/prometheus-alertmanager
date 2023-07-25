@@ -2467,8 +2467,6 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Tomas Zemblys to check FLT-SQL-DEV is DB bi2v2 available or not. Ask Tomas Zemblys send communication for DB's downtime.
-- name: 25. QUANTUM
-  rules:
 - name: 26. Sensus
   rules:
   - alert: 26.1 Sensus_http_respose_yellow
@@ -2583,6 +2581,42 @@ groups:
       Action: Ask Karolis Dimitrevičius about open availability, communication
 - name: 28. Sensus-TimeTracking
   rules:
+  - alert: 28.1 sensustimetracking_http_respose_yellow
+    expr: probe_http_status_code{ job="SENSUS_EXT_TIMETRACKING_HTTPS"} != 200
+    for: 5m
+    labels:
+      severity: event.yellow.Sensus
+    annotations:
+      Inpacted_Service : Sensus Time Tracking
+      Trigger : Exporter have status 0 or other of Sensus Time Tracking system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Krolis Dimitrevičius
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Sensus availability if not working do communication.
+  - alert: 28.1 sensustimetracking_http_respose_ornage
+    expr: probe_http_status_code{ job="SENSUS_EXT_TIMETRACKING_HTTPS"} != 200
+    for: 15m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Sensus Sensus Time Tracking
+      Trigger : Exporter have status 0 or other of Sensus Time Tracking system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Krolis Dimitrevičius
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Sensus availability if not working do communication.
+  - alert: 28.1 sensustimetracking_http_respose_red
+    expr: probe_http_status_code{ job="SENSUS_EXT_TIMETRACKING_HTTPS"} != 200
+    for: 20m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Sensus Time Tracking
+      Trigger : Exporter have status 0 or other of Sensus Time Tracking system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Karolis Dimitrevičius about Sensus Time Tracking availability, communication
 - name: Linux Server Events
   rules:
   - record: instance:node_cpu:rate:sum
