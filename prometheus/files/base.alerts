@@ -1576,6 +1576,114 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Karolis about RAMCO Sharepoint availability, communication.
+  - alert: 13.3 RAMCO_db_activity_yellow
+    expr: mssql_fltsql_db_service_ramco == 0 or absent(mssql_fltsql_others_db_activity)
+    for: 10m
+    labels:
+      severity: event.yellow.ramco
+    annotations:
+      Inpacted_Service : Ramco
+      Trigger : Ramco MSSQL db activity > 10 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check MSSQL services is running or not on FLTSQL server. If FLTSQL (192.168.50.10) VM is down ask ASG to turn on VM.
+  - alert: 13.3 RAMCO_db_activity_orange
+    expr: mssql_fltsql_db_service_ramco == 0 or absent(mssql_fltsql_others_db_activity)
+    for: 15m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Ramco
+      Trigger :  Ramco MSSQL db activity >  15 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check MSSQL services is running or not on FLTSQL server. If FLTSQL (192.168.50.10) VM is down ask ASG to turn on VM.
+  - alert: 13.3 RAMCO_db_activity_red
+    expr: mssql_fltsql_db_service_ramco == 0 or absent(mssql_fltsql_others_db_activity)
+    for: 20m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Ramco
+      Trigger :  Ramco MSSQL db activity > 20 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Tomas to check FLTSQL DB is available or not. Ask Tomas send communication for DB's downtime .
+  - alert: 13.4 ramco_main_services_yellow
+    expr: windows_service_state{name="rvwrouter",state="running"} == 0 or windows_service_state{name="rvwserversocket",state="running"} == 0 or  windows_service_state{name="rvwsrvcontroller",state="running"} == 0
+    for: 1m
+    labels:
+      severity: event.yellow.ramco
+    annotations:
+      Inpacted_Service : Ramco
+      Trigger : Exporter have status 0 or other of Ramco Services rvwrouter,rvwserversocket,rvwsrvcontroller stopped {{ $labels.vhost }} for 1m
+      responsable: Karolis Dimitrevičius
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Ramco availability and Webservice statuses and do startup or restart services.
+  - alert: 13.4 ramco_main_services_orange
+    expr: windows_service_state{name="rvwrouter",state="running"} == 0 or windows_service_state{name="rvwserversocket",state="running"} == 0 or  windows_service_state{name="rvwsrvcontroller",state="running"} == 0
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Ramco
+      Trigger : Exporter have status 0 or other of Ramco Services rvwrouter,rvwserversocket,rvwsrvcontroller stopped {{ $labels.vhost }} for 10m
+      responsable: Karolis Dimitrevičius
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Teampass availability and docker statuses and startup or restart services.
+  - alert: 13.4 ramco_main_services_red
+    expr: windows_service_state{name="rvwrouter",state="running"} == 0 or windows_service_state{name="rvwserversocket",state="running"} == 0 or  windows_service_state{name="rvwsrvcontroller",state="running"} == 0
+    for: 20m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Ramco
+      Trigger : Exporter have status 0 or other of Ramco Services rvwrouter,rvwserversocket,rvwsrvcontroller stopped {{ $labels.vhost }} for 10m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Karolis about RAMCO availability, communication.
+  - alert: 13.5 ramco_printing_yellow
+    expr: mssql_ramco_printing > 5 
+    for: 15m
+    labels:
+      severity: event.yellow.ramco
+    annotations:
+      Inpacted_Service : Ramco
+      Trigger : Ramco Printing have on hold 5 Jobs for 15m
+      responsable: Karolis Dimitrevičius
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Ramco printing startup or restart service.
+  - alert: 13.5 ramco_printing_orange
+    expr: mssql_ramco_printing > 5 
+    for: 30m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Ramco
+      Trigger : Ramco Printing have on hold 5 Jobs for 30m
+      responsable: Karolis Dimitrevičius
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Ramco printing startup or restart service.
+  - alert: 13.5 ramco_printing_red
+    expr: mssql_ramco_printing > 5 
+    for: 1h
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Ramco
+      Trigger : Ramco Printing have on hold 5 Jobs for 1h
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Karolis about RAMCO printing/
 - name: 14. Genesis Events
   rules:
   - alert: 14.1 genesis_api_http_response_yellow
