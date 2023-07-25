@@ -118,6 +118,12 @@ route:
       severity: event.yellow.bi2v2
     receiver: event.yellow.bi2v2
   - match:
+      severity: event.yellow.sensus
+    receiver: event.yellow.sensus
+  - match:
+      severity: event.yellow.open
+    receiver: event.yellow.open
+  - match:
       severity: event.yellow.files
     receiver: event.yellow.files
   - match:
@@ -412,6 +418,26 @@ receivers:
 - name: 'event.yellow.bi2v2'
   email_configs:
   - to: 'vadimas.klepko@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.yellow.sensus'
+  email_configs:
+  - to: 'karolis.dimitrevicius@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.yellow.open'
+  email_configs:
+  - to: 'karolis.dimitrevicius@fltechnics.com'
     from: 'grafana@fltechnics.com'
     headers:
       Subject: '{{ template "email-yellow.subject" . }}'
