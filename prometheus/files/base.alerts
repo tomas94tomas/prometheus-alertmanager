@@ -3156,7 +3156,7 @@ groups:
 - name: Test Events
   rules:
   - alert: 4.1 Server_yellow
-    expr: up{job="IT Unit Support"} == 1
+    expr: up{job="IT Unit Support"} == 0
     labels:
       severity: event.red
     annotations:
