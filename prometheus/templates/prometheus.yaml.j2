@@ -728,40 +728,6 @@ scrape_configs:
       - target_label: __address__
         replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
 
-
-  - job_name: UI_APP_LIVE_HTTPS
-    metrics_path: /probe
-    params:
-      module: [ http_2xx_example ]  # Look for a HTTP 200 response.
-    dns_sd_configs:
-      - names:
-          - bi2.fltechnics.com
-          - kyc.fltechnics.com
-          - flint.fltechnics.com
-          - old-it-dashboard.fltechnics.com
-          - sw.fltechnics.com
-          - smailer.fltechnics.com
-          - parcels-dev.fltechnics.com
-          - web-dev.fltechnics.com
-          - contracts-playbook.fltechnics.com
-          - bi2-v2-uat.fltechnics.com
-          - sensus.fltechnics.com
-          - sensusmro.fltechnics.com
-          - open.fltechnics.com
-        type: A
-        port: 443
-    relabel_configs:
-      - source_labels: [__address__]
-        target_label: __param_target
-      - source_labels: [__param_target]
-        target_label: instance
-      - target_label: __address__
-        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
-      - source_labels: [__meta_dns_name]
-        target_label: __param_hostname  # Make domain name become 'Host' header for probe requests
-      - source_labels: [__meta_dns_name]
-        target_label: vhost  # and store it in 'vhost' label
-
   - job_name: UI_APP_INFRASTRUCTURE_HTTPS
     metrics_path: /probe
     params:
@@ -783,6 +749,33 @@ scrape_configs:
         replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
       - source_labels: [__meta_dns_name]
         target_label: vhost  # and store it in 'vhost' label
+
+  - job_name: UI_APP_LIVE_HTTPS
+    metrics_path: /probe
+    params:
+      module: [ http_2xx_example ]  # Look for a HTTP 200 response.
+    static_configs:
+      - targets:
+        - https://sensus.fltechnics.com
+        - https://parcels-dev.fltechnics.com
+        - https://bi2.fltechnics.com
+        - https://kyc.fltechnics.com
+        - https://flint.fltechnics.com
+        - https://old-it-dashboard.fltechnics.com
+        - https://sw.fltechnics.com
+        - https://smailer.fltechnics.com
+        - https://web-dev.fltechnics.com
+        - https://contracts-playbook.fltechnics.com
+        - https://bi2-v2-uat.fltechnics.com
+        - https://sensusmro.fltechnics.com
+        - https://open.fltechnics.com
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
 
   - job_name: QLIKSENSE_HTTPS
     metrics_path: /probe
