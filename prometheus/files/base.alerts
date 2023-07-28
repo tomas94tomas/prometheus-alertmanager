@@ -1635,7 +1635,7 @@ groups:
       responsable: Karolis Dimitrevičius
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Check Teampass availability and docker statuses and startup or restart services.
+      Action: check Ramco availability and Webservice statuses and do startup or restart services.
   - alert: 13.4 ramco_main_services_red
     expr: windows_service_state{name="rvwrouter",state="running"} == 0 or windows_service_state{name="rvwserversocket",state="running"} == 0 or  windows_service_state{name="rvwsrvcontroller",state="running"} == 0
     for: 20m
@@ -1683,7 +1683,7 @@ groups:
       responsable: Andrius Kubickas
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Ask Karolis about RAMCO printing/
+      Action: Ask Karolis about RAMCO printing
 - name: 14. Genesis Events
   rules:
   - alert: 14.1 genesis_api_http_response_yellow
@@ -2543,7 +2543,7 @@ groups:
       Action: Ask Karolis Dimitrevičius about Sensus availability, communication
 - name: 27. OPEN-FLT
   rules:
-  - alert: 26.1 open_http_respose_yellow
+  - alert: 27.1 open_http_respose_yellow
     expr: probe_http_status_code{instance="open.fltechnics.com", job="UI_APP_INFRASTRUCTURE_HTTPS"} != 200
     for: 5m
     labels:
@@ -2555,7 +2555,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check Open availability if not working do communication.
-  - alert: 26.1 open_http_respose_orange
+  - alert: 27.1 open_http_respose_orange
     expr: probe_http_status_code{instance="open.fltechnics.com", job="UI_APP_INFRASTRUCTURE_HTTPS"} != 200
     for: 15m
     labels:
@@ -2567,7 +2567,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check open availability if not working do communication.
-  - alert: 26.1 open_http_respose_red
+  - alert: 27.1 open_http_respose_red
     expr: probe_http_status_code{instance="open.fltechnics.com", job="UI_APP_INFRASTRUCTURE_HTTPS"} != 200
     for: 20m
     labels:
@@ -3156,8 +3156,8 @@ groups:
 - name: Test Events
   rules:
   - alert: 4.1 Server_yellow
-    expr: up{job="IT Unit Support",name="temi"} == 0
+    expr: up{job="IT Unit Support"} == 1
     labels:
-      severity: event.yellow.test
+      severity: event.red
     annotations:
       Action: Check server availability
