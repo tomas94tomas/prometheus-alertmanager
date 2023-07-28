@@ -2982,7 +2982,7 @@ groups:
 - name: Bussnes systems Events
   rules:
   - alert: Bussines system UI HTTP error (Yellow)
-    expr: probe_http_status_code{job="UI_APP_LIVE_HTTPS"} == 0 or probe_http_status_code{job="UI_APP_LIVE_HTTPS"} == 200
+    expr: probe_http_status_code{job="UI_APP_LIVE_HTTPS"} == 0 or probe_http_status_code{job="UI_APP_LIVE_HTTPS"} != 200
     for: 1m
     labels:
       severity: warning
@@ -2990,7 +2990,7 @@ groups:
       description: Exporter have status 0 ir 200 of Bussines system {{ $labels.vhost }} HTTP error
       summary: The Web UI {{ $labels.vhost }} is DOWN or Prometheus could not scrape.
   - alert: Bussines system UI HTTP error (Orange)
-    expr: probe_http_status_code{job="UI_APP_LIVE_HTTPS"} == 0 or probe_http_status_code{job="UI_APP_LIVE_HTTPS"} == 200
+    expr: probe_http_status_code{job="UI_APP_LIVE_HTTPS"} == 0 or probe_http_status_code{job="UI_APP_LIVE_HTTPS"} != 200
     for: 10m
     labels:
       severity: event.orange
@@ -2998,7 +2998,7 @@ groups:
       description: Exporter have status 0 ir 200 of Bussines system {{ $labels.vhost }} HTTP error
       summary: The Web UI {{ $labels.vhost }} is DOWN or Prometheus could not scrape.
   - alert: Bussines system UI HTTP error (Red)
-    expr: probe_http_status_code{job="UI_APP_LIVE_HTTPS"} == 0 or probe_http_status_code{job="UI_APP_LIVE_HTTPS"} == 200
+    expr: probe_http_status_code{job="UI_APP_LIVE_HTTPS"} == 0 or probe_http_status_code{job="UI_APP_LIVE_HTTPS"} != 200
     for: 15m
     labels:
       severity: event.red
