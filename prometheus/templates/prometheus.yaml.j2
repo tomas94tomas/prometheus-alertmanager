@@ -734,7 +734,7 @@ scrape_configs:
       module: [ http_2xx_example ]  # Look for a HTTP 200 response.
     static_configs:
       - targets:
-        - https://bi2.fltechnics.com/auth
+        - https://bi2.fltechnics.com
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target
@@ -756,7 +756,7 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+        replacement: 192.168.231.235:9116  # The blackbox exporter's real hostname:port.
 
   - job_name: UI_APP_INFRASTRUCTURE_HTTPS
     metrics_path: /probe
