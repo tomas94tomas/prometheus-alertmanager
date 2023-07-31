@@ -129,7 +129,7 @@ scrape_configs:
     static_configs:
 
 {% for host in groups['MySQL-DB'] %}
-      - targets: ['{{ hostvars[host]['ansible_host'] | default (host) }}:9182']
+      - targets: ['{{ hostvars[host]['ansible_host'] | default (host) }}:9100']
         labels:
           name: '{{ hostvars[host]['inventory_hostname'] }}'
 {% endfor %}
@@ -728,7 +728,24 @@ scrape_configs:
       - target_label: __address__
         replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
 
-  - job_name: UI_APP_SPECIAL_HTTPS
+  - job_name: UI_APP_BI2_HTTPS
+    metrics_path: /probe
+    params:
+      module: [ http_2xx_example ]  # Look for a HTTP 200 response.
+    dns_sd_configs:
+      - names:
+        - bi2.fltechnics.com
+        type: A
+        port: 443
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+
+  - job_name: UI_APP_FLINT_HTTPS
     metrics_path: /probe
     scrape_interval: 15s
     scrape_timeout: 15s
@@ -736,7 +753,7 @@ scrape_configs:
       module: [ http_2xx_example ]  # Look for a HTTP 200 response.
     static_configs:
       - targets:
-        - https://bi2.fltechnics.com
+        - https://flint.fltechnics.com/auth
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target
