@@ -730,13 +730,13 @@ scrape_configs:
 
   - job_name: UI_APP_SPECIAL_HTTPS
     metrics_path: /probe
+    scrape_interval: 15s
+    scrape_timeout: 15s
     params:
       module: [ http_2xx_example ]  # Look for a HTTP 200 response.
     static_configs:
       - targets:
-          - bi2.fltechnics.com
-          - flint.fltechnics.com
-          - web-dev.fltechnics.com
+        - https://bi2.fltechnics.com
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target
@@ -744,8 +744,6 @@ scrape_configs:
         target_label: instance
       - target_label: __address__
         replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
-      - source_labels: [__meta_dns_name]
-        target_label: vhost  # and store it in 'vhost' label
 
   - job_name: UI_APP_INFRASTRUCTURE_HTTPS
     metrics_path: /probe
