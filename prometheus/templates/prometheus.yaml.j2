@@ -748,7 +748,7 @@ scrape_configs:
   - job_name: UI_APP_FLINT_HTTPS
     metrics_path: /probe
     params:
-      module: [ http_2xx_example ]  # Look for a HTTP 200 response.
+      module: [ http_3xx_example ]  # Look for a HTTP 304 response.
     static_configs:
       - targets:
         - https://flint.fltechnics.com/auth
