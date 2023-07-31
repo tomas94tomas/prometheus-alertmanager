@@ -3153,11 +3153,3 @@ groups:
       Trigger: Disk usage is more than 95%
       Inpacted_Service: Files Server
       Action: Check server Disk Uasge
-- name: Test Events
-  rules:
-  - alert: 4.1 Server_yellow
-    expr: up{job="IT Unit Support"} == 0
-    labels:
-      severity: event.red
-    annotations:
-      Action: Check server availability

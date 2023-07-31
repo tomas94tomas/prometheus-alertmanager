@@ -732,23 +732,19 @@ scrape_configs:
     metrics_path: /probe
     params:
       module: [ http_2xx_example ]  # Look for a HTTP 200 response.
-    dns_sd_configs:
-      - names:
-        - bi2.fltechnics.com
-        type: A
-        port: 443
+    static_configs:
+      - targets:
+        - https://bi2.fltechnics.com/auth
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+        replacement: 192.168.231.235:9116  # The blackbox exporter's real hostname:port.
 
   - job_name: UI_APP_FLINT_HTTPS
     metrics_path: /probe
-    scrape_interval: 15s
-    scrape_timeout: 15s
     params:
       module: [ http_2xx_example ]  # Look for a HTTP 200 response.
     static_configs:
