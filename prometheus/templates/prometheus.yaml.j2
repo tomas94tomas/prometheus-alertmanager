@@ -729,6 +729,8 @@ scrape_configs:
         replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
 
   - job_name: UI_APP_BI2_HTTPS
+    scrape_interval: 20s
+    scrape_timeout: 20s
     metrics_path: /probe
     params:
       module: [ http_2xx_example ]  # Look for a HTTP 200 response.
