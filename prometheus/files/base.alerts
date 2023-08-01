@@ -1875,7 +1875,7 @@ groups:
 - name: 18. BI2 
   rules:
   - alert: 18.1 bi2_http_respose_yellow
-    expr: probe_http_status_code{instance="bi2.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    expr: probe_http_status_code{instance="https://bi2.fltechnics.com", job="UI_APP_BI2_HTTPS"} != 200
     for: 5m
     labels:
       severity: event.yellow.bi2
@@ -1887,7 +1887,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check BI2 availability and docker statuses and do startup or restart services.
   - alert: 18.1 bi2_http_respose_orange
-    expr: probe_http_status_code{instance="bi2.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    expr: probe_http_status_code{instance="https://bi2.fltechnics.com", job="UI_APP_BI2_HTTPS"} != 200
     for: 10m
     labels:
       severity: event.orange
@@ -1899,7 +1899,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check BI2 availability and docker statuses and do startup or restart services.
   - alert: 18.1 bi2_http_respose_red
-    expr: probe_http_status_code{instance="bi2.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    expr: probe_http_status_code{instance="https://bi2.fltechnics.com", job="UI_APP_BI2_HTTPS"} != 200
     for: 15m
     labels:
       severity: event.red
