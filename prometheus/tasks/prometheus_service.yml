@@ -43,7 +43,7 @@
 - name: Start Prometheus
   docker_container:
     name: prometheus
-    image: prom/prometheus:v2.47.0
+    image: prom/prometheus:2.46.0
     networks:
       - name: fltechnics
     state: started
