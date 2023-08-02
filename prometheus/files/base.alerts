@@ -477,7 +477,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Tomas to check FLTSQL DB is available or not. Ask Tomas send communication for service downtime. 
-  - alert: 3.6 FLT_others_db_activity_yellow
+  - alert: 3.6 FLTTRAIN_others_db_activity_yellow
     expr: mssql_fltrain_others_db_activity == 0
     for: 10m
     labels:
@@ -490,7 +490,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check MSSQL services is running or not on FLTSQL server. If FLTTrain (192.168.50.18) VM is down ask ASG to turn on VM.
   - alert: 3.6 FLTTRAIN_others_db_activity_orange
-    expr: mssql_fltsql_others_db_activity == 0
+    expr: mssql_fltrain_others_db_activity == 0
     for: 20m
     labels:
       severity: event.orange
@@ -502,7 +502,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check MSSQL services is running or not on FLTSQL server. If FLTTrain (192.168.50.18) VM is down ask ASG to turn on VM.
   - alert: 3.6 FLTTRAIN_others_db_activity_red
-    expr: mssql_fltsql_others_db_activity == 0
+    expr: mssql_fltrain_others_db_activity == 0
     for: 30m
     labels:
       severity: event.red
@@ -1467,7 +1467,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Dominykas about Nexus availability and healthcheck.
   - alert: 12.2 kb_db_activity_yellow
-    expr: mysql_up{instance="192.168.231.235:9105", job="kb_mysql_exporter", name="kb_teampass_exporter"} == 0
+    expr: mysql_up{instance="192.168.231.235:9105", job="kb_mysql_exporter", name="kb_exporter"} == 0
     for: 5m
     labels:
       severity: event.yellow.kb
@@ -1576,6 +1576,114 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Karolis about RAMCO Sharepoint availability, communication.
+  - alert: 13.3 ramco_db_activity_yellow
+    expr: mssql_fltsql_db_service_ramco == 0 or absent(mssql_fltsql_others_db_activity)
+    for: 10m
+    labels:
+      severity: event.yellow.ramco
+    annotations:
+      Inpacted_Service : Ramco
+      Trigger : Ramco MSSQL db activity > 10 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check MSSQL services is running or not on FLTSQL server. If FLTSQL (192.168.50.10) VM is down ask ASG to turn on VM.
+  - alert: 13.3 ramco_db_activity_orange
+    expr: mssql_fltsql_db_service_ramco == 0 or absent(mssql_fltsql_others_db_activity)
+    for: 15m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Ramco
+      Trigger :  Ramco MSSQL db activity >  15 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check MSSQL services is running or not on FLTSQL server. If FLTSQL (192.168.50.10) VM is down ask ASG to turn on VM.
+  - alert: 13.3 ramco_db_activity_red
+    expr: mssql_fltsql_db_service_ramco == 0 or absent(mssql_fltsql_others_db_activity)
+    for: 20m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Ramco
+      Trigger :  Ramco MSSQL db activity > 20 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Tomas to check FLTSQL DB is available or not. Ask Tomas send communication for DB's downtime .
+  - alert: 13.4 ramco_main_services_yellow
+    expr: windows_service_state{name="rvwrouter",state="running"} == 0 or windows_service_state{name="rvwserversocket",state="running"} == 0 or  windows_service_state{name="rvwsrvcontroller",state="running"} == 0
+    for: 1m
+    labels:
+      severity: event.yellow.ramco
+    annotations:
+      Inpacted_Service : Ramco
+      Trigger : Exporter have status 0 or other of Ramco Services rvwrouter,rvwserversocket,rvwsrvcontroller stopped {{ $labels.vhost }} for 1m
+      responsable: Karolis Dimitrevičius
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Ramco availability and Webservice statuses and do startup or restart services.
+  - alert: 13.4 ramco_main_services_orange
+    expr: windows_service_state{name="rvwrouter",state="running"} == 0 or windows_service_state{name="rvwserversocket",state="running"} == 0 or  windows_service_state{name="rvwsrvcontroller",state="running"} == 0
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Ramco
+      Trigger : Exporter have status 0 or other of Ramco Services rvwrouter,rvwserversocket,rvwsrvcontroller stopped {{ $labels.vhost }} for 10m
+      responsable: Karolis Dimitrevičius
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: check Ramco availability and Webservice statuses and do startup or restart services.
+  - alert: 13.4 ramco_main_services_red
+    expr: windows_service_state{name="rvwrouter",state="running"} == 0 or windows_service_state{name="rvwserversocket",state="running"} == 0 or  windows_service_state{name="rvwsrvcontroller",state="running"} == 0
+    for: 20m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Ramco
+      Trigger : Exporter have status 0 or other of Ramco Services rvwrouter,rvwserversocket,rvwsrvcontroller stopped {{ $labels.vhost }} for 10m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Karolis about RAMCO availability, communication.
+  - alert: 13.5 ramco_printing_yellow
+    expr: mssql_ramco_printing > 5 
+    for: 15m
+    labels:
+      severity: event.yellow.ramco
+    annotations:
+      Inpacted_Service : Ramco
+      Trigger : Ramco Printing have on hold 5 Jobs for 15m
+      responsable: Karolis Dimitrevičius
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Ramco printing startup or restart service.
+  - alert: 13.5 ramco_printing_orange
+    expr: mssql_ramco_printing > 5 
+    for: 30m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Ramco
+      Trigger : Ramco Printing have on hold 5 Jobs for 30m
+      responsable: Karolis Dimitrevičius
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Ramco printing startup or restart service.
+  - alert: 13.5 ramco_printing_red
+    expr: mssql_ramco_printing > 5 
+    for: 1h
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Ramco
+      Trigger : Ramco Printing have on hold 5 Jobs for 1h
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Karolis about RAMCO printing
 - name: 14. Genesis Events
   rules:
   - alert: 14.1 genesis_api_http_response_yellow
@@ -1764,6 +1872,751 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask K.Gagac about Customer Portal availability, communication.
+- name: 18. BI2 
+  rules:
+  - alert: 18.1 bi2_http_respose_yellow
+    expr: probe_http_status_code{instance="https://bi2.fltechnics.com", job="UI_APP_BI2_HTTPS"} != 200
+    for: 5m
+    labels:
+      severity: event.yellow.bi2
+    annotations:
+      Inpacted_Service : BI2
+      Trigger : Exporter have status 0 or other of BI2 system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Vadimas Klepko
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check BI2 availability and docker statuses and do startup or restart services.
+  - alert: 18.1 bi2_http_respose_orange
+    expr: probe_http_status_code{instance="https://bi2.fltechnics.com", job="UI_APP_BI2_HTTPS"} != 200
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : bi2
+      Trigger : Exporter have status 0 or other of BI2 system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Vadimas Klepko
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check BI2 availability and docker statuses and do startup or restart services.
+  - alert: 18.1 bi2_http_respose_red
+    expr: probe_http_status_code{instance="https://bi2.fltechnics.com", job="UI_APP_BI2_HTTPS"} != 200
+    for: 15m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : BI2
+      Trigger : Exporter have status 0 or other of BI2 system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Vadimas Klepko about BI2 availability, communication
+  - alert: 18.2 BI2_db_activity_yellow
+    expr: mssql_fltsql_db_service_bi2_state < 2 or absent(mssql_fltsql_db_service_bi2_state)
+    for: 5m
+    labels:
+      severity: event.yellow.bi2_DB
+    annotations:
+      Inpacted_Service : BI2
+      Trigger : Bi2, Bi2_erp MSSQL DB status >= 0 and time >= 5 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check BI2 database on FLTSQL server. If FLTSQL (192.168.50.10) VM is down ask ASG to turn on VM.
+  - alert: 18.2 BI2_db_activity_orange
+    expr: mssql_fltsql_db_service_bi2_state < 2 or absent(mssql_fltsql_db_service_bi2_state)
+    for: 15m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : BI2
+      Trigger : Bi2, Bi2_erp MSSQL DB status >= 0 and time >= 10 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: n	Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check BI2 database on FLTSQL server. If FLTSQL (192.168.50.10) VM is down ask ASG to turn on VM.
+  - alert: 18.2 BI2_db_activity_red
+    expr: mssql_fltsql_db_service_bi2_state < 2 or absent(mssql_fltsql_db_service_bi2_state)
+    for: 20m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : BI2
+      Trigger : Bi2, Bi2_erp MSSQL DB status >= 0 and time >= 15 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Tomas Zemblys to check MSSQL is DB BI2 and BI2_erp available or not. Ask Tomas Zemblys send communication for DB's downtime.
+  - alert: 18.2 BI2_kiosk_activity_yellow
+    expr: mssql_entrance_KUN_HGR_kiosk_status == 0 or mssql_entrance_KUN_WH_kiosk_status == 0 or mssql_entrance_VNO_ADM_1a_1_kiosk_status == 0 or mssql_entrance_VNO_ADM_1a_2_kiosk_status == 0 or mssql_entrance_VNO_HGR_kiosk_status == 0 or mssql_entrance_VTA_kiosk_status == 0
+    for: 30m
+    labels:
+      severity: event.yellow.bi2
+    annotations:
+      Inpacted_Service : BI2 Kiosk
+      Trigger : bi2 Kiosk status >= 0 and time >= 30 min
+      responsable: Vadimas Klepko
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available Kiosk mentioned in the alert. If Kiosk is not available then ask SD to check Internet connection to bi2.fltechnics.com.
+  - alert: 18.2 BI2_kiosk_activity_orange
+    expr: mssql_entrance_KUN_HGR_kiosk_status == 0 or mssql_entrance_KUN_WH_kiosk_status == 0 or mssql_entrance_VNO_ADM_1a_1_kiosk_status == 0 or mssql_entrance_VNO_ADM_1a_2_kiosk_status == 0 or mssql_entrance_VNO_HGR_kiosk_status == 0 or mssql_entrance_VTA_kiosk_status == 0
+    for: 40m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : BI2 Kiosk
+      Trigger : bi2 Kiosk status >= 0 and time >= 40 min
+      responsable: Vadimas Klepko
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available Kiosk mentioned in the alert. If Kiosk is not available then ask SD to check Internet connection to bi2.fltechnics.com.
+  - alert: 18.2 BI2_kiosk_activity_red
+    expr: mssql_entrance_KUN_HGR_kiosk_status == 0 or mssql_entrance_KUN_WH_kiosk_status == 0 or mssql_entrance_VNO_ADM_1a_1_kiosk_status == 0 or mssql_entrance_VNO_ADM_1a_2_kiosk_status == 0 or mssql_entrance_VNO_HGR_kiosk_status == 0 or mssql_entrance_VTA_kiosk_status == 0
+    for: 60m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : BI2 Kiosk 
+      Trigger: bi2 Kiosk status >= 0 and time >= 60 min
+      responsable: Vadimas Klepko
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Vadimas Klepko to check Kiosk is available or not. 
+- name: 19. FLINT 
+  rules:
+  - alert: 19.1 flint_http_respose_yellow
+    expr: probe_http_status_code{job="UI_APP_LIVE_HTTPS", vhost="flint.fltechnics.com"} != 400
+    for: 5m
+    labels:
+      severity: event.yellow.flint
+    annotations:
+      Inpacted_Service : flint
+      Trigger : Exporter have status 0 or other of flint system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Vadimas Klepko
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check flint availability and docker statuses and do startup or restart services.
+  - alert: 19.1 flint_http_respose_orange
+    expr: probe_http_status_code{job="UI_APP_LIVE_HTTPS", vhost="flint.fltechnics.com"} != 400
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : flint
+      Trigger : Exporter have status 0 or other of flint system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Vadimas Klepko
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check flint availability and docker statuses and do startup or restart services.
+  - alert: 19.1 flint_http_respose_red
+    expr: probe_http_status_code{job="UI_APP_LIVE_HTTPS", vhost="flint.fltechnics.com"} != 400
+    for: 15m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : flint
+      Trigger : Exporter have status 0 or other of flint system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Vadimas Klepko about flint availability, communication
+  - alert: 19.2 flint_db_activity_yellow
+    expr: oracledb_oracledb_db_flint_value == 0 or absent(oracledb_oracledb_db_flint_value)
+    for: 5m
+    labels:
+      severity: event.yellow.flint
+    annotations:
+      Inpacted_Service : flint
+      Trigger : flint ODB IT DB status >= 0 and time >= 5 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check flint database on ODB IT server. If ODB IT (192.168.50.157) VM is down ask ASG to turn on VM.
+  - alert: 19.2 flint_db_activity_orange
+    expr: oracledb_oracledb_db_flint_value == 0 or absent(oracledb_oracledb_db_flint_value)
+    for: 15m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : flint
+      Trigger : flint MSSQL DB status >= 0 and time >= 10 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check flint database on ODB IT server. If ODB IT (192.168.50.157) VM is down ask ASG to turn on VM.
+  - alert: 19.2 flint_db_activity_red
+    expr: oracledb_oracledb_db_flint_value == 0 or absent(oracledb_oracledb_db_flint_value)
+    for: 20m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : flint
+      Trigger : flint MSSQL DB status >= 0 and time >= 15 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Tomas Zemblys to check ODB IT is DB flint available or not. Ask Tomas Zemblys send communication for DB's downtime.
+- name: 20. Parcel 
+  rules:
+  - alert: 20.1 parcel_http_respose_yellow
+    expr: probe_http_status_code{instance="web-dev.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    for: 5m
+    labels:
+      severity: event.yellow.parcel
+    annotations:
+      Inpacted_Service : parcel
+      Trigger : Exporter have status 0 or other of parcel system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Vadimas Klepko
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check parcel availability and docker statuses and do startup or restart services.
+  - alert: 20.1 parcel_http_respose_orange
+    expr: probe_http_status_code{instance="web-dev.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    for: 15m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : parcels
+      Trigger : Exporter have status 0 or other of parcel system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Vadimas Klepko
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check parcel availability and docker statuses and do startup or restart services.
+  - alert: 20.1 parcel_http_respose_red
+    expr: probe_http_status_code{instance="web-dev.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    for: 20m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : parcel
+      Trigger : Exporter have status 0 or other of parcel system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Vadimas Klepko about parcel availability, communication 
+  - alert: 20.2 parcelv2_http_respose_yellow
+    expr: probe_http_status_code{instance="parcel-dev.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    for: 5m
+    labels:
+      severity: event.yellow.parcel
+    annotations:
+      Inpacted_Service : parcel V2
+      Trigger : Exporter have status 0 or other of parcel system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Vadimas Klepko
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check parcel availability and docker statuses and do startup or restart services.
+  - alert: 20.2 parcel_http_respose_orange
+    expr: probe_http_status_code{instance="parcel-dev.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : parcel V2
+      Trigger : Exporter have status 0 or other of parcel system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Vadimas Klepko
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check parcel availability and docker statuses and do startup or restart services.
+  - alert: 20.2 parcel_http_respose_red
+    expr: probe_http_status_code{instance="parcel-dev.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    for: 20m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : parcel V2
+      Trigger : Exporter have status 0 or other of parcel system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Dominykas about parcel availability, communication
+- name: 21. Contracts-playbook
+  rules:
+  - alert: 20.1 Contracts-playbook_http_respose_yellow
+    expr: probe_http_status_code{instance="contracts-playbook.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    for: 5m
+    labels:
+      severity: event.yellow.contracts-playbook
+    annotations:
+      Inpacted_Service : Contracts-playbook
+      Trigger : Exporter have status 0 or other of Contracts-playbook system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Vadimas Klepko
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Contracts-playbook availability and docker statuses and do startup or restart services.
+  - alert: 21.1 Contracts-playbook_http_respose_orange
+    expr: probe_http_status_code{instance="contracts-playbook.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    for: 15m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Contracts-playbooks
+      Trigger : Exporter have status 0 or other of Contracts-playbook system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Vadimas Klepko
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Contracts-playbook availability and docker statuses and do startup or restart services.
+  - alert: 21.1 Contracts-playbook_http_respose_red
+    expr: probe_http_status_code{instance="contracts-playbook.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    for: 20m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Contracts-playbook
+      Trigger : Exporter have status 0 or other of Contracts-playbook system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Vadimas Klepko about Contracts-playbook availability, communication
+  - alert: 21.2 Contracts-playbook_db_activity_yellow
+    expr: mssql_fltsql_db_service_legal == 0 or absent(mssql_fltsql_db_service_legal)
+    for: 5m
+    labels:
+      severity: event.yellow.legal
+    annotations:
+      Inpacted_Service : legal
+      Trigger : legal MSSQL DB status >= 0 and time >= 5 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check legal database on FLT-SQL-DEV server. If FLT-SQL-DEV (192.168.50.210) VM is down ask ASG to turn on VM.
+  - alert: 21.2 Contracts-playbook_db_activity_orange
+    expr: mssql_fltsql_db_service_legal == 0 or absent(mssql_fltsql_db_service_legal)
+    for: 15m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : legal
+      Trigger : legal, legal_erp MSSQL DB status >= 0 and time >= 10 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check legal database on FLT-SQL-DEV server. If FLT-SQL-DEV (192.168.50.210) VM is down ask ASG to turn on VM.
+  - alert: 21.2 Contracts-playbook_db_activity_red
+    expr: mssql_fltsql_db_service_legal == 0 or absent(mssql_fltsql_db_service_legal)
+    for: 20m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : legal
+      Trigger : legal, legal_erp MSSQL DB status >= 0 and time >= 15 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Tomas Zemblys to check FLT-SQL-DEV is DB legal available or not. Ask Tomas Zemblys send communication for DB's downtime.
+- name: 22. Safety
+  rules:
+  - alert: 22.1 Contracts-playbook_http_respose_yellow
+    expr: probe_http_status_code{instance="safety.fltechnics.com", job="UI_APP_INFRASTRUCTURE_HTTPS"} != 200
+    for: 5m
+    labels:
+      severity: event.yellow.safety
+    annotations:
+      Inpacted_Service : safety
+      Trigger : Exporter have status 0 or other of safety system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Vadimas Klepko
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check safety availability and docker statuses and do startup or restart services.
+  - alert: 22.1 safety_http_respose_orange
+    expr: probe_http_status_code{instance="safety.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    for: 15m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : safety
+      Trigger : Exporter have status 0 or other of safety system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Vadimas Klepko
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check safety availability and docker statuses and do startup or restart services.
+  - alert: 22.1 safety_http_respose_red
+    expr: probe_http_status_code{instance="safety.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    for: 20m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : safety
+      Trigger : Exporter have status 0 or other of safety system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Dominykas about safety availability, communication
+  - alert: 22.2 safety_db_activity_yellow
+    expr: mysql_up{instance="192.168.231.235:9106", job="safety_mysql_exporter", name="safety_exporter"} == 0
+    for: 5m
+    labels:
+      severity: event.yellow.safety
+    annotations:
+      Inpacted_Service : safety 
+      Trigger : Teampass MySQL DB status >= 0 and time >= 5 min
+      responsable: Dominykas Sivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check MYSQL docker container is running or not on FLT-MM-BS server. If FLT-MM-BS (192.168.50.54) VM is down ask ASG to turn on VM.
+  - alert: 22.2 safety_db_activity_orange
+    expr: mysql_up{instance="192.168.231.235:9106", job="safety_mysql_exporter", name="safety_exporter"} == 0
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : safety
+      Trigger : safety MySQL db activity > 10 min
+      responsable: Dominykas Sivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action:  Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check MYSQL docker container is running or not on FLT-MM-BS server. If FLT-MM-BS (192.168.50.54) VM is down ask ASG to turn on VM.
+  - alert: 22.2 safety_db_activity_red
+    expr: mysql_up{instance="192.168.231.235:9106", job="safety_mysql_exporter", name="safety_exporter"} == 0
+    for: 15m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : safety
+      Trigger :  safety MySQL DB status >= 0 and time >= 15 min
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Dominykas Sivickas to check MySQL is available or not. Ask Dominykas send communication for DB's downtime .
+  - alert: 22.3 safety_db_activity_DiskRunningFull_yellow
+    expr: 100 - ((node_filesystem_avail_bytes{mountpoint="/home/app/share/safety"} * 100) / node_filesystem_size_bytes{mountpoint="/home/app/share/safety"}) > 90
+    for: 10m
+    labels:
+      severity: event.yellow.safety
+    annotations:
+      Inpacted_Service : safety 
+      Trigger : File system on FLT-App-Samba server on mountpoint="/home/app/share/safety" is more than 90proc
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check SMB Volume size on FLT-App-Samba server on mountpoint="/home/app/share/safety"
+  - alert: 22.3 safety_db_activity_DiskRunningFull_orange
+    expr: 100 - ((node_filesystem_avail_bytes{mountpoint="/home/app/share/safety"} * 100) / node_filesystem_size_bytes{mountpoint="/home/app/share/safety"}) > 90
+    for: 20m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : safety 
+      Trigger : File system on FLT-App-Samba server on mountpoint="/home/app/share/safety" is more than 90proc
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check SMB Volume size on FLT-App-Samba server on mountpoint="/home/app/share/safety"
+  - alert: 22.3 safety_db_activity_DiskRunningFull_red
+    expr: 100 - ((node_filesystem_avail_bytes{mountpoint="/home/app/share/safety"} * 100) / node_filesystem_size_bytes{mountpoint="/home/app/share/safety"}) > 90
+    for: 30m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : safety 
+      Trigger : File system on FLT-App-Samba server on mountpoint="/home/app/share/safety" is more than 90proc
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check SMB Volume size on FLT-App-Samba server on mountpoint="/home/app/share/safety"
+- name: 23. Smailer
+  rules:
+  - alert: 23.1 smailer_http_respose_yellow
+    expr: probe_http_status_code{instance="smailer.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    for: 5m
+    labels:
+      severity: event.yellow.smailer
+    annotations:
+      Inpacted_Service : smailer
+      Trigger : Exporter have status 0 or other of smailer system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Vadimas Klepko
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check smailer availability and docker statuses and do startup or restart services.
+  - alert: 23.1 smailer_http_respose_orange
+    expr: probe_http_status_code{instance="smailer.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    for: 15m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : smailer
+      Trigger : Exporter have status 0 or other of smailer system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Vadimas Klepko
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check smailer availability and docker statuses and do startup or restart services.
+  - alert: 23.1 smailer_http_respose_red
+    expr: probe_http_status_code{instance="smailer.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    for: 20m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : smailer
+      Trigger : Exporter have status 0 or other of smailer system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Vadimas Klepko about smailer availability, communication
+  - alert: Alert for Smailer processing indicator
+    expr: mssql_smailer_processing_indicator < 50 and ON() hour() > 10 < 11
+    for: 10m 
+    labels:
+      {'env': 'jira'}
+    annotations:
+      description: Status change to 0.
+      summary: Smailer processing indicator result less than 50
+  - alert: 23.2 smailer_db_activity_yellow
+    expr: mssql_fltsql_db_service_smailer == 0 or absent(mssql_fltsql_db_service_smailer)
+    for: 5m
+    labels:
+      severity: event.yellow.smailer
+    annotations:
+      Inpacted_Service : smailer
+      Trigger : smailer MSSQL DB status >= 0 and time >= 5 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check smailer database on FLTSQL server. If FLTSQL (192.168.50.10) VM is down ask ASG to turn on VM.
+  - alert: 23.2 smailer_db_activity_orange
+    expr: mssql_fltsql_db_service_smailer == 0 or absent(mssql_fltsql_db_service_smailer)
+    for: 15m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : smailer
+      Trigger : smailer MSSQL DB status >= 0 and time >= 10 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: n	Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check smailer database on FLTSQL server. If FLTSQL (192.168.50.10) VM is down ask ASG to turn on VM.
+  - alert: 23.2 smailer_db_activity_red
+    expr: mssql_fltsql_db_service_smailer == 0 or absent(mssql_fltsql_db_service_smailer)
+    for: 20m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : smailer
+      Trigger : smailer MSSQL DB status >= 0 and time >= 15 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Tomas Zemblys to check MSSQL is DB smailer available or not. Ask Tomas Zemblys send communication for DB's downtime.
+- name: 24. Bi2v2
+  rules:
+  - alert: 24.1 bi2v2_http_respose_yellow
+    expr: probe_http_status_code{instance="bi2-v2-uat.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    for: 5m
+    labels:
+      severity: event.yellow.bi2v2
+    annotations:
+      Inpacted_Service : bi2v2
+      Trigger : Exporter have status 0 or other of bi2v2 system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Vadimas Klepko
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check bi2v2 availability and docker statuses and do startup or restart services.
+  - alert: 24.1 bi2v2_http_respose_orange
+    expr: probe_http_status_code{instance="bi2-v2-uat.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    for: 15m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : bi2v2
+      Trigger : Exporter have status 0 or other of bi2v2 system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Vadimas Klepko
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check bi2v2 availability and docker statuses and do startup or restart services.
+  - alert: 24.1 bi2v2_http_respose_red
+    expr: probe_http_status_code{instance="bi2-v2-uat.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    for: 20m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : bi2v2
+      Trigger : Exporter have status 0 or other of bi2v2 system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Vadimas Klepko about bi2v2 availability, communication 
+  - alert: 24.2 bi2v2_db_activity_yellow
+    expr: mssql_fltsql_db_service_bi2v2 == 0 or absent(mssql_fltsql_db_service_bi2v2)
+    for: 5m
+    labels:
+      severity: event.yellow.bi2v2
+    annotations:
+      Inpacted_Service : bi2v2
+      Trigger : bi2v2 MSSQL DB status >= 0 and time >= 5 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check bi2v2 database on FLTSQL server. If FLT-SQL-DEV (192.168.50.210) VM is down ask ASG to turn on VM.
+  - alert: 24.2 bi2v2_db_activity_orange
+    expr: mssql_fltsql_db_service_bi2v2 == 0 or absent(mssql_fltsql_db_service_bi2v2)
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : bi2v2
+      Trigger : bi2v2 MSSQL DB status >= 0 and time >= 10 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available DB mentioned in the alert. If DB is not available then start DB or restore DB. If DB available then check bi2v2 database on FLTSQL server. If FLT-SQL-DEV (192.168.50.210) VM is down ask ASG to turn on VM.
+  - alert: 24.2 bi2v2_db_activity_red
+    expr: mssql_fltsql_db_service_bi2v2 == 0 or absent(mssql_fltsql_db_service_bi2v2)
+    for: 15m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : bi2v2
+      Trigger : bi2v2 MSSQL DB status >= 0 and time >= 15 min
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Tomas Zemblys to check FLT-SQL-DEV is DB bi2v2 available or not. Ask Tomas Zemblys send communication for DB's downtime.
+- name: 26. Sensus
+  rules:
+  - alert: 26.1 Sensus_http_respose_yellow
+    expr: probe_http_status_code{instance="sensus.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    for: 5m
+    labels:
+      severity: event.yellow.Sensus
+    annotations:
+      Inpacted_Service : Sensus
+      Trigger : Exporter have status 0 or other of Sensus system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Krolis Dimitrevičius
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Sensus availability if not working do communication.
+  - alert: 26.1 Sensus_http_respose_orange
+    expr: probe_http_status_code{instance="sensus.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    for: 15m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Sensus
+      Trigger : Exporter have status 0 or other of Sensus system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Krolis Dimitrevičius
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Sensus availability if not working do communication.
+  - alert: 26.1 Sensus_http_respose_red
+    expr: probe_http_status_code{instance="sensus.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    for: 20m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Sensus
+      Trigger : Exporter have status 0 or other of Sensus system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Krolis Dimitrevičius
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Karolis Dimitrevičius about Sensus availability, communication
+  - alert: 26.2 Sensusmro_http_respose_yellow
+    expr: probe_http_status_code{instance="sensusmro.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    for: 5m
+    labels:
+      severity: event.yellow.Sensus
+    annotations:
+      Inpacted_Service : Sensus
+      Trigger : Exporter have status 0 or other of Sensus system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Krolis Dimitrevičius
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Sensus availability if not working do communication.
+  - alert: 26.2 Sensusmro_http_respose_orange
+    expr: probe_http_status_code{instance="sensusmro.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    for: 15m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Sensus
+      Trigger : Exporter have status 0 or other of Sensus system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Krolis Dimitrevičius
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Sensus availability if not working do communication.
+  - alert: 26.2 Sensusmro_http_respose_red
+    expr: probe_http_status_code{instance="sensusmro.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    for: 20m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Sensus
+      Trigger : Exporter have status 0 or other of Sensus system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Karolis Dimitrevičius about Sensus availability, communication
+- name: 27. OPEN-FLT
+  rules:
+  - alert: 27.1 open_http_respose_yellow
+    expr: probe_http_status_code{instance="open.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    for: 5m
+    labels:
+      severity: event.yellow.open
+    annotations:
+      Inpacted_Service : open
+      Trigger : Exporter have status 0 or other of Open system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Krolis Dimitrevičius
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Open availability if not working do communication.
+  - alert: 27.1 open_http_respose_orange
+    expr: probe_http_status_code{instance="open.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    for: 15m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : open
+      Trigger : Exporter have status 0 or other of open system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Krolis Dimitrevičius
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check open availability if not working do communication.
+  - alert: 27.1 open_http_respose_red
+    expr: probe_http_status_code{instance="open.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    for: 20m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : open
+      Trigger : Exporter have status 0 or other of open system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Krolis Dimitrevičius
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Karolis Dimitrevičius about open availability, communication
+- name: 28. Sensus-TimeTracking
+  rules:
+  - alert: 28.1 sensustimetracking_http_respose_yellow
+    expr: probe_http_status_code{ job="SENSUS_EXT_TIMETRACKING_HTTPS"} != 200
+    for: 5m
+    labels:
+      severity: event.yellow.Sensus
+    annotations:
+      Inpacted_Service : Sensus Time Tracking
+      Trigger : Exporter have status 0 or other of Sensus Time Tracking system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Krolis Dimitrevičius
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Sensus availability if not working do communication.
+  - alert: 28.1 sensustimetracking_http_respose_ornage
+    expr: probe_http_status_code{ job="SENSUS_EXT_TIMETRACKING_HTTPS"} != 200
+    for: 15m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Sensus Sensus Time Tracking
+      Trigger : Exporter have status 0 or other of Sensus Time Tracking system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Krolis Dimitrevičius
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Sensus availability if not working do communication.
+  - alert: 28.1 sensustimetracking_http_respose_red
+    expr: probe_http_status_code{ job="SENSUS_EXT_TIMETRACKING_HTTPS"} != 200
+    for: 20m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Sensus Time Tracking
+      Trigger : Exporter have status 0 or other of Sensus Time Tracking system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Karolis Dimitrevičius about Sensus Time Tracking availability, communication
 - name: Linux Server Events
   rules:
   - record: instance:node_cpu:rate:sum
@@ -2129,7 +2982,7 @@ groups:
 - name: Bussnes systems Events
   rules:
   - alert: Bussines system UI HTTP error (Yellow)
-    expr: probe_http_status_code{job="UI_APP_LIVE_HTTPS"} == 0 or probe_http_status_code{job="UI_APP_LIVE_HTTPS"} == 200
+    expr: probe_http_status_code{job="UI_APP_LIVE_HTTPS"} == 0 or probe_http_status_code{job="UI_APP_LIVE_HTTPS"} != 200
     for: 1m
     labels:
       severity: warning
@@ -2137,7 +2990,7 @@ groups:
       description: Exporter have status 0 ir 200 of Bussines system {{ $labels.vhost }} HTTP error
       summary: The Web UI {{ $labels.vhost }} is DOWN or Prometheus could not scrape.
   - alert: Bussines system UI HTTP error (Orange)
-    expr: probe_http_status_code{job="UI_APP_LIVE_HTTPS"} == 0 or probe_http_status_code{job="UI_APP_LIVE_HTTPS"} == 200
+    expr: probe_http_status_code{job="UI_APP_LIVE_HTTPS"} == 0 or probe_http_status_code{job="UI_APP_LIVE_HTTPS"} != 200
     for: 10m
     labels:
       severity: event.orange
@@ -2145,7 +2998,7 @@ groups:
       description: Exporter have status 0 ir 200 of Bussines system {{ $labels.vhost }} HTTP error
       summary: The Web UI {{ $labels.vhost }} is DOWN or Prometheus could not scrape.
   - alert: Bussines system UI HTTP error (Red)
-    expr: probe_http_status_code{job="UI_APP_LIVE_HTTPS"} == 0 or probe_http_status_code{job="UI_APP_LIVE_HTTPS"} == 200
+    expr: probe_http_status_code{job="UI_APP_LIVE_HTTPS"} == 0 or probe_http_status_code{job="UI_APP_LIVE_HTTPS"} != 200
     for: 15m
     labels:
       severity: event.red
@@ -2221,16 +3074,6 @@ groups:
       description: Prometheus could not scrape {{ $labels.name }} for more than 10m,
         server may be down 
       summary: Prometheus could not scrape a {{ $labels.name }} exporter
-- name: Smailer Events
-  rules:
-  - alert: Alert for Smailer processing indicator
-    expr: mssql_smailer_processing_indicator < 50 and ON() hour() > 10 < 11
-    for: 10m 
-    labels:
-      {'env': 'jira'}
-    annotations:
-      description: Status change to 0.
-      summary: Smailer processing indicator result less than 50
 - name: Files Events
   rules:
   - alert: File_server_availability_yellow
@@ -2310,11 +3153,3 @@ groups:
       Trigger: Disk usage is more than 95%
       Inpacted_Service: Files Server
       Action: Check server Disk Uasge
-- name: Test Events
-  rules:
-  - alert: 4.1 Server_yellow
-    expr: up{job="IT Unit Support",name="temi"} == 0
-    labels:
-      severity: event.yellow.test
-    annotations:
-      Action: Check server availability

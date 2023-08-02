@@ -48,6 +48,8 @@ AirNavX-Data ansible_host=192.168.50.202
 FLT-Boeing ansible_host=192.168.50.22
 FLT-Web-DEV ansible_host=192.168.231.117
 FLT-Files ansible_host=192.168.50.100
+Quantum2 ansible_host=192.168.50.121
+Quantum2-ODB ansible_host=192.168.50.182
 
 [AMOS_WB]
 wb-amos-app-prod ansible_host=192.168.243.23
@@ -66,12 +68,6 @@ FLT-BI2 ansible_host=192.168.231.177
 FLT-Flint ansible_host=192.168.231.191
 FLT-MM-BS ansible_host=192.168.50.54
 
-[Training]
-training-KYC-Dev ansible_host=192.168.231.43
-training-Consul-Trainings ansible_host=192.168.231.11
-training-Nomad ansible_host=192.168.231.12
-training-Nomad-Client ansible_host=192.168.231.13
-
 [linux_ext]
 FLT-GitLab-ext ansible_host=185.11.27.16 ansible_port=3500
 FLT-Prometheus-ext ansible_host=185.11.27.16 ansible_port=3501
@@ -86,3 +82,7 @@ prometheus
 odb.flts.lan ansible_host=192.168.50.180
 flt-odb-eamsdev.flts.lan ansible_host=192.168.50.129
 odb-eams-uat.flts.lan ansible_host=192.168.208.10
+
+[MySQL-DB]
+flt-mysql-dev ansible_host=192.168.231.22
+flt-mysql-live ansible_host=192.168.231.28
