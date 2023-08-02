@@ -26,12 +26,10 @@
   copy:
     src: "{{ item }}"
     dest: /etc/prometheus/{{ item }}
-    validate: |
-      docker run -v %s:/tmp/{{ item }} \
-            dnanexus/promtool:2.9.2 check rules /tmp/{{ item }}
+    validate: docker run -v %s:/tmp/{{ item }} dnanexus/promtool:2.9.2 check rules /tmp/{{ item }}
   with_items:
-    - base.alerts
-    - windows.alerts
+  - base.alerts
+  - windows.alerts
   notify: reload prometheus
 
 - name: Create a docker volume for prometheuswith options
@@ -56,7 +54,7 @@
       - /etc/localtime:/etc/localtime:ro
       - /etc/prometheus/:/etc/prometheus/
       - prometheus-data:/prometheus
-    command:
+    command: 
       - '--config.file=/etc/prometheus/prometheus.yaml'
       - '--web.config.file=/etc/prometheus/prometheus_web.yml'
       - '--storage.tsdb.path=/prometheus'
@@ -74,8 +72,5 @@
     mode: 0644
     owner: "1001"
     group: "1001"
-    validate: |
-      docker run -v /etc/prometheus:/tmp \
-             -v %s:/tmp/prometheus.yaml \
-             dnanexus/promtool:2.9.2 check config /tmp/prometheus.yaml
+    validate: docker run -v /etc/prometheus:/tmp -v %s:/tmp/prometheus.yaml dnanexus/promtool:2.9.2 check config /tmp/prometheus.yaml
   notify: reload prometheus

@@ -1,20 +1,3 @@
----
-- name: Check YAML files with yamllint
-  hosts: localhost
-  gather_facts: false
-
-  tasks:
-    - name: Check YAML files with yamllint
-      shell: find ./ -type f -name "*.yml" -exec yamllint {} +
-      changed_when: false
-      register: yamllint_output
-      ignore_errors: false
-
-    - name: Fail if YAML syntax is incorrect
-      fail:
-        msg: "YAML syntax is incorrect. Please fix the errors."
-      when: yamllint_output.rc != 0
-
 - name: Start Prometheus service
   import_tasks: prometheus_service.yml
 

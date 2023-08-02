@@ -1,11 +1,7 @@
 ---
 # handlers file for prometheus
 - name: reload prometheus
-  command: |
-    curl -u admin:{{ prometheus_web_password }} \
-    -X POST http://localhost:9090/-/reload
+  command: "curl -u admin:{{ prometheus_web_password }} -X POST http://localhost:9090/-/reload"
 
 - name: reload alertmanager
-  command: |
-    curl -u admin:{{ alertmanager_web_password }} \
-    -X POST http://localhost:9093/-/reload
+  command: "curl -u admin:{{ alertmanager_web_password }} -X POST http://localhost:9093/-/reload"
