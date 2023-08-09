@@ -1,7 +1,17 @@
 ---
 # handlers file for prometheus
-- name: reload prometheus
-  command: "curl -u admin:{{ prometheus_web_password }} -X POST http://localhost:9090/-/reload"
+- name: Reload Prometheus
+  ansible.builtin.uri:
+    url: "http://localhost:9090/-/reload"
+    method: POST
+    user: admin
+    password: "{{ prometheus_web_password }}"
+  changed_when: false
 
-- name: reload alertmanager
-  command: "curl -u admin:{{ alertmanager_web_password }} -X POST http://localhost:9093/-/reload"
+- name: Reload Alertmanager
+  ansible.builtin.uri:
+    url: "http://localhost:9093/-/reload"
+    method: POST
+    user: admin
+    password: "{{ alertmanager_web_password }}"
+  changed_when: false
