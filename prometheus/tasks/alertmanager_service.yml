@@ -85,7 +85,7 @@
     name: alertmanager
     image: prom/alertmanager:v0.25.0
     networks:
-      - name: test
+      - name: fltechnics
     state: started
     restart_policy: always
     published_ports:
