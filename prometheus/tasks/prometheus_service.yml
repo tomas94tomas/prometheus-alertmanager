@@ -40,7 +40,7 @@
   with_items:
     - base.alerts
     - windows.alerts
-  notify: reload Prometheus
+  notify: Reload Prometheus
 
 - name: Create a docker volume for prometheus with options
   community.docker.docker_volume:
@@ -83,4 +83,4 @@
     owner: "1001"
     group: "1001"
     validate: "docker run -v /etc/prometheus:/tmp -v %s:/tmp/prometheus.yaml dnanexus/promtool:2.9.2 check config /tmp/prometheus.yaml"
-  notify: reload prometheus
+  notify: Reload Prometheus

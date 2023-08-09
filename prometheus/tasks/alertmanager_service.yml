@@ -22,7 +22,7 @@
     group: "1001"
     owner: "1001"
     mode: '0644'
-  notify: reload Alertmanager
+  notify: Reload Alertmanager
 
 - name: Copy status alertmanager email template
   ansible.builtin.copy:
