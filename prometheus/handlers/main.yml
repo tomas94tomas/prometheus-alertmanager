@@ -5,7 +5,7 @@
     url: "http://localhost:9090/-/reload"
     method: POST
     headers:
-      Authorization: "Basic {{ prometheus_web_password }}"
+      Authorization: "Basic {{ prometheus_basic_auth }}"
   changed_when: false
 
 - name: Reload Alertmanager
@@ -13,5 +13,5 @@
     url: "http://localhost:9093/-/reload"
     method: POST
     headers:
-      Authorization: "Basic {{ alertmanager_web_password }}"
+      Authorization: "Basic {{ alertmanager_basic_auth }}"
   changed_when: false
