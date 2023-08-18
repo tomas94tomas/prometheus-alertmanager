@@ -4,14 +4,14 @@
   ansible.builtin.uri:
     url: "http://localhost:9090/-/reload"
     method: POST
-    user: admin
-    password: "{{ prometheus_web_password }}"
+    headers:
+      Authorization: "Basic {{ prometheus_web_password }}"
   changed_when: false
 
 - name: Reload Alertmanager
   ansible.builtin.uri:
     url: "http://localhost:9093/-/reload"
     method: POST
-    user: admin
-    password: "{{ alertmanager_web_password }}"
+    headers:
+      Authorization: "Basic {{ alertmanager_web_password }}"
   changed_when: false

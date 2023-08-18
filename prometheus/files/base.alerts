@@ -1874,7 +1874,7 @@ groups:
       Action: Ask K.Gagac about Customer Portal availability, communication.
 - name: 18. BI2 
   rules:
-  - alert: 18.1 bi2_http_respose_yellow
+  - alert: 18.1 BI2_http_respose_yellow
     expr: probe_http_status_code{instance="https://bi2.fltechnics.com", job="UI_APP_BI2_HTTPS"} != 200
     for: 5m
     labels:
@@ -1886,7 +1886,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check BI2 availability and docker statuses and do startup or restart services.
-  - alert: 18.1 bi2_http_respose_orange
+  - alert: 18.1 BI2_http_respose_orange
     expr: probe_http_status_code{instance="https://bi2.fltechnics.com", job="UI_APP_BI2_HTTPS"} != 200
     for: 10m
     labels:
@@ -1898,7 +1898,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check BI2 availability and docker statuses and do startup or restart services.
-  - alert: 18.1 bi2_http_respose_red
+  - alert: 18.1 BI2_http_respose_red
     expr: probe_http_status_code{instance="https://bi2.fltechnics.com", job="UI_APP_BI2_HTTPS"} != 200
     for: 15m
     labels:
@@ -2206,7 +2206,7 @@ groups:
       Action: Ask Tomas Zemblys to check FLT-SQL-DEV is DB legal available or not. Ask Tomas Zemblys send communication for DB's downtime.
 - name: 22. Safety
   rules:
-  - alert: 22.1 Contracts-playbook_http_respose_yellow
+  - alert: 22.1 safety_http_respose_yellow
     expr: probe_http_status_code{instance="https://safety.fltechnics.com", job="UI_APP_INFRASTRUCTURE_HTTPS"} != 200
     for: 5m
     labels:
