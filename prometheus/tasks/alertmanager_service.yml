@@ -1,63 +1,87 @@
 ---
-- name: Create a AlertManager templates directory
-  file:
+- name: Create an AlertManager templates directory
+  ansible.builtin.file:
     path: /etc/prometheus/template
     state: directory
-    mode: 0755
+    mode: '0755'
     owner: "1001"
     group: "1001"
 
-- name: Copy Alertmanager alertmanager_web.yml files
-  copy:
+- name: Copy AlertManager alertmanager_web.yml files
+  ansible.builtin.copy:
     src: prometheus/files/alertmanager_web.yml
     dest: /etc/prometheus/alertmanager_web.yml
+    group: "1001"
+    owner: "1001"
+    mode: '0644'
 
 - name: Copy AlertManager configuration
-  copy:
+  ansible.builtin.copy:
     src: alertmanager.yaml
     dest: /etc/prometheus/alertmanager.yaml
     group: "1001"
     owner: "1001"
-    mode: 0644
-  notify: reload alertmanager
+    mode: '0644'
+  notify: Reload Alertmanager
 
 - name: Copy status alertmanager email template
-  copy:
+  ansible.builtin.copy:
     src: email.tmpl
+    group: "1001"
+    owner: "1001"
+    mode: '0644'
     dest: /etc/prometheus/email.tmpl
 
 - name: Copy Yellow status alertmanager email template
-  copy:
+  ansible.builtin.copy:
     src: email-yellow.tmpl
+    group: "1001"
+    owner: "1001"
+    mode: '0644'
     dest: /etc/prometheus/email-yellow.tmpl
 
 - name: Copy Orange status alertmanager email template
-  copy:
+  ansible.builtin.copy:
     src: email-orange.tmpl
+    group: "1001"
+    owner: "1001"
+    mode: '0644'
     dest: /etc/prometheus/email-orange.tmpl
 
 - name: Copy RED status alertmanager email template
-  copy:
+  ansible.builtin.copy:
     src: email-red.tmpl
+    group: "1001"
+    owner: "1001"
+    mode: '0644'
     dest: /etc/prometheus/email-red.tmpl
 
 - name: Copy Yellow EAMS status alertmanager email template
-  copy:
+  ansible.builtin.copy:
     src: email-yellow-eams.tmpl
+    group: "1001"
+    owner: "1001"
+    mode: '0644'
     dest: /etc/prometheus/email-yellow-eams.tmpl
 
 - name: Copy Orange EAMS status alertmanager email template
-  copy:
+  ansible.builtin.copy:
     src: email-orange-eams.tmpl
+    group: "1001"
+    owner: "1001"
+    mode: '0644'
     dest: /etc/prometheus/email-orange-eams.tmpl
 
 - name: Copy Red EAMS status alertmanager email template
-  copy:
+  ansible.builtin.copy:
     src: email-red-eams.tmpl
+    group: "1001"
+    owner: "1001"
+    mode: '0644'
     dest: /etc/prometheus/email-red-eams.tmpl
 
 - name: Start AlertManager
-  docker_container:
+  community.docker.docker_container:
     name: alertmanager
     image: prom/alertmanager:v0.25.0
     networks:

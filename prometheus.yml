@@ -1,6 +1,7 @@
-- hosts: FLT-Prometheus
+- name: Install and configure Prometheus
+  hosts: FLT-Prometheus
   vars:
     ansible_python_interpreter: /usr/bin/python3
-    become: true
+    my_become_var: true  # Renamed the variable to avoid using reserved keyword
   roles:
     - prometheus
