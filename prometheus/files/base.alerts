@@ -2650,7 +2650,7 @@ groups:
       severity: event.red
     annotations:
       Inpacted_Service : Server Backups
-      Trigger : If Failed status is more than 0 for 1h
+      Trigger : If Failed status is more than 0 for 24h
       responsable: Dominykas Šivickas
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
