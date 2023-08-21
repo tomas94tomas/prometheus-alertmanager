@@ -1874,7 +1874,7 @@ groups:
       Action: Ask K.Gagac about Customer Portal availability, communication.
 - name: 18. BI2 
   rules:
-  - alert: 18.1 bi2_http_respose_yellow
+  - alert: 18.1 BI2_http_respose_yellow
     expr: probe_http_status_code{instance="https://bi2.fltechnics.com", job="UI_APP_BI2_HTTPS"} != 200
     for: 5m
     labels:
@@ -1886,7 +1886,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check BI2 availability and docker statuses and do startup or restart services.
-  - alert: 18.1 bi2_http_respose_orange
+  - alert: 18.1 BI2_http_respose_orange
     expr: probe_http_status_code{instance="https://bi2.fltechnics.com", job="UI_APP_BI2_HTTPS"} != 200
     for: 10m
     labels:
@@ -1898,7 +1898,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check BI2 availability and docker statuses and do startup or restart services.
-  - alert: 18.1 bi2_http_respose_red
+  - alert: 18.1 BI2_http_respose_red
     expr: probe_http_status_code{instance="https://bi2.fltechnics.com", job="UI_APP_BI2_HTTPS"} != 200
     for: 15m
     labels:
@@ -2095,7 +2095,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Vadimas Klepko about parcel availability, communication 
   - alert: 20.2 parcelv2_http_respose_yellow
-    expr: probe_http_status_code{instance="parcel-dev.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    expr: probe_http_status_code{instance="https://parcels-dev.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
     for: 5m
     labels:
       severity: event.yellow.parcel
@@ -2107,7 +2107,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check parcel availability and docker statuses and do startup or restart services.
   - alert: 20.2 parcel_http_respose_orange
-    expr: probe_http_status_code{instance="parcel-dev.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    expr: probe_http_status_code{instance="https://parcels-dev.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
     for: 10m
     labels:
       severity: event.orange
@@ -2119,7 +2119,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check parcel availability and docker statuses and do startup or restart services.
   - alert: 20.2 parcel_http_respose_red
-    expr: probe_http_status_code{instance="parcel-dev.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    expr: probe_http_status_code{instance="https://parcels-dev.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
     for: 20m
     labels:
       severity: event.red
@@ -2133,7 +2133,7 @@ groups:
 - name: 21. Contracts-playbook
   rules:
   - alert: 20.1 Contracts-playbook_http_respose_yellow
-    expr: probe_http_status_code{instance="contracts-playbook.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    expr: probe_http_status_code{instance="https://contracts-playbook.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
     for: 5m
     labels:
       severity: event.yellow.contracts-playbook
@@ -2145,7 +2145,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check Contracts-playbook availability and docker statuses and do startup or restart services.
   - alert: 21.1 Contracts-playbook_http_respose_orange
-    expr: probe_http_status_code{instance="contracts-playbook.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    expr: probe_http_status_code{instance="https://contracts-playbook.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
     for: 15m
     labels:
       severity: event.orange
@@ -2157,7 +2157,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check Contracts-playbook availability and docker statuses and do startup or restart services.
   - alert: 21.1 Contracts-playbook_http_respose_red
-    expr: probe_http_status_code{instance="contracts-playbook.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    expr: probe_http_status_code{instance="https://contracts-playbook.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
     for: 20m
     labels:
       severity: event.red
@@ -2206,8 +2206,8 @@ groups:
       Action: Ask Tomas Zemblys to check FLT-SQL-DEV is DB legal available or not. Ask Tomas Zemblys send communication for DB's downtime.
 - name: 22. Safety
   rules:
-  - alert: 22.1 Contracts-playbook_http_respose_yellow
-    expr: probe_http_status_code{instance="safety.fltechnics.com", job="UI_APP_INFRASTRUCTURE_HTTPS"} != 200
+  - alert: 22.1 safety_http_respose_yellow
+    expr: probe_http_status_code{instance="https://safety.fltechnics.com", job="UI_APP_INFRASTRUCTURE_HTTPS"} != 200
     for: 5m
     labels:
       severity: event.yellow.safety
@@ -2219,7 +2219,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check safety availability and docker statuses and do startup or restart services.
   - alert: 22.1 safety_http_respose_orange
-    expr: probe_http_status_code{instance="safety.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    expr: probe_http_status_code{instance="https://safety.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
     for: 15m
     labels:
       severity: event.orange
@@ -2231,7 +2231,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check safety availability and docker statuses and do startup or restart services.
   - alert: 22.1 safety_http_respose_red
-    expr: probe_http_status_code{instance="safety.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    expr: probe_http_status_code{instance="https://safety.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
     for: 20m
     labels:
       severity: event.red
@@ -2314,7 +2314,7 @@ groups:
 - name: 23. Smailer
   rules:
   - alert: 23.1 smailer_http_respose_yellow
-    expr: probe_http_status_code{instance="smailer.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    expr: probe_http_status_code{instance="https://smailer.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
     for: 5m
     labels:
       severity: event.yellow.smailer
@@ -2326,7 +2326,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check smailer availability and docker statuses and do startup or restart services.
   - alert: 23.1 smailer_http_respose_orange
-    expr: probe_http_status_code{instance="smailer.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    expr: probe_http_status_code{instance="https://smailer.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
     for: 15m
     labels:
       severity: event.orange
@@ -2338,7 +2338,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check smailer availability and docker statuses and do startup or restart services.
   - alert: 23.1 smailer_http_respose_red
-    expr: probe_http_status_code{instance="smailer.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    expr: probe_http_status_code{instance="https://smailer.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
     for: 20m
     labels:
       severity: event.red
@@ -2396,7 +2396,7 @@ groups:
 - name: 24. Bi2v2
   rules:
   - alert: 24.1 bi2v2_http_respose_yellow
-    expr: probe_http_status_code{instance="bi2-v2-uat.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    expr: probe_http_status_code{instance="https://bi2-v2-uat.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
     for: 5m
     labels:
       severity: event.yellow.bi2v2
@@ -2408,7 +2408,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check bi2v2 availability and docker statuses and do startup or restart services.
   - alert: 24.1 bi2v2_http_respose_orange
-    expr: probe_http_status_code{instance="bi2-v2-uat.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    expr: probe_http_status_code{instance="https://bi2-v2-uat.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
     for: 15m
     labels:
       severity: event.orange
@@ -2420,7 +2420,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check bi2v2 availability and docker statuses and do startup or restart services.
   - alert: 24.1 bi2v2_http_respose_red
-    expr: probe_http_status_code{instance="bi2-v2-uat.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    expr: probe_http_status_code{instance="https://bi2-v2-uat.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
     for: 20m
     labels:
       severity: event.red
@@ -2470,7 +2470,7 @@ groups:
 - name: 26. Sensus
   rules:
   - alert: 26.1 Sensus_http_respose_yellow
-    expr: probe_http_status_code{instance="sensus.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    expr: probe_http_status_code{instance="https://sensus.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
     for: 5m
     labels:
       severity: event.yellow.Sensus
@@ -2482,7 +2482,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check Sensus availability if not working do communication.
   - alert: 26.1 Sensus_http_respose_orange
-    expr: probe_http_status_code{instance="sensus.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    expr: probe_http_status_code{instance="https://sensus.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
     for: 15m
     labels:
       severity: event.orange
@@ -2494,7 +2494,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check Sensus availability if not working do communication.
   - alert: 26.1 Sensus_http_respose_red
-    expr: probe_http_status_code{instance="sensus.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    expr: probe_http_status_code{instance="https://sensus.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
     for: 20m
     labels:
       severity: event.red
@@ -2506,7 +2506,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Karolis Dimitrevičius about Sensus availability, communication
   - alert: 26.2 Sensusmro_http_respose_yellow
-    expr: probe_http_status_code{instance="sensusmro.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    expr: probe_http_status_code{instance="https://sensusmro.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
     for: 5m
     labels:
       severity: event.yellow.Sensus
@@ -2518,7 +2518,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check Sensus availability if not working do communication.
   - alert: 26.2 Sensusmro_http_respose_orange
-    expr: probe_http_status_code{instance="sensusmro.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    expr: probe_http_status_code{instance="https://sensusmro.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
     for: 15m
     labels:
       severity: event.orange
@@ -2530,7 +2530,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check Sensus availability if not working do communication.
   - alert: 26.2 Sensusmro_http_respose_red
-    expr: probe_http_status_code{instance="sensusmro.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    expr: probe_http_status_code{instance="https://sensusmro.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
     for: 20m
     labels:
       severity: event.red
@@ -2544,7 +2544,7 @@ groups:
 - name: 27. OPEN-FLT
   rules:
   - alert: 27.1 open_http_respose_yellow
-    expr: probe_http_status_code{instance="open.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    expr: probe_http_status_code{instance="https://open.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
     for: 5m
     labels:
       severity: event.yellow.open
@@ -2556,7 +2556,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check Open availability if not working do communication.
   - alert: 27.1 open_http_respose_orange
-    expr: probe_http_status_code{instance="open.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    expr: probe_http_status_code{instance="https://open.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
     for: 15m
     labels:
       severity: event.orange
@@ -2568,7 +2568,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check open availability if not working do communication.
   - alert: 27.1 open_http_respose_red
-    expr: probe_http_status_code{instance="open.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    expr: probe_http_status_code{instance="https://open.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
     for: 20m
     labels:
       severity: event.red
@@ -2617,6 +2617,44 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Karolis Dimitrevičius about Sensus Time Tracking availability, communication
+- name: 29. ServerBackups
+  rules:
+  - alert: 29.1 Server_backups_failed_yellow
+    expr: server_backups_failed != 0
+    for: 1h
+    labels:
+      severity: event.yellow.backups
+    annotations:
+      Inpacted_Service : Server Backups
+      Trigger : If Failed status is more than 0 for 30m
+      responsable: Dominykas Šivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Sensus availability if not working do communication.
+  - alert: 29.1 Server_backups_failed_orange
+    expr: server_backups_failed != 0
+    for: 3h
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Server Backups
+      Trigger : If Failed status is more than 0 for 3h
+      responsable: Dominykas Šivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Sensus availability if not working do communication.
+  - alert: 29.1 Server_backups_failed_red
+    expr: server_backups_failed != 0
+    for: 24h
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Server Backups
+      Trigger : If Failed status is more than 0 for 24h
+      responsable: Dominykas Šivickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Sensus availability if not working do communication.
 - name: Linux Server Events
   rules:
   - record: instance:node_cpu:rate:sum
