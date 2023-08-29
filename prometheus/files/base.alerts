@@ -221,7 +221,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Tomas and Eligijus to check Qlik Sense application services is running and Qlik Sense DB is available or not. Ask Tomas or Eligijus to send communication for service downtime.
   - alert: 2.3 QlikSense_capacity_left_minutes_yellow
-    expr: mssql_qlik_analyzer_capacity_lefttime{job="sql_exporter"} <= 200
+    expr: mssql_qlik_analyzer_capacity_lefttime{job="sql_exporter"} <= 200  or absent(mssql_qlik_analyzer_capacity_lefttime{job="sql_exporter"})
     for: 30m
     labels:
       severity: event.yellow.qliksense
@@ -233,7 +233,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check users with "Analyzer" license. Deallocate few users with oldest used date. Allocate these free licenses for users with biggest capacity minutes.
   - alert: 2.3 QlikSense_capacity_left_minutes_orange
-    expr: mssql_qlik_analyzer_capacity_lefttime{job="sql_exporter"} <= 200
+    expr: mssql_qlik_analyzer_capacity_lefttime{job="sql_exporter"} <= 200 or absent(mssql_qlik_analyzer_capacity_lefttime{job="sql_exporter"})
     for: 60m
     labels:
       severity: event.orange
@@ -245,7 +245,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: 	Check users with "Analyzer" license. Deallocate few users with oldest used date. Allocate these free licenses for users with biggest capacity minutes.
   - alert: 2.3 QlikSense_capacity_left_minutes_red
-    expr: mssql_qlik_analyzer_capacity_lefttime{job="sql_exporter"} <= 200
+    expr: mssql_qlik_analyzer_capacity_lefttime{job="sql_exporter"} <= 200  or absent(mssql_qlik_analyzer_capacity_lefttime{job="sql_exporter"})
     for: 90m
     labels:
       severity: event.red
