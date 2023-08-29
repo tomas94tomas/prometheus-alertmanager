@@ -225,8 +225,8 @@ scrape_configs:
     metric_relabel_configs:
     - regex: 'id'
       action: labeldrop
-    scrape_interval: 120s
-    scrape_timeout: 119s
+    scrape_interval: 5m
+    scrape_timeout: 4m
 
   - job_name: 'fltrain_exporter'
     metrics_path: "/metrics"
