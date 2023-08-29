@@ -458,6 +458,16 @@ receivers:
     require_tls: false
     send_resolved: true
 
+- name: 'event.yellow.carreservation'
+  email_configs:
+  - to: 'titas.pirgus@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
 - name: 'event.yellow.test'
   email_configs:
   - to: 'dominykas.sivickas@fltechnics.com'

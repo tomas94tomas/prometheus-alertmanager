@@ -2655,6 +2655,44 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check Sensus availability if not working do communication.
+- name: 31. CarReservation
+  rules:
+  - alert: 31.1 car_reservation_http_respose_yellow
+    expr: probe_http_status_code{instance="http://webfleet.aktkc.lt/gps", job="CAR_RESERVATION_HTTP"} != 200
+    for: 1m
+    labels:
+      severity: event.yellow.carreservation
+    annotations:
+      Inpacted_Service : Car Reservation
+      Trigger : Exporter have status 0 or other of Teampass system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Titas Pirugis
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Car Reservation webfleet availability and docker statuses and do startup or restart services.
+  - alert: 31.1 car_reservation_http_respose_orange
+    expr: probe_http_status_code{instance="http://webfleet.aktkc.lt/gps", job="CAR_RESERVATION_HTTP"} != 200
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Car Reservation
+      Trigger : Exporter have status 0 or other of Car reservation system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Titas Pirugis
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Car Reservation webfleet availability and docker statuses and do startup or restart services.
+  - alert: 31.1 car_reservation_http_respose_red
+    expr: probe_http_status_code{instance="http://webfleet.aktkc.lt/gps", job="CAR_RESERVATION_HTTP"} != 200
+    for: 30m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Car Reservation
+      Trigger : Exporter have status 0 or other of Car Reservation system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Dominykas about Car Reservation webfleetavailability, communication
 - name: Linux Server Events
   rules:
   - record: instance:node_cpu:rate:sum
