@@ -2658,7 +2658,7 @@ groups:
 - name: 31. CarReservation
   rules:
   - alert: 31.1 car_reservation_http_respose_yellow
-    expr: probe_http_status_code{instance="http://webfleet.aktkc.lt/gps", job="CAR_RESERVATION_HTTP"} != 200
+    expr: probe_http_status_code{instance="http://webfleet.aktkc.lt/gps", job="CAR_RESERVATION_HTTP"} != 401
     for: 1m
     labels:
       severity: event.yellow.carreservation
@@ -2670,7 +2670,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check Car Reservation webfleet availability and docker statuses and do startup or restart services.
   - alert: 31.1 car_reservation_http_respose_orange
-    expr: probe_http_status_code{instance="http://webfleet.aktkc.lt/gps", job="CAR_RESERVATION_HTTP"} != 200
+    expr: probe_http_status_code{instance="http://webfleet.aktkc.lt/gps", job="CAR_RESERVATION_HTTP"} != 401
     for: 10m
     labels:
       severity: event.orange
@@ -2682,7 +2682,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check Car Reservation webfleet availability and docker statuses and do startup or restart services.
   - alert: 31.1 car_reservation_http_respose_red
-    expr: probe_http_status_code{instance="http://webfleet.aktkc.lt/gps", job="CAR_RESERVATION_HTTP"} != 200
+    expr: probe_http_status_code{instance="http://webfleet.aktkc.lt/gps", job="CAR_RESERVATION_HTTP"} != 401
     for: 30m
     labels:
       severity: event.red
