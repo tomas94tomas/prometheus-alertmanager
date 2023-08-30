@@ -1947,7 +1947,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Tomas Zemblys to check MSSQL is DB BI2 and BI2_erp available or not. Ask Tomas Zemblys send communication for DB's downtime.
   - alert: 18.2 BI2_kiosk_activity_yellow
-    expr: mssql_entrance_KUN_HGR_kiosk_status == 0 or mssql_entrance_KUN_WH_kiosk_status == 0 or mssql_entrance_VNO_ADM_1a_1_kiosk_status == 0 or mssql_entrance_VNO_ADM_1a_2_kiosk_status == 0 or mssql_entrance_VNO_HGR_kiosk_status == 0
+    expr: mssql_entrance_KUN_HGR_kiosk_status + mssql_entrance_KUN_WH_kiosk_status + mssql_entrance_VNO_ADM_1a_1_kiosk_status + mssql_entrance_VNO_ADM_1a_2_kiosk_status + mssql_entrance_VNO_HGR_kiosk_status < 4
     for: 30m
     labels:
       severity: event.yellow.bi2
@@ -1959,8 +1959,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check if available Kiosk mentioned in the alert. If Kiosk is not available then ask SD to check Internet connection to bi2.fltechnics.com.
   - alert: 18.2 BI2_kiosk_activity_orange
-    expr: mssql_entrance_KUN_HGR_kiosk_status == 0 or mssql_entrance_KUN_WH_kiosk_status == 0 or mssql_entrance_VNO_ADM_1a_1_kiosk_status == 0 or mssql_entrance_VNO_ADM_1a_2_kiosk_status == 0 or mssql_entrance_VNO_HGR_kiosk_status == 0
-    for: 40m
+    expr: mssql_entrance_KUN_HGR_kiosk_status + mssql_entrance_KUN_WH_kiosk_status + mssql_entrance_VNO_ADM_1a_1_kiosk_status + mssql_entrance_VNO_ADM_1a_2_kiosk_status + mssql_entrance_VNO_HGR_kiosk_status < 4
     labels:
       severity: event.orange
     annotations:
@@ -1971,7 +1970,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check if available Kiosk mentioned in the alert. If Kiosk is not available then ask SD to check Internet connection to bi2.fltechnics.com.
   - alert: 18.2 BI2_kiosk_activity_red
-    expr: mssql_entrance_KUN_HGR_kiosk_status == 0 or mssql_entrance_KUN_WH_kiosk_status == 0 or mssql_entrance_VNO_ADM_1a_1_kiosk_status == 0 or mssql_entrance_VNO_ADM_1a_2_kiosk_status == 0 or mssql_entrance_VNO_HGR_kiosk_status == 0
+    expr: mssql_entrance_KUN_HGR_kiosk_status + mssql_entrance_KUN_WH_kiosk_status + mssql_entrance_VNO_ADM_1a_1_kiosk_status + mssql_entrance_VNO_ADM_1a_2_kiosk_status + mssql_entrance_VNO_HGR_kiosk_status < 4
     for: 60m
     labels:
       severity: event.red
@@ -2630,7 +2629,7 @@ groups:
       responsable: Dominykas Šivickas
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Check Sensus availability if not working do communication.
+      Action: Check Servers Failed Backups, write ticket to ASG if failing periodically.
   - alert: 29.1 Server_backups_failed_orange
     expr: server_backups_failed != 0
     for: 3h
@@ -2642,7 +2641,7 @@ groups:
       responsable: Dominykas Šivickas
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Check Sensus availability if not working do communication.
+      Action: Check Servers Failed Backups, write ticket to ASG if failing periodically.
   - alert: 29.1 Server_backups_failed_red
     expr: server_backups_failed != 0
     for: 24h
@@ -2654,7 +2653,7 @@ groups:
       responsable: Dominykas Šivickas
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Check Sensus availability if not working do communication.
+      Action: Check Servers Failed Backups, write ticket to ASG if failing periodically.
 - name: 31. CarReservation
   rules:
   - alert: 31.1 car_reservation_http_respose_yellow
