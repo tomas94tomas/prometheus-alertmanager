@@ -1960,6 +1960,7 @@ groups:
       Action: Check if available Kiosk mentioned in the alert. If Kiosk is not available then ask SD to check Internet connection to bi2.fltechnics.com.
   - alert: 18.2 BI2_kiosk_activity_orange
     expr: mssql_entrance_KUN_HGR_kiosk_status + mssql_entrance_KUN_WH_kiosk_status + mssql_entrance_VNO_ADM_1a_1_kiosk_status + mssql_entrance_VNO_ADM_1a_2_kiosk_status + mssql_entrance_VNO_HGR_kiosk_status < 4
+    for: 40m
     labels:
       severity: event.orange
     annotations:
