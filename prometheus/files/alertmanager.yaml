@@ -127,6 +127,12 @@ route:
       severity: event.yellow.backups
     receiver: event.yellow.backups
   - match:
+      severity: event.yellow.airbus
+    receiver: event.yellow.airbus
+  - match:
+      severity: event.yellow.boeingfleet
+    receiver: event.yellow.boeingfleet
+  - match:
       severity: event.yellow.files
     receiver: event.yellow.files
   - match:
@@ -469,6 +475,16 @@ receivers:
     send_resolved: true
 
 - name: 'event.yellow.boeingfleet'
+  email_configs:
+  - to: 'leonas.vedeikis@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.yellow.airbus'
   email_configs:
   - to: 'leonas.vedeikis@fltechnics.com'
     from: 'grafana@fltechnics.com'
