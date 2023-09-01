@@ -1,4 +1,5 @@
 [DevOps_Infrastructure]
+FLT-Airbus ansible_host=192.168.50.46
 FLT-Monitoring-Analytics ansible_host=192.168.50.247
 FLT-GitLab ansible_host=192.168.231.136 ansible_port=2222
 FLT-Nexus ansible_host=192.168.231.180 ansible_port=2222
