@@ -2693,7 +2693,7 @@ groups:
 - name: 33. Boeing Fleet
   rules:
   - alert: 33.1 boeing_fleet_http_respose_yellow
-    expr: probe_http_status_code{instance="http://192.168.50.22:8081", job="MY_BOEING_FLEET_HTTP"} != 200
+    expr: probe_http_status_code{instance="http://192.168.50.22:8081", job="MY_BOEING_FLEET_HTTP"} != 0
     for: 5m
     labels:
       severity: event.yellow.boeingfleet
@@ -2705,7 +2705,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check Boeing Fleet webfleet availability and docker statuses and do startup or restart services.
   - alert: 33.1 boeing_fleet_http_respose_orange
-    expr: probe_http_status_code{instance="http://192.168.50.22:8081", job="MY_BOEING_FLEET_HTTP"} != 200
+    expr: probe_http_status_code{instance="http://192.168.50.22:8081", job="MY_BOEING_FLEET_HTTP"} != 0
     for: 10m
     labels:
       severity: event.orange
@@ -2717,7 +2717,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check Boeing Fleet webfleet availability and docker statuses and do startup or restart services.
   - alert: 33.1 boeing_fleet_http_respose_red
-    expr: probe_http_status_code{instance="http://192.168.50.22:8081", job="MY_BOEING_FLEET_HTTP"} != 200
+    expr: probe_http_status_code{instance="http://192.168.50.22:8081", job="MY_BOEING_FLEET_HTTP"} != 0
     for: 30m
     labels:
       severity: event.red
@@ -2729,7 +2729,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Dominykas about Boeing Fleet webfleetavailability, communication
   - alert: 33.2 boeing_fleet_server_respose_yellow
-    expr: up{instance="FLT-Boeing", job="IT Unit Support", name="FLT-Boeing"}
+    expr: up{instance="FLT-Boeing", job="IT Unit Support", name="FLT-Boeing"} != 1
     for: 5m
     labels:
       severity: event.yellow.boeingfleet
@@ -2741,7 +2741,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check Boeing Fleet webfleet availability and docker statuses and do startup or restart services.
   - alert: 33.2 boeing_fleet_server_respose_orange
-    expr: up{instance="FLT-Boeing", job="IT Unit Support", name="FLT-Boeing"}
+    expr: up{instance="FLT-Boeing", job="IT Unit Support", name="FLT-Boeing"} != 1
     for: 10m
     labels:
       severity: event.orange
@@ -2753,7 +2753,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check Boeing Fleet webfleet availability and docker statuses and do startup or restart services.
   - alert: 33.2 boeing_fleet_server_respose_red
-    expr: up{instance="FLT-Boeing", job="IT Unit Support", name="FLT-Boeing"}
+    expr: up{instance="FLT-Boeing", job="IT Unit Support", name="FLT-Boeing"} != 1
     for: 30m
     labels:
       severity: event.red
