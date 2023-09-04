@@ -424,6 +424,17 @@ scrape_configs:
     - regex: 'id'
       action: labeldrop
 
+  - job_name: 'zabbix_metrics'
+    scrape_interval: 5m
+    scrape_timeout: 2m
+    metrics_path: "/metrics"
+    static_configs:
+    - targets: ['192.168.231.235:9224']
+    metric_relabel_configs:
+    - source_labels: [__name__]
+      regex: 'agent_ping'  # Adjust this regex to match your specific metric
+      action: keep
+
   - job_name: 'oracledb_exporter'
     metrics_path: "/metrics"
     static_configs:
