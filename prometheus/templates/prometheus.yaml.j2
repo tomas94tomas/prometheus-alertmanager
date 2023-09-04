@@ -638,30 +638,6 @@ scrape_configs:
       replacement: $1
       action: replace
 
-  - job_name: 'rnd_vault_live'
-    scrape_interval: 30s
-    scrape_timeout: 10s
-    metrics_path: '/v1/sys/metrics'
-    scheme: 'https'
-    static_configs:
-      - targets:
-          - 'rnd-vault-live.fltechnics.com'
-    bearer_token: '{{ rnd_vault_dev_token }}'
-    tls_config:
-      insecure_skip_verify: true
-
-  - job_name: 'rnd_vault_dev'
-    scrape_interval: 30s
-    scrape_timeout: 10s
-    metrics_path: '/v1/sys/metrics'
-    scheme: 'https'
-    static_configs:
-      - targets:
-          - 'rnd-vault-dev.fltechnics.com'
-    bearer_token: '{{ rnd_vault_dev_token }}'
-    tls_config:
-      insecure_skip_verify: true
-
   - job_name: Nomad_cluster_https
     metrics_path: /probe
     params:

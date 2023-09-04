@@ -1279,7 +1279,7 @@ groups:
 - name: 9. Vault Events
   rules:
   - alert: 9.1 Vualt_http_respose_yellow
-    expr: probe_http_status_code{instance="https://rnd-vault-live.fltechnics.com", job="Vault_cluster_https"} != 200
+    expr: probe_http_status_code{instance="https://rnd-vault-live.fltechnics.com", job="vault_cluster_https"} != 200
     for: 1m
     labels:
       severity: event.yellow.vault
@@ -1291,7 +1291,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check Vault service statuses and startup or restart service.
   - alert: 9.1 Vault_http_respose_orange
-    expr: probe_http_status_code{instance="https://rnd-vault-live.fltechnics.com", job="Vault_cluster_https"} != 200
+    expr: probe_http_status_code{instance="https://rnd-vault-live.fltechnics.com", job="vault_cluster_https"} != 200
     for: 5m
     labels:
       severity: event.orange
@@ -1303,7 +1303,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check Vault service statuses and startup or restart service.
   - alert: 9.1 Vault_http_respose_red
-    expr: probe_http_status_code{instance="https://rnd-vault-live.fltechnics.com", job="Vault_cluster_https"} != 200
+    expr: probe_http_status_code{instance="https://rnd-vault-live.fltechnics.com", job="vault_cluster_https"} != 200
     for: 10m
     labels:
       severity: event.red
