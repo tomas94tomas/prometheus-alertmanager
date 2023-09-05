@@ -2693,7 +2693,7 @@ groups:
 - name: 32. Airbus
   rules:
   - alert: 32.1 boeing_fleet_server_respose_yellow
-    expr: up{instance="FLT-Airbus", job="IT Unit Support", name="FLT-Boeing"} != 1
+    expr: up{instance="FLT-Airbus", job="IT Unit Support", name="FLT-Airbus"} != 1
     for: 5m
     labels:
       severity: event.yellow.airbus
@@ -2802,6 +2802,44 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Leonas about Boeing Fleet webfleetavailability, communication
+- name: 34. AirNavix
+  rules:
+  - alert: 34.1 airnavix_server_respose_yellow
+    expr: up{instance="AirNavX-Data", job="IT Unit Support", name="AirNavX-Data"} != 1 or up{instance="AirNavX-PUB", job="IT Unit Support", name="AirNavX-PUB"} != 1
+    for: 5m
+    labels:
+      severity: event.yellow.airbus
+    annotations:
+      Inpacted_Service : Airbus
+      Trigger : Exporter have status 0 or other of Airbus system {{ $labels.vhost }} Down for 5m
+      responsable: Leonas Vedeikis
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Airbus Server availability statuses and do startup or restart services.
+  - alert: 34.1 airnavix_server_respose_orange
+    expr: up{instance="AirNavX-Data", job="IT Unit Support", name="AirNavX-Data"} != 1 or up{instance="AirNavX-PUB", job="IT Unit Support", name="AirNavX-PUB"} != 1
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Airbus Fleet
+      Trigger : Exporter have status 0 or other of Airbus Fleet system {{ $labels.vhost }} Down for 10m
+      responsable: Leonas Vedeikis
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Airbus Fleet Server availability statuses and do startup or restart services.
+  - alert: 34.1 airnavix_server_respose_red
+    expr: up{instance="AirNavX-Data", job="IT Unit Support", name="AirNavX-Data"} != 1 or up{instance="AirNavX-PUB", job="IT Unit Support", name="AirNavX-PUB"} != 1
+    for: 30m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Airbus Fleet
+      Trigger : Exporter have status 0 or other of Airbus Fleet system {{ $labels.vhost }} Down for 30m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Leonas about Airbus Fleet webfleetavailability, communication
 - name: Linux Server Events
   rules:
   - record: instance:node_cpu:rate:sum
