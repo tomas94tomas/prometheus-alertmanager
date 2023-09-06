@@ -484,6 +484,26 @@ receivers:
     require_tls: false
     send_resolved: true
 
+- name: 'event.yellow.magicinfo'
+  email_configs:
+  - to: 'konstantinas.starkutis@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.yellow.m365'
+  email_configs:
+  - to: 'dominykas.sivickas@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
 - name: 'event.yellow.airbus'
   email_configs:
   - to: 'leonas.vedeikis@fltechnics.com'

@@ -1,5 +1,5 @@
 groups:
-- name: 1. Solarwinds Events
+- name: 1. Solarwinds
   rules:
   - alert: 1.1 SolarWinds_http_respose_yellow
     expr: probe_http_status_code{instance="https://sw.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
@@ -145,7 +145,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Tomas and Dominykas to check SolarWinds Docker container and DB availabilities.
-- name: 2. QlikSense Events
+- name: 2. QlikSense
   rules:
   - alert: 2.1 QlikSense_http_respose_yellow
     expr: probe_http_status_code{instance="https://bi.fltechnics.com", job="QLIKSENSE_HTTPS"} == 0
@@ -292,7 +292,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Rasita or Tomas to check failed scheduler tasks.  
-- name: 3. MSSQL Events
+- name: 3. MSSQL
   rules:
   - alert: 3.1 FLTSQL_master_db_activity_yellow
     expr: mssql_fltsql_db_service_state == 0 or absent(mssql_fltsql_db_service_state)
@@ -546,7 +546,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Tomas to check FLTTrain server blocked sessions and kill session of the blocker.
-- name: 4. ODB Events
+- name: 4. ODB
   rules:
   - alert: 4.1 ODB_sysdba_alert_yellow
     expr: oracledb_connections_idle_sec{program="QCSYSMOD.EXE", user_name="SYSDBA"} or oracledb_connections_idle_sec{program="qcsysmod.exe", user_name="SYSDBA"} 
@@ -908,7 +908,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Tomas to check free space of WB-AMOS-DB-PROD server drive E (Oracle DB datafiles). If need more space ask Dominykas to order more resources.
-- name: 5. Gitlab Events
+- name: 5. Gitlab
   rules:
   - alert: 5.1 gitlab_http_respose_yellow
     expr: probe_http_status_code{instance="gitlab.fltechnics.com", job="UI_APP_INFRASTRUCTURE_HTTPS"} != 200
@@ -982,7 +982,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Dominykas Sivickas to check Postgres is available or not. Ask Dominykas send communication for DB's downtime.
-- name: 6. Teampass Events
+- name: 6. Teampass
   rules:
   - alert: 6.1 teampass_http_respose_yellow
     expr: probe_http_status_code{instance="tp.fltechnics.com", job="UI_APP_INFRASTRUCTURE_HTTPS"} != 200
@@ -1056,7 +1056,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Dominykas Sivickas to check MySQL is available or not. Ask Dominykas send communication for DB's downtime .
-- name: 7. Nomad Events
+- name: 7. Nomad
   rules:
   - alert: 7.1 nomad_http_respose_yellow
     expr: probe_http_status_code{instance="https://rnd-nomad-live.fltechnics.com", job="Nomad_cluster_https"} != 200
@@ -1166,7 +1166,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Dominykas about Nomad Jobs and healthcheck.
-- name: 8. Consul Events
+- name: 8. Consul
   rules:
   - alert: 8.1 Consul_http_respose_yellow
     expr: probe_http_status_code{instance="https://rnd-Consul-live.fltechnics.com", job="Consul_cluster_https"} != 200
@@ -1276,7 +1276,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Dominykas about Consul Cluster availability and healthcheck.
-- name: 9. Vault Events
+- name: 9. Vault
   rules:
   - alert: 9.1 Vualt_http_respose_yellow
     expr: probe_http_status_code{instance="https://rnd-vault-live.fltechnics.com", job="vault_cluster_https"} != 200
@@ -1314,7 +1314,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Dominykas about Vault availability and healthcheck.
-- name: 10. Traefik Events
+- name: 10. Traefik
   rules:
   - alert: 10.1 traefik_http_respose_yellow
     expr: probe_http_status_code{instance="https://rnd-traefik.fltechnics.com", job="traefik_https"} != 401
@@ -1352,7 +1352,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Dominykas about Traefik availability and healthcheck.
-- name: 11. Nexus Events
+- name: 11. Nexus
   rules:
   - alert: 11.1 nexus_http_respose_yellow
     expr: probe_http_status_code{instance="repository.fltechnics.com", job="UI_APP_INFRASTRUCTURE_HTTPS"} != 200
@@ -1499,7 +1499,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Dominykas Sivickas to check MySQL is available or not. Ask Dominykas send communication for DB's downtime .
-- name: 13. Ramco Events
+- name: 13. Ramco
   rules:
   - alert: 13.1 ramco_http_respose_yellow
     expr: probe_http_status_code{instance="http://ramco", job="RAMCO_SHAREPOINT_HTTP"} != 200
@@ -1681,7 +1681,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Karolis about RAMCO printing
-- name: 14. Genesis Events
+- name: 14. Genesis
   rules:
   - alert: 14.1 genesis_api_http_response_yellow
     expr: probe_http_status_code{job="jira_genesis_api_check"} != 200
@@ -1719,7 +1719,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask K.Gagac about Genesis availability, communication.
-- name: 15. Jira Events
+- name: 15. Jira
   rules:
   - alert: 15.1 jira_Customer_portal_http_response_yellow
     expr: probe_http_status_code{job="jira_customer_portal"} != 200
@@ -1793,7 +1793,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask K.Gagac about Customer Portal availability, communication.
-- name: 16. Insight Events
+- name: 16. Insight
   rules:
   - alert: 16.1 jira_insight_portal_http_response_yellow
     expr: probe_http_status_code{job="jira_customer_portal"} != 200
@@ -1831,7 +1831,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask K.Gagac about Customer Portal availability, communication.
-- name: 17. Tempo Events
+- name: 17. Tempo
   rules:
   - alert: 17.1 jira_tempo_token_status_yellow
     expr: mssql_jira_tempo_token_status != 1
@@ -1869,7 +1869,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask K.Gagac about Customer Portal availability, communication.
-- name: 18. BI2 
+- name: 18. BI2
   rules:
   - alert: 18.1 BI2_http_respose_yellow
     expr: probe_http_status_code{instance="https://bi2.fltechnics.com", job="UI_APP_BI2_HTTPS"} != 200
@@ -2614,44 +2614,44 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Karolis Dimitrevičius about Sensus Time Tracking availability, communication
-- name: 29. ServerBackups
+- name: 30. Microsoft-365-status
   rules:
-  - alert: 29.1 Server_backups_failed_yellow
-    expr: server_backups_failed != 0
+  - alert: 30.1 m365_status_yellow
+    expr: m365_service_status != 0
     for: 1h
     labels:
-      severity: event.yellow.backups
+      severity: event.yellow.m365
     annotations:
-      Inpacted_Service : Server Backups
+      Inpacted_Service : M365
       Trigger : If Failed status is more than 0 for 30m
       responsable: Dominykas Šivickas
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Check Servers Failed Backups, write ticket to ASG if failing periodically.
-  - alert: 29.1 Server_backups_failed_orange
-    expr: server_backups_failed != 0
+      Action: Check 365 services if there is some problems do communication and add ticket to ASG
+  - alert: 30.1 m365_status_orange
+    expr: m365_service_status != 0
     for: 3h
     labels:
       severity: event.orange
     annotations:
-      Inpacted_Service : Server Backups
+      Inpacted_Service : M365
       Trigger : If Failed status is more than 0 for 3h
       responsable: Dominykas Šivickas
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Check Servers Failed Backups, write ticket to ASG if failing periodically.
-  - alert: 29.1 Server_backups_failed_red
-    expr: server_backups_failed != 0
+      Action: Check 365 services if there is some problems do communication and add ticket to ASG
+  - alert: 30.1 m365_statusd_red
+    expr: m365_service_status != 0
     for: 24h
     labels:
       severity: event.red
     annotations:
-      Inpacted_Service : Server Backups
+      Inpacted_Service : M365
       Trigger : If Failed status is more than 0 for 24h
       responsable: Dominykas Šivickas
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Check Servers Failed Backups, write ticket to ASG if failing periodically.
+      Action: Check 365 services if there is some problems do communication and add ticket to ASG
 - name: 31. CarReservation
   rules:
   - alert: 31.1 car_reservation_http_respose_yellow
@@ -2840,6 +2840,44 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Leonas about Airbus Fleet webfleetavailability, communication
+- name: 35. TV(MagicInfo)
+  rules:
+  - alert: 35.1 MagicInfo_http_respose_yellow
+    expr: probe_http_status_code{instance="http://192.168.50.45:7001/MagicInfo/login", job="MAGICINFO_HTTPS"} == 0
+    for: 5m
+    labels:
+      severity: event.yellow.magicinfo
+    annotations:
+      Inpacted_Service : MagicInfo
+      Trigger : Exporter have status 0 or other of MagicInfo system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Konstantinas Starkutis
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check MagicInfo availability if not working do communication.
+  - alert: 35.1 MagicInfo_http_respose_orange
+    expr: probe_http_status_code{instance="http://192.168.50.45:7001/MagicInfo/login", job="MAGICINFO_HTTPS"} == 0
+    for: 15m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Sensus
+      Trigger : Exporter have status 0 or other of MagicInfo system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Krolis Dimitrevičius
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check MagicInfo availability if not working do communication.
+  - alert: 35.1 MagicInfo_http_respose_red
+    expr: probe_http_status_code{instance="http://192.168.50.45:7001/MagicInfo/login", job="MAGICINFO_HTTPS"} == 0
+    for: 20m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Sensus
+      Trigger : Exporter have status 0 or other of MagicInfo system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Konstantinas Starkutis about MagicInfo vailability, communication
 - name: Linux Server Events
   rules:
   - record: instance:node_cpu:rate:sum
