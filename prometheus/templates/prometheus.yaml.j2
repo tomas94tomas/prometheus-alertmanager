@@ -431,7 +431,7 @@ scrape_configs:
     - targets: ['192.168.231.235:9224']
     metric_relabel_configs:
     - source_labels: [__name__]
-      regex: 'agent_ping|service_state_*'  # Adjust this regex to match your specific metric
+      regex: 'agent_ping|service_state_DNS_Server_'  # Adjust this regex to match your specific metric
       action: keep
 
   - job_name: 'oracledb_exporter'
