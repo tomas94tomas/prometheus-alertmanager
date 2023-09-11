@@ -2917,7 +2917,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Arnas Terakas about Active Directory availability, communication
   - alert: 36.2 activedirectory_main_services_respose_yellow
-    expr: agent_ping{exported_instance="FLT-DC1"} != 1 or agent_ping{exported_instance="FLT-DC2"} != 1
+    expr: service_state_DNS_Server_ != 0 or service_state_lsmServ_ != 0 or service_state_kdc_ !=0 or service_state_Netlogon_ !=0 or service_state_W32Time_ !=0
     for: 5m
     labels:
       severity: event.yellow.activedirectory
@@ -2929,7 +2929,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check Active Directory Services ( Intersite Messaging Service (IsmServ), the Kerberos Key Distribution Center (KDC), the NetLogon service (NetLogon), and the Windows Time (W32Time) service.) availability statuses and do startup or restart services.
   - alert: 36.2 activedirectory_main_services_respose_orange
-    expr: agent_ping{exported_instance="FLT-DC1"} != 1 or agent_ping{exported_instance="FLT-DC2"} != 1
+    expr: service_state_DNS_Server_ != 0 or service_state_lsmServ_ != 0 or service_state_kdc_ !=0 or service_state_Netlogon_ !=0 or service_state_W32Time_ !=0
     for: 10m
     labels:
       severity: event.orange
@@ -2941,12 +2941,12 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check Active Directory Services ( Intersite Messaging Service (IsmServ), the Kerberos Key Distribution Center (KDC), the NetLogon service (NetLogon), and the Windows Time (W32Time) service.) availability statuses and do startup or restart services.
   - alert: 36.2 activedirectory_main_services_respose_red
-    expr: agent_ping{exported_instance="FLT-DC1"} != 1 or agent_ping{exported_instance="FLT-DC2"} != 1
+    expr: service_state_DNS_Server_ != 0 or service_state_lsmServ_ != 0 or service_state_kdc_ !=0 or service_state_Netlogon_ !=0 or service_state_W32Time_ !=0
     for: 30m
     labels:
       severity: event.red
     annotations:
-      Inpacted_Service :ActiveDirectory
+      Inpacted_Service : ActiveDirectory
       Trigger : Exporter have status 0 or one of ActiveDirectory Services{{ $labels.vhost }} Down for 30m
       responsable: Andrius Kubickas
       timestamp: >
