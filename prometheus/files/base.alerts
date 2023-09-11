@@ -2892,7 +2892,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check Active Directory Server availability statuses and do startup or restart services.
-  - alert: 36.1 Airbus_fleet_server_respose_orange
+  - alert: 36.1 activedirectory_server_respose_orange
     expr: agent_ping{exported_instance="FLT-DC1"} != 1 or agent_ping{exported_instance="FLT-DC2"} != 1
     for: 10m
     labels:
@@ -2904,13 +2904,13 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check Active Directory Server availability statuses and do startup or restart services.
-  - alert: 36.1 Airbus_fleet_server_respose_red
+  - alert: 36.2 activedirectory_main_services_respose_red
     expr: agent_ping{exported_instance="FLT-DC1"} != 1 or agent_ping{exported_instance="FLT-DC2"} != 1
     for: 30m
     labels:
       severity: event.red
     annotations:
-      Inpacted_Service :ActiveDirectory
+      Inpacted_Service : ActiveDirectory
       Trigger : Exporter have status 0 or one of ActiveDirectory Server {{ $labels.vhost }} Down for 30m
       responsable: Andrius Kubickas
       timestamp: >
