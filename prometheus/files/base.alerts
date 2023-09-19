@@ -2952,6 +2952,82 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Arnas Terakas about Active Directory Services (Intersite Messaging Service (IsmServ), the Kerberos Key Distribution Center (KDC), the NetLogon service (NetLogon), and the Windows Time (W32Time) service) availability, communication
+- name: 37. Doclogix
+  rules:
+  - alert: 37.1 doclogix_http_respose_yellow
+    expr: probe_http_status_code{instance="https://documents.aviasg.com/DocLogix", job="DOCLOGIX_HTTP"} != 401
+    for: 5m
+    labels:
+      severity: event.yellow.doclogix
+    annotations:
+      Inpacted_Service : doclogix
+      Trigger : Exporter have status 0 or other of doclogix  system {{ $labels.vhost }} HTTP error for 5m
+      responsable: ASG IT
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Boeing Fleet webfleet availability and docker statuses and do startup or restart services.
+  - alert: 37.1 doclogix_http_respose_orange
+    expr: probe_http_status_code{instance="https://documents.aviasg.com/DocLogix", job="DOCLOGIX_HTTP"} != 401
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : doclogix
+      Trigger : Exporter have status 0 or other of doclogix Fleet system {{ $labels.vhost }} HTTP error for 1m
+      responsable: ASG IT
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Doclogix availability statuses and do startup or restart services.
+  - alert: 37.1 doclogix_http_respose_red
+    expr: probe_http_status_code{instance="https://documents.aviasg.com/DocLogix", job="DOCLOGIX_HTTP"} != 401
+    for: 30m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : doclogix
+      Trigger : Exporter have status 0 or other of doclogix Fleet system {{ $labels.vhost }} HTTP error for 1m
+      responsable: ASG IT 
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask ASG about doclogix availability, communication
+- name: 38. eLearning
+  rules:
+  - alert: 38.1 elerning_http_respose_yellow
+    expr: probe_http_status_code{instance="https://elearning.fltechnics.com/login/index.php", job="elerning_HTTP"} != 200
+    for: 5m
+    labels:
+      severity: event.yellow.elerning
+    annotations:
+      Inpacted_Service : elerning
+      Trigger : Exporter have status 0 or other of elerning  system {{ $labels.vhost }} HTTP error for 5m
+      responsable: ASG IT
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Boeing Fleet webfleet availability and docker statuses and do startup or restart services.
+  - alert: 38.1 elerning_http_respose_orange
+    expr: probe_http_status_code{instance="https://elearning.fltechnics.com/login/index.php", job="elerning_HTTP"} != 200
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : elerning
+      Trigger : Exporter have status 0 or other of elerning Fleet system {{ $labels.vhost }} HTTP error for 1m
+      responsable: ASG IT
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check elerning availability statuses and do startup or restart services.
+  - alert: 38.1 elerning_http_respose_red
+    expr: probe_http_status_code{instance="https://elearning.fltechnics.com/login/index.php", job="elerning_HTTP"} != 200
+    for: 30m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : elerning
+      Trigger : Exporter have status 0 or other of elerning Fleet system {{ $labels.vhost }} HTTP error for 1m
+      responsable: ASG IT 
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask ASG about elerning availability, communication
 - name: Linux Server Events
   rules:
   - record: instance:node_cpu:rate:sum

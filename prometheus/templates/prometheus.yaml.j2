@@ -954,6 +954,37 @@ scrape_configs:
         target_label: instance
       - target_label: __address__
         replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+
+  - job_name: DOCLOGIX_HTTP
+    metrics_path: /probe
+    params:
+      module: [ http_2xx_example ]  # Look for a HTTP 200 response.
+    static_configs:
+      - targets:
+        - https://documents.aviasg.com/DocLogix
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+  
+    - job_name: elearning_HTTP
+    metrics_path: /probe
+    params:
+      module: [ http_2xx_example ]  # Look for a HTTP 200 response.
+    static_configs:
+      - targets:
+        - https://elearning.fltechnics.com/login/index.php
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+  
   
   - job_name: 'M365_metrics'
     scrape_interval: 5m
