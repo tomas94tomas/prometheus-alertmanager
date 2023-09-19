@@ -3,7 +3,7 @@ groups:
   rules:
   - alert: High_CPU_Usage
     expr: 100 - (avg(irate(wmi_cpu_time_total{mode="idle"}[5m])) by (name) * 100) > 90
-    for: 10m
+    for: 15m
     labels:
       severity: warning
     annotations:
@@ -11,7 +11,7 @@ groups:
       summary: 'High CPU Usage on {{ $labels.name }} - {{ $value | humanize }}%'
   - alert: HighMemoryUsage
     expr: (wmi_os_physical_memory_free_bytes / wmi_os_visible_memory_bytes) * 100 > 90
-    for: 10m
+    for: 30m
     labels:
       severity: warning
     annotations:
@@ -19,7 +19,7 @@ groups:
       summary: 'High Memory Usage on {{ $labels.name }} - {{ $value | humanize }}%'
   - alert: HighDiskUsage
     expr: (wmi_logical_disk_free_bytes{volume !~"HarddiskVolume.+"} / wmi_logical_disk_size_bytes{volume !~"HarddiskVolume.+"}) * 100 > 90
-    for: 10m
+    for: 40m
     labels:
       severity: warning
     annotations:
@@ -30,7 +30,7 @@ groups:
   rules:
   - alert: WindowsServerCpuUsage
     expr: 100 - (avg by (instance) (rate(windows_cpu_time_total{mode="idle"}[2m])) * 100) > 90
-    for: 5m
+    for: 15m
     labels:
       severity: warning
     annotations:
@@ -38,7 +38,7 @@ groups:
       description: "CPU Usage is more than 90%\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
   - alert: WindowsServerMemoryUsage99
     expr: 100 - ((windows_os_physical_memory_free_bytes / windows_cs_physical_memory_bytes) * 100) > 99
-    for: 10m
+    for: 15m
     labels:
       severity: warning
     annotations:
@@ -46,7 +46,7 @@ groups:
       description: "Memory usage is more than 95%\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
   - alert: WindowsServerMemoryUsage
     expr: 100 - ((windows_os_physical_memory_free_bytes / windows_cs_physical_memory_bytes) * 100) > 95
-    for: 30m
+    for: 40m
     labels:
       severity: warning
     annotations:
@@ -54,7 +54,7 @@ groups:
       description: "Memory usage is more than 95%\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
   - alert: WindowsServerDiskSpaceUsage
     expr: 100.0 - 100 * ((windows_logical_disk_free_bytes{volume !~"R:"} / 1024 / 1024 ) / (windows_logical_disk_size_bytes{volume !~"R:"} / 1024 / 1024) ) > 95 
-    for: 2m
+    for: 30m
     labels:
       severity: warning
     annotations:

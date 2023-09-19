@@ -127,6 +127,18 @@ route:
       severity: event.yellow.backups
     receiver: event.yellow.backups
   - match:
+      severity: event.yellow.airbus
+    receiver: event.yellow.airbus
+  - match:
+      severity: event.yellow.boeingfleet
+    receiver: event.yellow.boeingfleet
+  - match:
+      severity: event.yellow.ad
+    receiver: event.yellow.ad
+  - match:
+      severity: event.yellow.doclogix
+    receiver: event.yellow.doclogix
+  - match:
       severity: event.yellow.files
     receiver: event.yellow.files
   - match:
@@ -163,13 +175,11 @@ inhibit_rules:
 receivers:
 - name: 'team-default'
   email_configs:
-  - to: 'grafana.monitoring@fltechnics.com'
+  - to: 'it.monitoring@fltechnics.com'
     send_resolved: true
 
 - name: 'team-warning'
   email_configs:
-  - to: 'grafana.monitoring@fltechnics.com'
-    send_resolved: true
   - to: 'it.monitoring@fltechnics.com'
     send_resolved: true
 
@@ -182,7 +192,7 @@ receivers:
   email_configs:
   - to: 'helpdesk@fltechnics.com'
     send_resolved: true
-  - to: 'it.administrators.team@fltechnics.com'
+  - to: 'it.monitoring@fltechnics.com'
     send_resolved: true
 
 - name: 'event.yellow.solarwinds'
@@ -203,7 +213,7 @@ receivers:
     html: '{{ template "email-yellow.html" . }}'
     require_tls: false
     send_resolved: true
-  - to: 'rasita.teiserskiene@fltechnics.com'
+  - to: 'andrius.svylas@fltechnics.com'
     from: 'grafana@fltechnics.com'
     headers:
       Subject: '{{ template "email-yellow.subject" . }}'
@@ -451,6 +461,86 @@ receivers:
 - name: 'event.yellow.backups'
   email_configs:
   - to: 'dominykas.sivickas@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.yellow.carreservation'
+  email_configs:
+  - to: 'titas.pirgus@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.yellow.boeingfleet'
+  email_configs:
+  - to: 'leonas.vedeikis@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.yellow.magicinfo'
+  email_configs:
+  - to: 'konstantinas.starkutis@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.yellow.m365'
+  email_configs:
+  - to: 'dominykas.sivickas@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.yellow.airbus'
+  email_configs:
+  - to: 'leonas.vedeikis@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.yellow.ad'
+  email_configs:
+  - to: 'arnas.terekas@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.yellow.doclogix'
+  email_configs:
+  - to: 'it.monitoring@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.yellow.elearning'
+  email_configs:
+  - to: 'it.monitoring@fltechnics.com'
     from: 'grafana@fltechnics.com'
     headers:
       Subject: '{{ template "email-yellow.subject" . }}'

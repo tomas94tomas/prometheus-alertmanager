@@ -225,8 +225,8 @@ scrape_configs:
     metric_relabel_configs:
     - regex: 'id'
       action: labeldrop
-    scrape_interval: 120s
-    scrape_timeout: 119s
+    scrape_interval: 3m
+    scrape_timeout: 2m
 
   - job_name: 'fltrain_exporter'
     metrics_path: "/metrics"
@@ -423,6 +423,16 @@ scrape_configs:
     metric_relabel_configs:
     - regex: 'id'
       action: labeldrop
+
+  - job_name: 'zabbix_metrics'
+    scrape_interval: 5m
+    scrape_timeout: 2m
+    static_configs:
+    - targets: ['192.168.231.235:9224']
+    metric_relabel_configs:
+    - source_labels: [__name__]
+      regex: 'agent_ping|service_state_DNS_Server_|service_state_lsmServ_|service_state_kdc_|service_state_Netlogon_|service_state_W32Time_'  # Adjust this regex to match your specific metric
+      action: keep
 
   - job_name: 'oracledb_exporter'
     metrics_path: "/metrics"
@@ -627,30 +637,6 @@ scrape_configs:
       target_label: __meta_consul_service_address
       replacement: $1
       action: replace
-
-  - job_name: 'rnd_vault_live'
-    scrape_interval: 30s
-    scrape_timeout: 10s
-    metrics_path: '/v1/sys/metrics'
-    scheme: 'https'
-    static_configs:
-      - targets:
-          - 'rnd-vault-live.fltechnics.com'
-    bearer_token: '{{ rnd_vault_dev_token }}'
-    tls_config:
-      insecure_skip_verify: true
-
-  - job_name: 'rnd_vault_dev'
-    scrape_interval: 30s
-    scrape_timeout: 10s
-    metrics_path: '/v1/sys/metrics'
-    scheme: 'https'
-    static_configs:
-      - targets:
-          - 'rnd-vault-dev.fltechnics.com'
-    bearer_token: '{{ rnd_vault_dev_token }}'
-    tls_config:
-      insecure_skip_verify: true
 
   - job_name: Nomad_cluster_https
     metrics_path: /probe
@@ -923,6 +909,92 @@ scrape_configs:
         target_label: instance
       - target_label: __address__
         replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+
+  - job_name: CAR_RESERVATION_HTTP
+    metrics_path: /probe
+    params:
+      module: [ http_2xx_example ]  # Look for a HTTP 200 response.
+    static_configs:
+      - targets:
+        - http://webfleet.aktkc.lt/gps
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+
+  - job_name: MY_BOEING_FLEET_HTTP
+    metrics_path: /probe
+    params:
+      module: [ http_2xx_example ]  # Look for a HTTP 200 response.
+    static_configs:
+      - targets:
+        - http://192.168.50.22:8081
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+
+  - job_name: MAGICINFO_HTTP
+    metrics_path: /probe
+    params:
+      module: [ http_2xx_example ]  # Look for a HTTP 200 response.
+    static_configs:
+      - targets:
+        - http://192.168.50.45:7001/MagicInfo/login
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+
+  - job_name: DOCLOGIX_HTTP
+    metrics_path: /probe
+    params:
+      module: [ http_2xx_example ]  # Look for a HTTP 200 response.
+    static_configs:
+      - targets:
+        - https://documents.aviasg.com/DocLogix
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+  
+  - job_name: elearning_HTTP
+    metrics_path: /probe
+    params:
+      module: [ http_2xx_example ]  # Look for a HTTP 200 response.
+    static_configs:
+      - targets:
+        - https://elearning.fltechnics.com/login/index.php
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+  
+  
+  - job_name: 'M365_metrics'
+    scrape_interval: 5m
+    scrape_timeout: 1m
+    metrics_path: "/metrics"
+    static_configs:
+    - targets: ['192.168.231.235:5001']
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
 
   - job_name: ICMP to SQL
     metrics_path: /probe

@@ -1,5 +1,5 @@
 groups:
-- name: 1. Solarwinds Events
+- name: 1. Solarwinds
   rules:
   - alert: 1.1 SolarWinds_http_respose_yellow
     expr: probe_http_status_code{instance="https://sw.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
@@ -145,7 +145,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Tomas and Dominykas to check SolarWinds Docker container and DB availabilities.
-- name: 2. QlikSense Events
+- name: 2. QlikSense
   rules:
   - alert: 2.1 QlikSense_http_respose_yellow
     expr: probe_http_status_code{instance="https://bi.fltechnics.com", job="QLIKSENSE_HTTPS"} == 0
@@ -221,7 +221,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Tomas and Eligijus to check Qlik Sense application services is running and Qlik Sense DB is available or not. Ask Tomas or Eligijus to send communication for service downtime.
   - alert: 2.3 QlikSense_capacity_left_minutes_yellow
-    expr: mssql_qlik_analyzer_capacity_lefttime{job="sql_exporter"} <= 200
+    expr: mssql_qlik_analyzer_capacity_lefttime{job="sql_exporter"} <= 200 or mssql_qlik_analyzer_capacity_lefttime{job="sql_exporter"} offset 18m <= 200 or on () mssql_qlik_analyzer_capacity_lefttime{job="sql_exporter"}  <= 200
     for: 30m
     labels:
       severity: event.yellow.qliksense
@@ -233,7 +233,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check users with "Analyzer" license. Deallocate few users with oldest used date. Allocate these free licenses for users with biggest capacity minutes.
   - alert: 2.3 QlikSense_capacity_left_minutes_orange
-    expr: mssql_qlik_analyzer_capacity_lefttime{job="sql_exporter"} <= 200
+    expr: mssql_qlik_analyzer_capacity_lefttime{job="sql_exporter"} <= 200 or mssql_qlik_analyzer_capacity_lefttime{job="sql_exporter"} offset 18m <= 200 or on () mssql_qlik_analyzer_capacity_lefttime{job="sql_exporter"}  <= 200
     for: 60m
     labels:
       severity: event.orange
@@ -245,7 +245,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: 	Check users with "Analyzer" license. Deallocate few users with oldest used date. Allocate these free licenses for users with biggest capacity minutes.
   - alert: 2.3 QlikSense_capacity_left_minutes_red
-    expr: mssql_qlik_analyzer_capacity_lefttime{job="sql_exporter"} <= 200
+    expr: mssql_qlik_analyzer_capacity_lefttime{job="sql_exporter"} <= 200 or mssql_qlik_analyzer_capacity_lefttime{job="sql_exporter"} offset 18m <= 200 or on () mssql_qlik_analyzer_capacity_lefttime{job="sql_exporter"}  <= 200
     for: 90m
     labels:
       severity: event.red
@@ -256,7 +256,6 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check users with "Analyzer" license. Deallocate few users with oldest used date. Allocate these free licenses for users with biggest capacity minutes.
-
   - alert: 2.4 QlikSense_failed_scheduler_tasks_yellow
     expr: qlik_sense_task_failed{job="sql_exporter"} > 0
     for: 30m
@@ -269,7 +268,6 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check failed scheduler tasks and try to run these tasks. Identify scheduler task report and try load data manually. Try to solve connection problem for data retrieve or inform employee who can do it. 
-      
   - alert: 2.4 QlikSense_failed_scheduler_tasks_orange
     expr: qlik_sense_task_failed{job="sql_exporter"} > 0
     for: 60m
@@ -282,7 +280,6 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check failed scheduler tasks and try to run these tasks. Identify scheduler task report and try load data manually. Try to solve connection problem for data retrieve or inform employee who can do it. 
-
   - alert: 2.4 QlikSense_failed_scheduler_tasks_red
     expr: qlik_sense_task_failed{job="sql_exporter"} > 0
     for: 90m
@@ -295,7 +292,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Rasita or Tomas to check failed scheduler tasks.  
-- name: 3. MSSQL Events
+- name: 3. MSSQL
   rules:
   - alert: 3.1 FLTSQL_master_db_activity_yellow
     expr: mssql_fltsql_db_service_state == 0 or absent(mssql_fltsql_db_service_state)
@@ -549,7 +546,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Tomas to check FLTTrain server blocked sessions and kill session of the blocker.
-- name: 4. ODB Events
+- name: 4. ODB
   rules:
   - alert: 4.1 ODB_sysdba_alert_yellow
     expr: oracledb_connections_idle_sec{program="QCSYSMOD.EXE", user_name="SYSDBA"} or oracledb_connections_idle_sec{program="qcsysmod.exe", user_name="SYSDBA"} 
@@ -911,7 +908,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Tomas to check free space of WB-AMOS-DB-PROD server drive E (Oracle DB datafiles). If need more space ask Dominykas to order more resources.
-- name: 5. Gitlab Events
+- name: 5. Gitlab
   rules:
   - alert: 5.1 gitlab_http_respose_yellow
     expr: probe_http_status_code{instance="gitlab.fltechnics.com", job="UI_APP_INFRASTRUCTURE_HTTPS"} != 200
@@ -985,7 +982,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Dominykas Sivickas to check Postgres is available or not. Ask Dominykas send communication for DB's downtime.
-- name: 6. Teampass Events
+- name: 6. Teampass
   rules:
   - alert: 6.1 teampass_http_respose_yellow
     expr: probe_http_status_code{instance="tp.fltechnics.com", job="UI_APP_INFRASTRUCTURE_HTTPS"} != 200
@@ -1059,7 +1056,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Dominykas Sivickas to check MySQL is available or not. Ask Dominykas send communication for DB's downtime .
-- name: 7. Nomad Events
+- name: 7. Nomad
   rules:
   - alert: 7.1 nomad_http_respose_yellow
     expr: probe_http_status_code{instance="https://rnd-nomad-live.fltechnics.com", job="Nomad_cluster_https"} != 200
@@ -1169,7 +1166,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Dominykas about Nomad Jobs and healthcheck.
-- name: 8. Consul Events
+- name: 8. Consul
   rules:
   - alert: 8.1 Consul_http_respose_yellow
     expr: probe_http_status_code{instance="https://rnd-Consul-live.fltechnics.com", job="Consul_cluster_https"} != 200
@@ -1279,10 +1276,10 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Dominykas about Consul Cluster availability and healthcheck.
-- name: 9. Vault Events
+- name: 9. Vault
   rules:
   - alert: 9.1 Vualt_http_respose_yellow
-    expr: probe_http_status_code{instance="https://rnd-vault-live.fltechnics.com", job="Vault_cluster_https"} != 200
+    expr: probe_http_status_code{instance="https://rnd-vault-live.fltechnics.com", job="vault_cluster_https"} != 200
     for: 1m
     labels:
       severity: event.yellow.vault
@@ -1294,7 +1291,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check Vault service statuses and startup or restart service.
   - alert: 9.1 Vault_http_respose_orange
-    expr: probe_http_status_code{instance="https://rnd-vault-live.fltechnics.com", job="Vault_cluster_https"} != 200
+    expr: probe_http_status_code{instance="https://rnd-vault-live.fltechnics.com", job="vault_cluster_https"} != 200
     for: 5m
     labels:
       severity: event.orange
@@ -1306,7 +1303,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check Vault service statuses and startup or restart service.
   - alert: 9.1 Vault_http_respose_red
-    expr: probe_http_status_code{instance="https://rnd-vault-live.fltechnics.com", job="Vault_cluster_https"} != 200
+    expr: probe_http_status_code{instance="https://rnd-vault-live.fltechnics.com", job="vault_cluster_https"} != 200
     for: 10m
     labels:
       severity: event.red
@@ -1317,7 +1314,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Dominykas about Vault availability and healthcheck.
-- name: 10. Traefik Events
+- name: 10. Traefik
   rules:
   - alert: 10.1 traefik_http_respose_yellow
     expr: probe_http_status_code{instance="https://rnd-traefik.fltechnics.com", job="traefik_https"} != 401
@@ -1355,7 +1352,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Dominykas about Traefik availability and healthcheck.
-- name: 11. Nexus Events
+- name: 11. Nexus
   rules:
   - alert: 11.1 nexus_http_respose_yellow
     expr: probe_http_status_code{instance="repository.fltechnics.com", job="UI_APP_INFRASTRUCTURE_HTTPS"} != 200
@@ -1502,7 +1499,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Dominykas Sivickas to check MySQL is available or not. Ask Dominykas send communication for DB's downtime .
-- name: 13. Ramco Events
+- name: 13. Ramco
   rules:
   - alert: 13.1 ramco_http_respose_yellow
     expr: probe_http_status_code{instance="http://ramco", job="RAMCO_SHAREPOINT_HTTP"} != 200
@@ -1684,7 +1681,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Karolis about RAMCO printing
-- name: 14. Genesis Events
+- name: 14. Genesis
   rules:
   - alert: 14.1 genesis_api_http_response_yellow
     expr: probe_http_status_code{job="jira_genesis_api_check"} != 200
@@ -1722,7 +1719,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask K.Gagac about Genesis availability, communication.
-- name: 15. Jira Events
+- name: 15. Jira
   rules:
   - alert: 15.1 jira_Customer_portal_http_response_yellow
     expr: probe_http_status_code{job="jira_customer_portal"} != 200
@@ -1796,7 +1793,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask K.Gagac about Customer Portal availability, communication.
-- name: 16. Insight Events
+- name: 16. Insight
   rules:
   - alert: 16.1 jira_insight_portal_http_response_yellow
     expr: probe_http_status_code{job="jira_customer_portal"} != 200
@@ -1834,7 +1831,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask K.Gagac about Customer Portal availability, communication.
-- name: 17. Tempo Events
+- name: 17. Tempo
   rules:
   - alert: 17.1 jira_tempo_token_status_yellow
     expr: mssql_jira_tempo_token_status != 1
@@ -1872,7 +1869,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask K.Gagac about Customer Portal availability, communication.
-- name: 18. BI2 
+- name: 18. BI2
   rules:
   - alert: 18.1 BI2_http_respose_yellow
     expr: probe_http_status_code{instance="https://bi2.fltechnics.com", job="UI_APP_BI2_HTTPS"} != 200
@@ -1947,7 +1944,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Tomas Zemblys to check MSSQL is DB BI2 and BI2_erp available or not. Ask Tomas Zemblys send communication for DB's downtime.
   - alert: 18.2 BI2_kiosk_activity_yellow
-    expr: mssql_entrance_KUN_HGR_kiosk_status == 0 or mssql_entrance_KUN_WH_kiosk_status == 0 or mssql_entrance_VNO_ADM_1a_1_kiosk_status == 0 or mssql_entrance_VNO_ADM_1a_2_kiosk_status == 0 or mssql_entrance_VNO_HGR_kiosk_status == 0
+    expr: mssql_entrance_KUN_HGR_kiosk_status + mssql_entrance_KUN_WH_kiosk_status + mssql_entrance_VNO_ADM_1a_1_kiosk_status + mssql_entrance_VNO_ADM_1a_2_kiosk_status + mssql_entrance_VNO_HGR_kiosk_status < 4
     for: 30m
     labels:
       severity: event.yellow.bi2
@@ -1959,7 +1956,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check if available Kiosk mentioned in the alert. If Kiosk is not available then ask SD to check Internet connection to bi2.fltechnics.com.
   - alert: 18.2 BI2_kiosk_activity_orange
-    expr: mssql_entrance_KUN_HGR_kiosk_status == 0 or mssql_entrance_KUN_WH_kiosk_status == 0 or mssql_entrance_VNO_ADM_1a_1_kiosk_status == 0 or mssql_entrance_VNO_ADM_1a_2_kiosk_status == 0 or mssql_entrance_VNO_HGR_kiosk_status == 0
+    expr: mssql_entrance_KUN_HGR_kiosk_status + mssql_entrance_KUN_WH_kiosk_status + mssql_entrance_VNO_ADM_1a_1_kiosk_status + mssql_entrance_VNO_ADM_1a_2_kiosk_status + mssql_entrance_VNO_HGR_kiosk_status < 4
     for: 40m
     labels:
       severity: event.orange
@@ -1971,7 +1968,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check if available Kiosk mentioned in the alert. If Kiosk is not available then ask SD to check Internet connection to bi2.fltechnics.com.
   - alert: 18.2 BI2_kiosk_activity_red
-    expr: mssql_entrance_KUN_HGR_kiosk_status == 0 or mssql_entrance_KUN_WH_kiosk_status == 0 or mssql_entrance_VNO_ADM_1a_1_kiosk_status == 0 or mssql_entrance_VNO_ADM_1a_2_kiosk_status == 0 or mssql_entrance_VNO_HGR_kiosk_status == 0
+    expr: mssql_entrance_KUN_HGR_kiosk_status + mssql_entrance_KUN_WH_kiosk_status + mssql_entrance_VNO_ADM_1a_1_kiosk_status + mssql_entrance_VNO_ADM_1a_2_kiosk_status + mssql_entrance_VNO_HGR_kiosk_status < 4
     for: 60m
     labels:
       severity: event.red
@@ -2617,44 +2614,420 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Karolis Dimitrevičius about Sensus Time Tracking availability, communication
-- name: 29. ServerBackups
+- name: 30. Microsoft-365-status
   rules:
-  - alert: 29.1 Server_backups_failed_yellow
-    expr: server_backups_failed != 0
+  - alert: 30.1 m365_status_yellow
+    expr: m365_service_status != 1
     for: 1h
     labels:
-      severity: event.yellow.backups
+      severity: event.yellow.m365
     annotations:
-      Inpacted_Service : Server Backups
+      Inpacted_Service : M365
       Trigger : If Failed status is more than 0 for 30m
       responsable: Dominykas Šivickas
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Check Sensus availability if not working do communication.
-  - alert: 29.1 Server_backups_failed_orange
-    expr: server_backups_failed != 0
+      Action: Check 365 services if there is some problems do communication and add ticket to ASG
+  - alert: 30.1 m365_status_orange
+    expr: m365_service_status != 1
     for: 3h
     labels:
       severity: event.orange
     annotations:
-      Inpacted_Service : Server Backups
+      Inpacted_Service : M365
       Trigger : If Failed status is more than 0 for 3h
       responsable: Dominykas Šivickas
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Check Sensus availability if not working do communication.
-  - alert: 29.1 Server_backups_failed_red
-    expr: server_backups_failed != 0
+      Action: Check 365 services if there is some problems do communication and add ticket to ASG
+  - alert: 30.1 m365_statusd_red
+    expr: m365_service_status != 1
     for: 24h
     labels:
       severity: event.red
     annotations:
-      Inpacted_Service : Server Backups
+      Inpacted_Service : M365
       Trigger : If Failed status is more than 0 for 24h
       responsable: Dominykas Šivickas
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Check Sensus availability if not working do communication.
+      Action: Check 365 services if there is some problems do communication and add ticket to ASG
+- name: 31. CarReservation
+  rules:
+  - alert: 31.1 car_reservation_http_respose_yellow
+    expr: probe_http_status_code{instance="http://webfleet.aktkc.lt/gps", job="CAR_RESERVATION_HTTP"} != 401
+    for: 1m
+    labels:
+      severity: event.yellow.carreservation
+    annotations:
+      Inpacted_Service : Car Reservation
+      Trigger : Exporter have status 0 or other of Teampass system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Titas Pirugis
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Car Reservation webfleet availability and docker statuses and do startup or restart services.
+  - alert: 31.1 car_reservation_http_respose_orange
+    expr: probe_http_status_code{instance="http://webfleet.aktkc.lt/gps", job="CAR_RESERVATION_HTTP"} != 401
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Car Reservation
+      Trigger : Exporter have status 0 or other of Car reservation system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Titas Pirugis
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Car Reservation webfleet availability and docker statuses and do startup or restart services.
+  - alert: 31.1 car_reservation_http_respose_red
+    expr: probe_http_status_code{instance="http://webfleet.aktkc.lt/gps", job="CAR_RESERVATION_HTTP"} != 401
+    for: 30m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Car Reservation
+      Trigger : Exporter have status 0 or other of Car Reservation system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Dominykas about Car Reservation webfleetavailability, communication
+- name: 32. Airbus
+  rules:
+  - alert: 32.1 boeing_fleet_server_respose_yellow
+    expr: up{instance="FLT-Airbus", job="IT Unit Support", name="FLT-Airbus"} != 1
+    for: 5m
+    labels:
+      severity: event.yellow.airbus
+    annotations:
+      Inpacted_Service : Airbus
+      Trigger : Exporter have status 0 or other of Airbus system {{ $labels.vhost }} Down for 5m
+      responsable: Leonas Vedeikis
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Airbus Server availability statuses and do startup or restart services.
+  - alert: 32.1 Airbus_fleet_server_respose_orange
+    expr: up{instance="FLT-Airbus", job="IT Unit Support", name="FLT-Airbus"} != 1
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Airbus Fleet
+      Trigger : Exporter have status 0 or other of Airbus Fleet system {{ $labels.vhost }} Down for 10m
+      responsable: Leonas Vedeikis
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Airbus Fleet Server availability statuses and do startup or restart services.
+  - alert: 32.1 Airbus_fleet_server_respose_red
+    expr: up{instance="FLT-Airbus", job="IT Unit Support", name="FLT-Airbus"} != 1
+    for: 30m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Airbus Fleet
+      Trigger : Exporter have status 0 or other of Airbus Fleet system {{ $labels.vhost }} Down for 30m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Leonas about Airbus Fleet webfleetavailability, communication
+- name: 33. Boeing Fleet
+  rules:
+  - alert: 33.1 boeing_fleet_http_respose_yellow
+    expr: probe_http_status_code{instance="http://192.168.50.22:8081", job="MY_BOEING_FLEET_HTTP"} != 200
+    for: 5m
+    labels:
+      severity: event.yellow.boeingfleet
+    annotations:
+      Inpacted_Service : Boeing Fleet
+      Trigger : Exporter have status 0 or other of Teampass system {{ $labels.vhost }} HTTP error for 5m
+      responsable: Leonas Vedeikis
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Boeing Fleet webfleet availability and docker statuses and do startup or restart services.
+  - alert: 33.1 boeing_fleet_http_respose_orange
+    expr: probe_http_status_code{instance="http://192.168.50.22:8081", job="MY_BOEING_FLEET_HTTP"} != 200
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Boeing Fleet
+      Trigger : Exporter have status 0 or other of Boeing Fleet system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Leonas Vedeikis
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Boeing Fleet webfleet availability statuses and do startup or restart services.
+  - alert: 33.1 boeing_fleet_http_respose_red
+    expr: probe_http_status_code{instance="http://192.168.50.22:8081", job="MY_BOEING_FLEET_HTTP"} != 200
+    for: 30m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Boeing Fleet
+      Trigger : Exporter have status 0 or other of Boeing Fleet system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Dominykas about Boeing Fleet webfleetavailability, communication
+  - alert: 33.2 boeing_fleet_server_respose_yellow
+    expr: up{instance="FLT-Boeing", job="IT Unit Support", name="FLT-Boeing"} != 1
+    for: 5m
+    labels:
+      severity: event.yellow.boeingfleet
+    annotations:
+      Inpacted_Service : Boeing Fleet
+      Trigger : Exporter have status 0 or other of Teampass system {{ $labels.vhost }} Down for 5m
+      responsable: Leonas Vedeikis
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Boeing Fleet Server availability statuses and do startup or restart services.
+  - alert: 33.2 boeing_fleet_server_respose_orange
+    expr: up{instance="FLT-Boeing", job="IT Unit Support", name="FLT-Boeing"} != 1
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Boeing Fleet
+      Trigger : Exporter have status 0 or other of Boeing Fleet system {{ $labels.vhost }} Down for 10m
+      responsable: Leonas Vedeikis
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Boeing Fleet Server availability statuses and do startup or restart services.
+  - alert: 33.2 boeing_fleet_server_respose_red
+    expr: up{instance="FLT-Boeing", job="IT Unit Support", name="FLT-Boeing"} != 1
+    for: 30m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Boeing Fleet
+      Trigger : Exporter have status 0 or other of Boeing Fleet system {{ $labels.vhost }} Down for 30m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Leonas about Boeing Fleet webfleetavailability, communication
+- name: 34. AirNavix
+  rules:
+  - alert: 34.1 airnavix_server_respose_yellow
+    expr: up{instance="AirNavX-Data", job="IT Unit Support", name="AirNavX-Data"} != 1 or up{instance="AirNavX-PUB", job="IT Unit Support", name="AirNavX-PUB"} != 1
+    for: 5m
+    labels:
+      severity: event.yellow.airbus
+    annotations:
+      Inpacted_Service : Airbus
+      Trigger : Exporter have status 0 or other of Airbus system {{ $labels.vhost }} Down for 5m
+      responsable: Leonas Vedeikis
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Airbus Server availability statuses and do startup or restart services.
+  - alert: 34.1 airnavix_server_respose_orange
+    expr: up{instance="AirNavX-Data", job="IT Unit Support", name="AirNavX-Data"} != 1 or up{instance="AirNavX-PUB", job="IT Unit Support", name="AirNavX-PUB"} != 1
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Airbus Fleet
+      Trigger : Exporter have status 0 or other of Airbus Fleet system {{ $labels.vhost }} Down for 10m
+      responsable: Leonas Vedeikis
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Airbus Fleet Server availability statuses and do startup or restart services.
+  - alert: 34.1 airnavix_server_respose_red
+    expr: up{instance="AirNavX-Data", job="IT Unit Support", name="AirNavX-Data"} != 1 or up{instance="AirNavX-PUB", job="IT Unit Support", name="AirNavX-PUB"} != 1
+    for: 30m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Airbus Fleet
+      Trigger : Exporter have status 0 or other of Airbus Fleet system {{ $labels.vhost }} Down for 30m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Leonas about Airbus Fleet webfleetavailability, communication
+- name: 35. TV(MagicInfo)
+  rules:
+  - alert: 35.1 MagicInfo_http_respose_yellow
+    expr: probe_http_status_code{instance="http://192.168.50.45:7001/MagicInfo/login", job="MAGICINFO_HTTPS"} != 404
+    for: 5m
+    labels:
+      severity: event.yellow.magicinfo
+    annotations:
+      Inpacted_Service : MagicInfo
+      Trigger : Exporter have status 0 or other of MagicInfo system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Konstantinas Starkutis
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check MagicInfo availability if not working do communication.
+  - alert: 35.1 MagicInfo_http_respose_orange
+    expr: probe_http_status_code{instance="http://192.168.50.45:7001/MagicInfo/login", job="MAGICINFO_HTTPS"} != 404
+    for: 15m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : Sensus
+      Trigger : Exporter have status 0 or other of MagicInfo system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Krolis Dimitrevičius
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check MagicInfo availability if not working do communication.
+  - alert: 35.1 MagicInfo_http_respose_red
+    expr: probe_http_status_code{instance="http://192.168.50.45:7001/MagicInfo/login", job="MAGICINFO_HTTPS"} != 404
+    for: 20m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : Sensus
+      Trigger : Exporter have status 0 or other of MagicInfo system {{ $labels.vhost }} HTTP error for 1m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Konstantinas Starkutis about MagicInfo vailability, communication
+- name: 36. ActiveDirectory
+  rules:
+  - alert: 36.1 activedirectory_server_respose_yellow
+    expr: agent_ping{exported_instance="FLT-DC1"} != 1 or agent_ping{exported_instance="FLT-DC2"} != 1
+    for: 5m
+    labels:
+      severity: event.yellow.activedirectory
+    annotations:
+      Inpacted_Service : ActiveDirectory
+      Trigger : Exporter have status 0 or one of ActiveDirectory Server {{ $labels.vhost }} Down for 5m
+      responsable: Arnas Terakas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Active Directory Server availability statuses and do startup or restart services.
+  - alert: 36.1 activedirectory_server_respose_orange
+    expr: agent_ping{exported_instance="FLT-DC1"} != 1 or agent_ping{exported_instance="FLT-DC2"} != 1
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : ActiveDirectory
+      Trigger : Exporter have status 0 or one of ActiveDirectory Server {{ $labels.vhost }} Down for 10m
+      responsable: Arnas Terakas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Active Directory Server availability statuses and do startup or restart services.
+  - alert: 36.2 activedirectory_main_services_respose_red
+    expr: agent_ping{exported_instance="FLT-DC1"} != 1 or agent_ping{exported_instance="FLT-DC2"} != 1
+    for: 30m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : ActiveDirectory
+      Trigger : Exporter have status 0 or one of ActiveDirectory Server {{ $labels.vhost }} Down for 30m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Arnas Terakas about Active Directory availability, communication
+  - alert: 36.2 activedirectory_main_services_respose_yellow
+    expr: service_state_DNS_Server_ != 0 or service_state_lsmServ_ != 0 or service_state_kdc_ !=0 or service_state_Netlogon_ !=0 or service_state_W32Time_ !=0
+    for: 5m
+    labels:
+      severity: event.yellow.activedirectory
+    annotations:
+      Inpacted_Service : ActiveDirectory
+      Trigger : Exporter have status 0 or one of ActiveDirectory Services {{ $labels.vhost }} Down for 5m
+      responsable: Arnas Terakas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Active Directory Services ( Intersite Messaging Service (IsmServ), the Kerberos Key Distribution Center (KDC), the NetLogon service (NetLogon), and the Windows Time (W32Time) service.) availability statuses and do startup or restart services.
+  - alert: 36.2 activedirectory_main_services_respose_orange
+    expr: service_state_DNS_Server_ != 0 or service_state_lsmServ_ != 0 or service_state_kdc_ !=0 or service_state_Netlogon_ !=0 or service_state_W32Time_ !=0
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : ActiveDirectory
+      Trigger : Exporter have status 0 or one of ActiveDirectory Services {{ $labels.vhost }} Down for 10m
+      responsable: Arnas Terakas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Active Directory Services ( Intersite Messaging Service (IsmServ), the Kerberos Key Distribution Center (KDC), the NetLogon service (NetLogon), and the Windows Time (W32Time) service.) availability statuses and do startup or restart services.
+  - alert: 36.2 activedirectory_main_services_respose_red
+    expr: service_state_DNS_Server_ != 0 or service_state_lsmServ_ != 0 or service_state_kdc_ !=0 or service_state_Netlogon_ !=0 or service_state_W32Time_ !=0
+    for: 30m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : ActiveDirectory
+      Trigger : Exporter have status 0 or one of ActiveDirectory Services{{ $labels.vhost }} Down for 30m
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Arnas Terakas about Active Directory Services (Intersite Messaging Service (IsmServ), the Kerberos Key Distribution Center (KDC), the NetLogon service (NetLogon), and the Windows Time (W32Time) service) availability, communication
+- name: 37. Doclogix
+  rules:
+  - alert: 37.1 doclogix_http_respose_yellow
+    expr: probe_http_status_code{instance="https://documents.aviasg.com/DocLogix", job="DOCLOGIX_HTTP"} != 401
+    for: 5m
+    labels:
+      severity: event.yellow.doclogix
+    annotations:
+      Inpacted_Service : doclogix
+      Trigger : Exporter have status 0 or other of doclogix  system {{ $labels.vhost }} HTTP error for 5m
+      responsable: ASG IT
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Boeing Fleet webfleet availability and docker statuses and do startup or restart services.
+  - alert: 37.1 doclogix_http_respose_orange
+    expr: probe_http_status_code{instance="https://documents.aviasg.com/DocLogix", job="DOCLOGIX_HTTP"} != 401
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : doclogix
+      Trigger : Exporter have status 0 or other of doclogix Fleet system {{ $labels.vhost }} HTTP error for 1m
+      responsable: ASG IT
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Doclogix availability statuses and do startup or restart services.
+  - alert: 37.1 doclogix_http_respose_red
+    expr: probe_http_status_code{instance="https://documents.aviasg.com/DocLogix", job="DOCLOGIX_HTTP"} != 401
+    for: 30m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : doclogix
+      Trigger : Exporter have status 0 or other of doclogix Fleet system {{ $labels.vhost }} HTTP error for 1m
+      responsable: ASG IT 
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask ASG about doclogix availability, communication
+- name: 38. eLearning
+  rules:
+  - alert: 38.1 elerning_http_respose_yellow
+    expr: probe_http_status_code{instance="https://elearning.fltechnics.com/login/index.php", job="elerning_HTTP"} != 200
+    for: 5m
+    labels:
+      severity: event.yellow.elerning
+    annotations:
+      Inpacted_Service : elerning
+      Trigger : Exporter have status 0 or other of elerning  system {{ $labels.vhost }} HTTP error for 5m
+      responsable: ASG IT
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check Boeing Fleet webfleet availability and docker statuses and do startup or restart services.
+  - alert: 38.1 elerning_http_respose_orange
+    expr: probe_http_status_code{instance="https://elearning.fltechnics.com/login/index.php", job="elerning_HTTP"} != 200
+    for: 10m
+    labels:
+      severity: event.orange
+    annotations:
+      Inpacted_Service : elerning
+      Trigger : Exporter have status 0 or other of elerning Fleet system {{ $labels.vhost }} HTTP error for 1m
+      responsable: ASG IT
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check elerning availability statuses and do startup or restart services.
+  - alert: 38.1 elerning_http_respose_red
+    expr: probe_http_status_code{instance="https://elearning.fltechnics.com/login/index.php", job="elerning_HTTP"} != 200
+    for: 30m
+    labels:
+      severity: event.red
+    annotations:
+      Inpacted_Service : elerning
+      Trigger : Exporter have status 0 or other of elerning Fleet system {{ $labels.vhost }} HTTP error for 1m
+      responsable: ASG IT 
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask ASG about elerning availability, communication
 - name: Linux Server Events
   rules:
   - record: instance:node_cpu:rate:sum
