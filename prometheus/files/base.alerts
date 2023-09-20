@@ -2965,7 +2965,7 @@ groups:
       responsable: ASG IT
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Check Boeing Fleet webfleet availability and docker statuses and do startup or restart services.
+      Action: Check Doclogix webfleet availability and docker statuses and do startup or restart services.
   - alert: 37.1 doclogix_http_respose_orange
     expr: probe_http_status_code{instance="https://documents.aviasg.com/DocLogix", job="DOCLOGIX_HTTP"} != 401
     for: 10m
@@ -3003,7 +3003,7 @@ groups:
       responsable: ASG IT
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Check Boeing Fleet webfleet availability and docker statuses and do startup or restart services.
+      Action: Check elearning availability and docker statuses and do startup or restart services.
   - alert: 38.1 elerning_http_respose_orange
     expr: probe_http_status_code{instance="https://elearning.fltechnics.com/login/index.php", job="elerning_HTTP"} != 200
     for: 10m
