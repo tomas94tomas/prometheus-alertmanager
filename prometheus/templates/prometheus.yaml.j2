@@ -849,7 +849,7 @@ scrape_configs:
     params:
       module: [ http_2xx_example ]  # Look for a HTTP 200 response.
       http_method: POST
-      body: '{"CardNumber": 1083903246582}'
+      body: 'CardNumber: 1083903246582'
     static_configs:
       - targets:
         - https://82.135.168.177:444/ImportToCrm7/GetCardInfo
