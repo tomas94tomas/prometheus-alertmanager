@@ -2393,7 +2393,7 @@ groups:
 - name: 24. Bi2v2
   rules:
   - alert: 24.1 bi2v2_http_respose_yellow
-    expr: probe_http_status_code{instance="https://bi2-v2-uat.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    expr: probe_http_status_code{instance="https://bi2-v2.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
     for: 5m
     labels:
       severity: event.yellow.bi2v2
@@ -2405,7 +2405,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check bi2v2 availability and docker statuses and do startup or restart services.
   - alert: 24.1 bi2v2_http_respose_orange
-    expr: probe_http_status_code{instance="https://bi2-v2-uat.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    expr: probe_http_status_code{instance="https://bi2-v2.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
     for: 15m
     labels:
       severity: event.orange
@@ -2417,7 +2417,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check bi2v2 availability and docker statuses and do startup or restart services.
   - alert: 24.1 bi2v2_http_respose_red
-    expr: probe_http_status_code{instance="https://bi2-v2-uat.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
+    expr: probe_http_status_code{instance="https://bi2-v2.fltechnics.com", job="UI_APP_LIVE_HTTPS"} != 200
     for: 20m
     labels:
       severity: event.red
