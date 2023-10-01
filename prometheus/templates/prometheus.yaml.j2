@@ -176,20 +176,20 @@ scrape_configs:
     - regex: 'id'
       action: labeldrop
 
-  - job_name: 'Gitlab_RND-shared-docker-shell-runner'
+  - job_name: 'Gitlab_RND1-shared-docker-shell-runner'
     metrics_path: "/metrics"
     static_configs:
-      - targets: ['192.168.231.55:9253']
+      - targets: ['192.168.231.55:9254']
         labels:
-          name: 'RND-shared-docker-shell-runner'
+          name: 'RND1-shared-docker-shell-runner'
     metric_relabel_configs:
     - regex: 'id'
       action: labeldrop
 
-  - job_name: 'Gitlab_TEST-shared-docker-shell-runner'
+  - job_name: 'Gitlab_RND-shared-docker-shell-runner'
     metrics_path: "/metrics"
     static_configs:
-      - targets: ['192.168.231.55:9252']
+      - targets: ['192.168.231.55:9253']
         labels:
           name: 'RND-shared-docker-shell-runner'
     metric_relabel_configs:
@@ -486,7 +486,7 @@ scrape_configs:
   - job_name: 'oracledb_metrics_ext'
     metrics_path: "/metrics"
     static_configs:
-      - targets: ['192.168.50.33:23231']
+      - targets: ['192.168.50.33:27695']
         labels:
           name: 'oracle_metrics_ext'
 
@@ -767,11 +767,10 @@ scrape_configs:
         - https://sensus.fltechnics.com
         - https://parcels-dev.fltechnics.com
         - https://kyc.fltechnics.com
-        - https://old-it-dashboard.fltechnics.com
         - https://sw.fltechnics.com
         - https://smailer.fltechnics.com
         - https://contracts-playbook.fltechnics.com
-        - https://bi2-v2-uat.fltechnics.com
+        - https://bi2-v2.fltechnics.com
         - https://sensusmro.fltechnics.com
         - https://open.fltechnics.com
     relabel_configs:
@@ -844,6 +843,37 @@ scrape_configs:
         target_label: instance
       - target_label: __address__
         replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+  
+  - job_name: 'Smailer App Web'
+    metrics_path: /probe
+    params:
+      module: [ http_2xx_example ]  # Look for a HTTP 200 response.
+    static_configs:
+      - targets:
+        - https://smailer.fltechnics.com/login
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+
+  - job_name: 'Amber Food Api'
+    metrics_path: /probe
+    params:
+      module: [ http_post_2xx_ucs ]  # Look for a HTTP 200 response.
+    static_configs:
+      - targets:
+        - https://82.135.168.177:444/ImportToCrm7/GetCardInfo
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.231.235:9116  # The blackbox exporter's real hostname:port.
+
 
   - job_name: 'jira_customer_portal'
     metrics_path: /probe
@@ -852,6 +882,20 @@ scrape_configs:
     static_configs:
       - targets:
         - https://fl-technics.atlassian.net/servicedesk/customer/portals
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+  - job_name: 'jira_insight_instance'
+    metrics_path: /probe
+    params:
+      module: [ http_2xx_example ]  # Look for a HTTP 200 response.
+    static_configs:
+      - targets:
+        - https://fl-technics-insight.atlassian.net
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target
@@ -976,14 +1020,14 @@ scrape_configs:
       module: [ http_2xx_example ]  # Look for a HTTP 200 response.
     static_configs:
       - targets:
-        - https://elearning.fltechnics.com/login/index.php
+        - https://elearning.fltechnics.com
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+        replacement: 192.168.231.235:9116  # The blackbox exporter's real hostname:port.
   
   
   - job_name: 'M365_metrics'
