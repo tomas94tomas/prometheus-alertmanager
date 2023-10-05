@@ -2993,7 +2993,7 @@ groups:
 - name: 38. eLearning
   rules:
   - alert: 38.1 elerning_http_respose_yellow
-    expr: probe_http_status_code{instance="https://elearning.fltechnics.com/login/index.php", job="elerning_HTTP"} != 200
+    expr: probe_ip_protocol{instance="https://elearning.fltechnics.com", job="elearning_HTTP"} != 6
     for: 5m
     labels:
       severity: event.yellow.elerning
@@ -3005,7 +3005,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check elearning availability and docker statuses and do startup or restart services.
   - alert: 38.1 elerning_http_respose_orange
-    expr: probe_http_status_code{instance="https://elearning.fltechnics.com/login/index.php", job="elerning_HTTP"} != 200
+    expr: probe_ip_protocol{instance="https://elearning.fltechnics.com", job="elearning_HTTP"} != 6
     for: 10m
     labels:
       severity: event.orange
@@ -3017,7 +3017,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check elerning availability statuses and do startup or restart services.
   - alert: 38.1 elerning_http_respose_red
-    expr: probe_http_status_code{instance="https://elearning.fltechnics.com/login/index.php", job="elerning_HTTP"} != 200
+    expr: probe_ip_protocol{instance="https://elearning.fltechnics.com", job="elearning_HTTP"} != 6
     for: 30m
     labels:
       severity: event.red
@@ -3028,6 +3028,80 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask ASG about elerning availability, communication
+- name: 39. Files Events
+  rules:
+  - alert: 39.1 File_server_availability_yellow
+    expr: up{job="IT Unit Support",name="FLT-Files"} == 0
+    for: 3m
+    labels:
+      severity: event.yellow.files
+    annotations:
+      responsable: Konstantinas Starkutis
+      Trigger: Server is unavailable
+      Inpacted_Service: Files Server
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check server availability.
+  - alert: 39.1 File_server_availability_orange
+    expr: up{job="IT Unit Support",name="FLT-Files"} == 0
+    for: 10m 
+    labels:
+      severity: event.orange
+    annotations:
+      responsable: Konstantinas Starkutis
+      Trigger: Server is unavailable
+      Inpacted_Service: Files Server
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check server availability.
+  - alert: 39.1 File_server_availability_red
+    expr: up{job="IT Unit Support",name="FLT-Files"} == 0
+    for: 10m 
+    labels:
+      severity: event.red
+    annotations:
+      responsable: Konstantinas Starkutis
+      Trigger: Server is unavailable
+      Inpacted_Service: Files Server
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check server availability.
+  - alert: 39.2 File_server_DiskUsage_yellow
+    expr: 100 - 100 * ((windows_logical_disk_free_bytes{instance="FLT-Files", volume!~"R:"} / 1024 / 1024) / (windows_logical_disk_size_bytes{instance="FLT-Files",volume!~"R:"} / 1024 / 1024)) > 98
+    for: 10m
+    labels:
+      severity: event.yellow.files
+    annotations:
+      responsable: Konstantinas Starkutis
+      Trigger: Disk usage is more than 95%
+      Inpacted_Service: Files Server
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check server Disk Uasge 
+  - alert: 39.2 File_server_DiskUsage_orange
+    expr: 100 - 100 * ((windows_logical_disk_free_bytes{instance="FLT-Files", volume!~"R:"} / 1024 / 1024) / (windows_logical_disk_size_bytes{instance="FLT-Files",volume!~"R:"} / 1024 / 1024)) > 98
+    for: 30m
+    labels:
+      severity: event.orange
+    annotations:
+      responsable: Konstantinas Starkutis
+      Trigger: Disk usage is more than 95%
+      Inpacted_Service: Files Server
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check server Disk Uasge 
+  - alert: 39.2 File_server_DiskUsage_red
+    expr: 100 - 100 * ((windows_logical_disk_free_bytes{instance="FLT-Files", volume!~"R:"} / 1024 / 1024) / (windows_logical_disk_size_bytes{instance="FLT-Files",volume!~"R:"} / 1024 / 1024)) > 98 
+    for: 60m
+    labels:
+      severity: event.red
+    annotations:
+      responsable: Konstantinas Starkutis
+      Trigger: Disk usage is more than 95%
+      Inpacted_Service: Files Server
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check server Disk Uasge
 - name: Linux Server Events
   rules:
   - record: instance:node_cpu:rate:sum

@@ -176,20 +176,20 @@ scrape_configs:
     - regex: 'id'
       action: labeldrop
 
-  - job_name: 'Gitlab_RND-shared-docker-shell-runner'
+  - job_name: 'Gitlab_RND1-shared-docker-shell-runner'
     metrics_path: "/metrics"
     static_configs:
-      - targets: ['192.168.231.55:9253']
+      - targets: ['192.168.231.55:9254']
         labels:
-          name: 'RND-shared-docker-shell-runner'
+          name: 'RND1-shared-docker-shell-runner'
     metric_relabel_configs:
     - regex: 'id'
       action: labeldrop
 
-  - job_name: 'Gitlab_TEST-shared-docker-shell-runner'
+  - job_name: 'Gitlab_RND-shared-docker-shell-runner'
     metrics_path: "/metrics"
     static_configs:
-      - targets: ['192.168.231.55:9252']
+      - targets: ['192.168.231.55:9253']
         labels:
           name: 'RND-shared-docker-shell-runner'
     metric_relabel_configs:
@@ -486,7 +486,7 @@ scrape_configs:
   - job_name: 'oracledb_metrics_ext'
     metrics_path: "/metrics"
     static_configs:
-      - targets: ['192.168.50.33:23231']
+      - targets: ['192.168.50.33:27695']
         labels:
           name: 'oracle_metrics_ext'
 
@@ -1018,7 +1018,7 @@ scrape_configs:
   - job_name: elearning_HTTP
     metrics_path: /probe
     params:
-      module: [ http_2xx_ipv6 ]  # Look for a HTTP 200 response.
+      module: [ http_2xx_example ]  # Look for a HTTP 200 response.
     static_configs:
       - targets:
         - https://elearning.fltechnics.com
