@@ -3563,7 +3563,7 @@ groups:
 - name: Centric
   rules:
   - alert: centric_http_respose_yellow
-    expr: probe_ip_protocol{instance="https://fltechnics.centrik.net/", job="CENTRIC_HTTPS"} != 6
+    expr: probe_http_status_code{instance="https://fltechnics.centrik.net/", job="CENTRIK_HTTPS"} == 0
     for: 5m
     labels:
       severity: event.yellow.centric
@@ -3575,7 +3575,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check Centrik availability if not working do communication.
   - alert: centric_http_respose_orange
-    expr: probe_ip_protocol{instance="https://fltechnics.centrik.net/", job="CENTRIC_HTTPS"} != 6
+    expr: probe_http_status_code{instance="https://fltechnics.centrik.net/", job="CENTRIK_HTTPS"} == 0
     for: 15m
     labels:
       severity: event.orange.centric
@@ -3587,7 +3587,7 @@ groups:
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check Centrik availability if not working do communication.
   - alert: centric_http_respose_red
-    expr: probe_ip_protocol{instance="https://fltechnics.centrik.net/", job="CENTRIC_HTTPS"} != 6
+    expr: probe_http_status_code{instance="https://fltechnics.centrik.net/", job="CENTRIK_HTTPS"} == 0
     for: 20m
     labels:
       severity: event.red.centric
