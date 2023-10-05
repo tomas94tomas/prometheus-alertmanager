@@ -610,6 +610,39 @@ receivers:
     require_tls: false
     send_resolved: true
 
+- name: 'event.yellow.centric'
+  email_configs:
+  - to: 'andrius.kubickas@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+      CC: 'konstantin.gagac@fltechnics.com'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.orange.centric'
+  email_configs:
+  - to: 'andrius.kubickas@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-orange.subject" . }}'
+      CC: 'konstantin.gagac@fltechnics.com'
+    html: '{{ template "email-orange.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.red.centric'
+  email_configs:
+  - to: 'andrius.kubickas@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-red.subject" . }}'
+      CC: 'konstantin.gagac@fltechnics.com'
+    html: '{{ template "email-red.html" . }}'
+    require_tls: false
+    send_resolved: true
+
 - name: 'event.orange'
   webhook_configs:
   - url: 'http://192.168.231.235:2000/it_alerts_channel'
