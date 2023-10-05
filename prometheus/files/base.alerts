@@ -3563,41 +3563,41 @@ groups:
 - name: Centric
   rules:
   - alert: centric_http_respose_yellow
-    expr: probe_http_status_code{ job="CENTRIC_HTTPS"} != 200
+    expr: probe_ip_protocol{instance="https://fltechnics.centrik.net/", job="CENTRIC_HTTPS"} != 6
     for: 5m
     labels:
       severity: event.yellow.centric
     annotations:
-      Inpacted_Service : Centric
+      Inpacted_Service : Centrik
       Trigger : Exporter have status 0 or other of Centric {{ $labels.vhost }} HTTP error for 1m
       responsable: Andrius Kubickas
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Check Centric availability if not working do communication.
+      Action: Check Centrik availability if not working do communication.
   - alert: centric_http_respose_orange
-    expr: probe_http_status_code{ job="CENTRIC_HTTPS"} != 200
+    expr: probe_ip_protocol{instance="https://fltechnics.centrik.net/", job="CENTRIC_HTTPS"} != 6
     for: 15m
     labels:
       severity: event.orange.centric
     annotations:
-      Inpacted_Service : Centric
+      Inpacted_Service : Centrik
       Trigger : Exporter have status 0 or other of Centric {{ $labels.vhost }} HTTP error for 1m
       responsable: Andrius Kubickas
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Check Centric availability if not working do communication.
+      Action: Check Centrik availability if not working do communication.
   - alert: centric_http_respose_red
-    expr: probe_http_status_code{ job="CENTRIC_HTTPS"} != 200
+    expr: probe_ip_protocol{instance="https://fltechnics.centrik.net/", job="CENTRIC_HTTPS"} != 6
     for: 20m
     labels:
       severity: event.red.centric
     annotations:
-      Inpacted_Service : Centric
+      Inpacted_Service : Centrik
       Trigger : Exporter have status 0 or other of Centric {{ $labels.vhost }} HTTP error for 1m
       responsable: Andrius Kubickas
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Check Centric availability if not working do communication.
+      Action: Check Centrik availability if not working do communication.
 
 
 - name: Files Events
