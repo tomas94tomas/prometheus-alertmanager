@@ -894,7 +894,7 @@ scrape_configs:
     metrics_path: /probe
     params:
       module: [ icmp_ipv4 ]  # Look for a HTTP 200 response.
-     static_configs:
+      static_configs:
       - targets:
         - localhost
         - prometheus.io
