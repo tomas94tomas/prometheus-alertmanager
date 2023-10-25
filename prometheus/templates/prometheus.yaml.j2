@@ -900,9 +900,6 @@ scrape_configs:
         - prometheus.io
         - robustperception.io
         - fltechnics.centrik.net
-        - 192.168.13.207
-        - 172.16.31.27
-        - 172.16.3.44
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target
