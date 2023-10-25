@@ -1040,7 +1040,7 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: 192.168.231.235:9116  # The blackbox exporter's real hostname:port.
+        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
 
 
   - job_name: 'jira_customer_portal'
