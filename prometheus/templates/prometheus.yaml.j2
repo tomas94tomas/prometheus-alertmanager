@@ -437,21 +437,21 @@ scrape_configs:
   - job_name: 'oracledb_exporter'
     metrics_path: "/metrics"
     static_configs:
-      - targets: ['192.168.50.247:9161']
+      - targets: ['192.168.231.235:9171']
         labels:
           name: 'oracle_db_exporter'
 
   - job_name: 'oracledb_exporter_dev'
     metrics_path: "/metrics"
     static_configs:
-      - targets: ['192.168.50.247:9163']
+      - targets: ['192.168.231.235:9173']
         labels:
           name: 'oracledb_exporter_dev'
 
   - job_name: 'oracledb_exporter_uat'
     metrics_path: "/metrics"
     static_configs:
-      - targets: ['192.168.50.247:9162']
+      - targets: ['192.168.231.235:9172']
         labels:
           name: 'oracle_db_exporter_uat'
 

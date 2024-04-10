@@ -1,5 +1,4 @@
 [DevOps_Infrastructure]
-FLT-Monitoring-Analytics ansible_host=192.168.50.247
 FLT-GitLab ansible_host=192.168.231.136 ansible_port=2222
 FLT-Nexus ansible_host=192.168.231.180 ansible_port=2222
 FLT-DevOps-Proxy ansible_host=192.168.231.183 ansible_port=2222

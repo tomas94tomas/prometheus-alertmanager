@@ -83,7 +83,7 @@
 - name: Start AlertManager
   community.docker.docker_container:
     name: alertmanager
-    image: prom/alertmanager:v0.25.0
+    image: prom/alertmanager:v0.27.0
     networks:
       - name: fltechnics
     state: started
