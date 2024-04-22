@@ -2690,44 +2690,6 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Dominykas about Car Reservation webfleetavailability, communication
-- name: 32. Airbus
-  rules:
-  - alert: 32.1 boeing_fleet_server_respose_yellow
-    expr: up{instance="FLT-Airbus", job="IT Unit Support", name="FLT-Airbus"} != 1
-    for: 5m
-    labels:
-      severity: event.yellow.airbus
-    annotations:
-      Inpacted_Service : Airbus
-      Trigger : Exporter have status 0 or other of Airbus system {{ $labels.vhost }} Down for 5m
-      responsable: Leonas Vedeikis
-      timestamp: >
-        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Check Airbus Server availability statuses and do startup or restart services.
-  - alert: 32.1 Airbus_fleet_server_respose_orange
-    expr: up{instance="FLT-Airbus", job="IT Unit Support", name="FLT-Airbus"} != 1
-    for: 10m
-    labels:
-      severity: event.orange
-    annotations:
-      Inpacted_Service : Airbus Fleet
-      Trigger : Exporter have status 0 or other of Airbus Fleet system {{ $labels.vhost }} Down for 10m
-      responsable: Leonas Vedeikis
-      timestamp: >
-        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Check Airbus Fleet Server availability statuses and do startup or restart services.
-  - alert: 32.1 Airbus_fleet_server_respose_red
-    expr: up{instance="FLT-Airbus", job="IT Unit Support", name="FLT-Airbus"} != 1
-    for: 30m
-    labels:
-      severity: event.red
-    annotations:
-      Inpacted_Service : Airbus Fleet
-      Trigger : Exporter have status 0 or other of Airbus Fleet system {{ $labels.vhost }} Down for 30m
-      responsable: Andrius Kubickas
-      timestamp: >
-        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Ask Leonas about Airbus Fleet webfleetavailability, communication
 - name: 33. Boeing Fleet
   rules:
   - alert: 33.1 boeing_fleet_http_respose_yellow
