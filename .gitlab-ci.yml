@@ -1,17 +1,23 @@
-image: python:3-slim
+image: $NEXUS_REGISTRY/devops:latest
 stages:
   - ansible-lint
   - ansible-syntax
   - deploy
 
-before_script:
-  - pip install --upgrade ansible ansible-lint
-  - ansible --version
-  - ansible-lint --version
+default:
+  tags:
+    - RND-INFRA
+
+#before_script:
+#  - pip install --upgrade ansible ansible-lint
+#  - ansible --version
+#  - ansible-lint --version
 
 ansible-lint:
   stage: ansible-lint
   script:
+    - pip install ansible-lint
+    - ansible-galaxy collection install community.docker
     - ansible-lint *.yml
 
 ansible-syntax:
@@ -21,7 +27,6 @@ ansible-syntax:
 
 deploy:
   stage: deploy
-  image: python:latest
   only:
     - /^version.*$/
   services:
@@ -33,6 +38,6 @@ deploy:
     - ssh-add ssh_key
     - rm ssh_key
   script:
-    - apt-get update && apt-get install -y ansible
-    - pip3 install docker
+    # - apt-get update && apt-get install -y ansible
+    # - pip3 install docker
     - ansible-playbook -i hosts prometheus.yml -u root --extra-vars "alertmanager_web_password=$alertmanager_web_password prometheus_web_password=$prometheus_web_password" -e "alertmanager_web_password=$alertmanager_web_password prometheus_web_password=$prometheus_web_password rnd_consul_dev_token=$rnd_consul_dev_token rnd_consul_live_token=$rnd_consul_live_token rnd_consul_uat_token=$rnd_consul_uat_token rnd_vault_dev_token=$rnd_vault_dev_token rnd_vault_live_token=$rnd_vault_live_token gitlab_token=$gitlab_token prometheus_basic_auth=$prometheus_basic_auth alertmanager_basic_auth=$alertmanager_basic_auth"
