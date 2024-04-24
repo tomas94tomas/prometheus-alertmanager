@@ -273,14 +273,6 @@ scrape_configs:
     - regex: 'id'
       action: labeldrop
 
-  - job_name: 'Analytics_docker_metrics'
-    metrics_path: "/metrics"
-    static_configs:
-    - targets: ['192.168.231.179:9417']
-    metric_relabel_configs:
-    - regex: 'id'
-      action: labeldrop
-
   - job_name: 'Proxy_docker_metrics'
     metrics_path: "/metrics"
     static_configs:
