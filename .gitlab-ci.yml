@@ -1,7 +1,6 @@
 image: $NEXUS_REGISTRY/devops:latest
 stages:
-  - ansible-lint
-  - ansible-syntax
+  - ansible-lint_syntax
   - deploy
 
 default:
@@ -9,14 +8,14 @@ default:
     - RND-INFRA
 
 ansible-lint:
-  stage: ansible-lint
+  stage: ansible-lint_syntax
   script:
     - pip install ansible-lint
     - ansible-galaxy collection install community.docker
     - ansible-lint *.yml
 
 ansible-syntax:
-  stage: ansible-syntax
+  stage: ansible-lint_syntax
   script:
     - ansible-playbook --inventory hosts --syntax-check *.yml
 

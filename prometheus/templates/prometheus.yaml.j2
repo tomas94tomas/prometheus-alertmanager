@@ -1,8 +1,7 @@
 # my global config
 global:
-  scrape_interval:     15s # By default, scrape targets every 15 seconds.
-  evaluation_interval: 15s # By default, scrape targets every 15 seconds.
-  # scrape_timeout is set to the global default (10s).
+  scrape_interval: 60s
+  scrape_timeout: 25s
 
 
 # Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
@@ -645,7 +644,7 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+        replacement: 192.168.231.235:9116
 
   - job_name: Consul_cluster_https
     metrics_path: /probe
@@ -662,7 +661,7 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+        replacement: 192.168.231.235:9116
 
   - job_name: vault_cluster_https
     metrics_path: /probe
@@ -679,7 +678,7 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+        replacement: 192.168.231.235:9116
 
   - job_name: traefik_https
     metrics_path: /probe
@@ -694,11 +693,9 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+        replacement: 192.168.231.235:9116
 
   - job_name: UI_APP_BI2_HTTPS
-    scrape_interval: 20s
-    scrape_timeout: 20s
     metrics_path: /probe
     params:
       module: [ http_2xx_example ]  # Look for a HTTP 200 response.
@@ -711,7 +708,7 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: 192.168.231.235:9116  # The blackbox exporter's real hostname:port.
+        replacement: 192.168.231.235:9116
 
   - job_name: UI_APP_FLINT_HTTPS
     metrics_path: /probe
@@ -726,7 +723,7 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: 192.168.231.235:9116  # The blackbox exporter's real hostname:port.
+        replacement: 192.168.231.235:9116
 
   - job_name: UI_APP_INFRASTRUCTURE_HTTPS
     metrics_path: /probe
@@ -746,7 +743,7 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+        replacement: 192.168.231.235:9116
       - source_labels: [__meta_dns_name]
         target_label: vhost  # and store it in 'vhost' label
 
@@ -772,7 +769,7 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+        replacement: 192.168.231.235:9116
 
   - job_name: QLIKSENSE_HTTPS
     metrics_path: /probe
@@ -787,7 +784,7 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+        replacement: 192.168.231.235:9116
 
   - job_name: SENSUS_EXT_TIMETRACKING_HTTPS
     metrics_path: /probe
@@ -802,7 +799,7 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+        replacement: 192.168.231.235:9116
   
   - job_name: RAMCO_SHAREPOINT_HTTP
     metrics_path: /probe
@@ -818,7 +815,7 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+        replacement: 192.168.231.235:9116
  
   - job_name: 'jira_genesis_api_check'
     scrape_interval: 10m
@@ -835,7 +832,7 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+        replacement: 192.168.231.235:9116
   
   - job_name: 'Smailer App Web'
     metrics_path: /probe
@@ -850,7 +847,7 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+        replacement: 192.168.231.235:9116
 
   - job_name: 'Amber Food Api'
     metrics_path: /probe
@@ -865,7 +862,7 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: 192.168.231.235:9116  # The blackbox exporter's real hostname:port.
+        replacement: 192.168.231.235:9116
 
   - job_name: 'CENTRIK_HTTPS'
     metrics_path: /probe
@@ -880,7 +877,7 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: 192.168.231.235:9116  # The blackbox exporter's real hostname:port.
+        replacement: 192.168.231.235:9116
 
   - job_name: 'PRINTERS_MONITORING'
     metrics_path: /probe
@@ -1032,7 +1029,7 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+        replacement: 192.168.231.235:9116
 
 
   - job_name: 'jira_customer_portal'
@@ -1048,7 +1045,7 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+        replacement: 192.168.231.235:9116
   - job_name: 'jira_insight_instance'
     metrics_path: /probe
     params:
@@ -1062,7 +1059,7 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+        replacement: 192.168.231.235:9116
 
   - job_name: 'jira_administration_portal'
     metrics_path: /probe
@@ -1071,14 +1068,14 @@ scrape_configs:
       target: ['https://fl-technics.atlassian.net/rest/api/3/search/?jql=project%20in%20(FLT.ADM.CPL)']  # Replace with the URL of the API endpoint you want to monitor
     static_configs:
       - targets:
-        - 192.168.231.235:9115  # Replace with the address and port where the Blackbox Exporter is running
+        - 192.168.231.235:9116  # Replace with the address and port where the Blackbox Exporter is running
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: 192.168.231.235:9115 
+        replacement: 192.168.231.235:9116
 
   - job_name: 'jira_insight_api'
     metrics_path: /probe
@@ -1087,32 +1084,14 @@ scrape_configs:
       target: ['https://api.atlassian.com/jsm/insight/workspace/6d14c587-3d7e-4baf-8613-b81e9c03a0c2/v1/iql/objects?iql=objectType%20IN%20(%22Computer%22)&resultPerPage=500&page=0']  # Replace with the URL of the API endpoint you want to monitor
     static_configs:
       - targets:
-        - 192.168.231.235:9115  # Replace with the address and port where the Blackbox Exporter is running
+        - 192.168.231.235:9116  # Replace with the address and port where the Blackbox Exporter is running
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: 192.168.231.235:9115 
-
-  - job_name: OUTSIDE_FLTECHNICS_HTTPS
-    metrics_path: /probe
-    params:
-      module: [ http_2xx_example ]  # Look for a HTTP 200 response.
-    dns_sd_configs:
-      - names:
-        - fltechnics.com
-        - 147training.com
-        type: A
-        port: 443
-    relabel_configs:
-      - source_labels: [__address__]
-        target_label: __param_target
-      - source_labels: [__param_target]
-        target_label: instance
-      - target_label: __address__
-        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+        replacement: 192.168.231.235:9116
 
   - job_name: CAR_RESERVATION_HTTP
     metrics_path: /probe
@@ -1127,7 +1106,7 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+        replacement: 192.168.231.235:9116
 
   - job_name: MY_BOEING_FLEET_HTTP
     metrics_path: /probe
@@ -1142,7 +1121,7 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+        replacement: 192.168.231.235:9116
 
   - job_name: MAGICINFO_HTTP
     metrics_path: /probe
@@ -1157,7 +1136,7 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+        replacement: 192.168.231.235:9116
 
   - job_name: DOCLOGIX_HTTP
     metrics_path: /probe
@@ -1172,7 +1151,7 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: 192.168.231.235:9115  # The blackbox exporter's real hostname:port.
+        replacement: 192.168.231.235:9116
   
   - job_name: elearning_HTTP
     metrics_path: /probe
@@ -1187,7 +1166,7 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: 192.168.231.235:9116  # The blackbox exporter's real hostname:port.
+        replacement: 192.168.231.235:9116
   
   
   - job_name: 'M365_metrics'
@@ -1214,7 +1193,27 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: 192.168.231.235:9115 # The blackbox exporter's real hostname:port.
+        replacement: 192.168.231.235:9116 # The blackbox exporter's real hostname:port.
+
+  - job_name: Certificate expiration
+    metrics_path: /probe
+    params:
+      module: [http_2xx_certs]
+    static_configs:
+      - targets:
+        - https://fltechnics.com/
+        - https://oils.aero/
+        - https://customers.fltechnicsparts.com/
+        - https://147training.com/
+        - https://fltechnicstraining.com/
+        - https://gitlab.fltechnics.com/
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.231.235:9116
 
 
 alerting:
