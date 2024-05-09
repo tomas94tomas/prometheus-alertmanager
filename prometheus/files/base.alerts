@@ -3452,14 +3452,6 @@ groups:
     annotations:
       description: Exporter have status 0 ir 200 of Bussines system {{ $labels.vhost }} HTTP error
       summary: The Web UI {{ $labels.vhost }} is DOWN or Prometheus could not scrape.
-  - alert: OUTSIDE Bussines system UI HTTP error 
-    expr: probe_http_status_code{job="OUTSIDE_FLTECHNICS_HTTPS"} == 0 or probe_http_status_code{job="OUTSIDE_FLTECHNICS_HTTPS"} == 200
-    for: 1m
-    labels:
-      severity: warning
-    annotations:
-      description: Exporter have status 0 ir 200 of Bussines system {{ $labels.vhost }} HTTP error
-      summary: The Web UI {{ $labels.vhost }} is DOWN or Prometheus could not scrape.
 - name: Jira Events
   rules:
   - alert: Alert for Insight sync SQL
