@@ -1196,6 +1196,7 @@ scrape_configs:
         replacement: 192.168.231.235:9116 # The blackbox exporter's real hostname:port.
 
   - job_name: Certificate expiration
+    scrape_interval: 1h
     metrics_path: /probe
     params:
       module: [http_2xx_certs]
@@ -1215,6 +1216,39 @@ scrape_configs:
       - target_label: __address__
         replacement: 192.168.231.235:9116
 
+  - job_name: domain expiration
+    scrape_interval: 1h
+    metrics_path: /probe
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - target_label: __address__
+        replacement: 192.168.231.235:9222
+    static_configs:
+      - targets:
+        - 147training.com
+        - aviation-projects.com
+        - fltechnics.com
+        - fltechnics.eu
+        - fltechnics.lt
+        - fltechnicsengine.com
+        - fltechnicsengineering.com
+        - fltechnicsengines.com
+        - fltechnicsline.com
+        - fltechnicsparts.com
+        - fltechnicstraining.com
+        - fltechnicswb.com
+        - fltechnicswbs.com
+        - fltengineservices.com
+        - fltswheelsbrakes.com
+        - fltwheelsandbrakes.com
+        - part147.eu
+        - part147.lt
+        - 147training.aero
+        - oils.aero
+        - onlinetraining.aero
+        - part147.aero
+        - fltechnics.ae
 
 alerting:
   alertmanagers:
