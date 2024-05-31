@@ -218,7 +218,7 @@ scrape_configs:
   - job_name: 'sql_exporter'
     metrics_path: "/metrics"
     static_configs:
-      - targets: ['sql_exporter:9399']
+      - targets: ['192.168.231.235:9399']
         labels:
           name: 'sql_exporter'
     metric_relabel_configs:
@@ -508,6 +508,15 @@ scrape_configs:
       - targets: ['192.168.231.235:9401']
         labels:
           name: 'jira_sql_exporter'
+
+  - job_name: 'flt_sql_prod_exporter'
+    metrics_path: "/metrics"
+    scrape_interval: 30s
+    scrape_timeout: 30s
+    static_configs:
+      - targets: ['192.168.231.235:9403']
+        labels:
+          name: 'flt_sql_prod_exporter'
 
   - job_name: 'flt_sql_dev_exporter'
     metrics_path: "/metrics"
