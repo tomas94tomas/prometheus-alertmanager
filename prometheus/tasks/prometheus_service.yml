@@ -53,7 +53,7 @@
 - name: Start Prometheus
   community.docker.docker_container:
     name: prometheus
-    image: prom/prometheus:v2.51.1
+    image: prom/prometheus:v2.52.0
     networks:
       - name: fltechnics
     state: started
