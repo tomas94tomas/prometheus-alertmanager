@@ -159,6 +159,12 @@ route:
   - match:
       severity: event.red.eams
     receiver: event.red.eams
+  - match:
+      severity: event.test_sms
+    receiver: event.test_sms
+  - match:
+      severity: event.test_email
+    receiver: event.test_email
 
 # Inhibition rules allow to mute a set of alerts given that another alert is
 # firing.
@@ -714,6 +720,22 @@ receivers:
     require_tls: false
     send_resolved: true
   - to: 'titas.pirugis@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-red.subject" . }}'
+    html: '{{ template "email-red.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.test_sms'
+  webhook_configs:
+  - url: 'http://192.168.231.235:8081/send'
+    send_resolved: true
+    # target_numbers: '37066988311'
+
+- name: 'event.test_email'
+  email_configs:
+  - to: 'aidas.petryla@fltechnics.com'
     from: 'grafana@fltechnics.com'
     headers:
       Subject: '{{ template "email-red.subject" . }}'

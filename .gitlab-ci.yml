@@ -2,6 +2,7 @@ image: $NEXUS_REGISTRY/devops:latest
 stages:
   - ansible-lint_syntax
   - deploy
+  - test_alerts
 
 default:
   tags:
@@ -33,3 +34,45 @@ deploy:
     - rm ssh_key
   script:
     - ansible-playbook -i hosts prometheus.yml -u root --extra-vars "alertmanager_web_password=$alertmanager_web_password prometheus_web_password=$prometheus_web_password" -e "alertmanager_web_password=$alertmanager_web_password prometheus_web_password=$prometheus_web_password rnd_consul_dev_token=$rnd_consul_dev_token rnd_consul_live_token=$rnd_consul_live_token rnd_consul_uat_token=$rnd_consul_uat_token rnd_vault_dev_token=$rnd_vault_dev_token rnd_vault_live_token=$rnd_vault_live_token gitlab_token=$gitlab_token prometheus_basic_auth=$prometheus_basic_auth alertmanager_basic_auth=$alertmanager_basic_auth"
+
+trigger_test_email_alert:
+  stage: test_alerts
+  when: manual
+  allow_failure: true
+  variables:
+    ALERTMANAGER_URL: "https://alertmanager.fltechnics.com"
+  before_script:
+    - apt update && apt install --no-install-recommends -y curl
+  script:
+    - >
+      curl -w '\n' -i
+      --user "admin:$alertmanager_web_password"
+      -X POST
+      --header 'Content-Type: application/json'
+      --data '[{
+      "labels": {
+      "alertname": "test_email",
+      "severity": "event.test_email"
+      }
+      }]' $ALERTMANAGER_URL/api/v2/alerts
+
+trigger_test_sms_alert:
+  stage: test_alerts
+  when: manual
+  allow_failure: true
+  variables:
+    ALERTMANAGER_URL: "https://alertmanager.fltechnics.com"
+  before_script:
+    - apt update && apt install --no-install-recommends -y curl
+  script:
+    - >
+      curl -w '\n' -i
+      --user "admin:$alertmanager_web_password"
+      -X POST
+      --header 'Content-Type: application/json'
+      --data '[{
+      "labels": {
+      "alertname": "test_sms",
+      "severity": "event.test_sms"
+      }
+      }]' $ALERTMANAGER_URL/api/v2/alerts
