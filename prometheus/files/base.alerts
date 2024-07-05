@@ -3455,7 +3455,7 @@ groups:
 - name: Jira Events
   rules:
   - alert: Alert for Insight sync SQL
-    expr: mssql_insights_sync_sql == 0 and ON() hour() > 2 < 8
+    expr: mssql_insights_sync_sql == 0 and ON() hour() > 5 < 8
     for: 2m
     labels:
       {'env': 'jira'}
