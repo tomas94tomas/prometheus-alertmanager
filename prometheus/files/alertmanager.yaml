@@ -671,7 +671,7 @@ receivers:
       Subject: '{{ template "email-orange.subject" . }}'
     html: '{{ template "email-orange.html" . }}'
     require_tls: false
-    send_resolved: true    
+    send_resolved: true
 
 - name: 'event.red'
   webhook_configs:
@@ -681,7 +681,7 @@ receivers:
       tls_config:
         insecure_skip_verify: true
     send_resolved: true
-  - url: 'http://192.168.231.235:8081/send'
+  - url: 'http://192.168.231.235:8081/send?phone_no=37064365433'
     send_resolved: true
   email_configs:
   - to: 'dominykas.sivickas@fltechnics.com'
@@ -729,9 +729,8 @@ receivers:
 
 - name: 'event.test_sms'
   webhook_configs:
-  - url: 'http://192.168.231.235:8081/send'
+  - url: 'http://192.168.231.235:8081/send?phone_no=37066988311'
     send_resolved: true
-    # target_numbers: '37066988311'
 
 - name: 'event.test_email'
   email_configs:
