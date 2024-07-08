@@ -391,6 +391,22 @@ scrape_configs:
     - regex: 'id'
       action: labeldrop
     
+  - job_name: 'ODB12_dev_metrics'
+    metrics_path: "/metrics"
+    static_configs:
+    - targets: ['192.168.151.126:9182']
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
+
+  - job_name: 'ODB12_uat_metrics'
+    metrics_path: "/metrics"
+    static_configs:
+    - targets: ['192.168.208.126:9182']
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
+
   - job_name: 'ODB_it_metrics'
     metrics_path: "/metrics"
     static_configs:
@@ -398,7 +414,7 @@ scrape_configs:
     metric_relabel_configs:
     - regex: 'id'
       action: labeldrop
-      
+
   - job_name: 'KYC_DB_metrics'
     metrics_path: "/metrics"
     static_configs:
