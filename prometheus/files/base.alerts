@@ -598,9 +598,9 @@ groups:
       Action: Check if available Oracle DB CCTL instance. If DB is not available then start DB or restore DB. If DB available then check Oracle DB CCTL instance services is running or not on ODB server. If ODB (192.168.50.180) VM is down ask ASG to turn on VM.
   - alert: 4.2 ODB_db_activity_orange
     expr: oracledb_up {job="oracledb_exporter"} == 0 or absent(oracledb_up {job="oracledb_exporter"})
-    for: 20m
+    for: 15m
     labels:
-      severity: event.orange
+      severity: event.orange.odb
     annotations:
       Inpacted_Service : ODB
       Trigger : db activity > 15 min
@@ -610,9 +610,9 @@ groups:
       Action: Check if available Oracle DB CCTL instance. If DB is not available then start DB or restore DB. If DB available then check Oracle DB CCTL instance services is running or not on ODB server. If ODB (192.168.50.180) VM is down ask ASG to turn on VM.
   - alert: 4.2 ODB_db_activity_red
     expr: oracledb_up {job="oracledb_exporter"} == 0 or absent(oracledb_up {job="oracledb_exporter"})
-    for: 40m
+    for: 20m
     labels:
-      severity: event.red
+      severity: event.red.odb.prod
     annotations:
       Inpacted_Service : ODB
       Trigger : db activity > 20 min
@@ -627,37 +627,37 @@ groups:
       severity: event.yellow.odb
     annotations:
       Inpacted_Service : ODB
-      Trigger : db activity > 10 min
+      Trigger : temporary_table_locks > 0 for 5 min
       responsable: Tomas Zemblys
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check blocked sessions of ODB server CCTL instance. Kill session of the blocker.
   - alert: 4.3 ODB_blocking_sessions_orange
     expr: oracledb_resource_current_utilization{job="oracledb_exporter", resource_name="temporary_table_locks"} > 1
-    for: 10m
+    for: 5m
     labels:
-      severity: event.orange
+      severity: event.orange.odb
     annotations:
       Inpacted_Service : ODB
-      Trigger : db activity > 10 min
+      Trigger : temporary_table_locks > 1 for 5 min
       responsable: Tomas Zemblys
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check blocked sessions of ODB server CCTL instance. Kill session of the blocker.
   - alert: 4.3 ODB_blocking_sessions_red
     expr: oracledb_resource_current_utilization{job="oracledb_exporter", resource_name="temporary_table_locks"} > 2
-    for: 10m
+    for: 5m
     labels:
-      severity: event.red
+      severity: event.red.odb.prod
     annotations:
       Inpacted_Service : ODB
-      Trigger : db activity > 10 min
+      Trigger : temporary_table_locks > 2 for 5 min
       responsable: Andrius Kubickas
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check blocked sessions of ODB server CCTL instance. Kill session of the blocker.
-  - alert: 4.4. ODB_D_disk_space_yellow
-    expr: label_replace(({__name__=~"^windows_logical_disk_size_bytes.*", job=~"ODB_metrics", volume="D:"} - {__name__=~"^windows_logical_disk_free_bytes.*", job=~"ODB_metrics", volume="D:"}) / {__name__=~"^windows_logical_disk_size_bytes.*", job=~"ODB_metrics",volume="D:"} * 100, "name", "$1", "__name__", "(.*)" ) > 85
+  - alert: 4.4. ODB_disk_space_yellow
+    expr: (1 - windows_logical_disk_free_bytes{job=~"ODB_metrics"} / windows_logical_disk_size_bytes{job=~"ODB_metrics"}) * 100 > 85
     for: 10m
     labels:
       severity: event.yellow.odb
@@ -667,31 +667,31 @@ groups:
       responsable: Tomas Zemblys
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Check free space of ODB server drive D (installed Oracle DB for Quantum). If need more space ask Dominykas to order more resources.
-  - alert: 4.4. ODB_D_disk_space_orange
-    expr: label_replace(({__name__=~"^windows_logical_disk_size_bytes.*", job=~"ODB_metrics", volume="D:"} - {__name__=~"^windows_logical_disk_free_bytes.*", job=~"ODB_metrics", volume="D:"}) / {__name__=~"^windows_logical_disk_size_bytes.*", job=~"ODB_metrics",volume="D:"} * 100, "name", "$1", "__name__", "(.*)" ) > 90
+      Action: Check free space of ODB server drive {{ $labels.volume }} (installed Oracle DB for Quantum). If need more space ask Dominykas to order more resources.
+  - alert: 4.4. ODB_disk_space_orange
+    expr: (1 - windows_logical_disk_free_bytes{job=~"ODB_metrics"} / windows_logical_disk_size_bytes{job=~"ODB_metrics"}) * 100 > 90
     for: 10m
     labels:
-      severity: event.orange
+      severity: event.orange.odb
     annotations:
       Inpacted_Service : ODB
       Trigger : used disk space >= 90%
       responsable: Tomas Zemblys
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Check free space of ODB server drive D (installed Oracle DB for Quantum). If need more space ask Dominykas to order more resources.
-  - alert: 4.4. ODB_D_disk_space_red
-    expr: label_replace(({__name__=~"^windows_logical_disk_size_bytes.*", job=~"ODB_metrics", volume="D:"} - {__name__=~"^windows_logical_disk_free_bytes.*", job=~"ODB_metrics", volume="D:"}) / {__name__=~"^windows_logical_disk_size_bytes.*", job=~"ODB_metrics",volume="D:"} * 100, "name", "$1", "__name__", "(.*)" ) > 95 
+      Action: Check free space of ODB server drive {{ $labels.volume }} (installed Oracle DB for Quantum). If need more space ask Dominykas to order more resources.
+  - alert: 4.4. ODB_disk_space_red
+    expr: (1 - windows_logical_disk_free_bytes{job=~"ODB_metrics"} / windows_logical_disk_size_bytes{job=~"ODB_metrics"}) * 100 > 95 
     for: 10m
     labels:
-      severity: event.red
+      severity: event.red.odb.prod
     annotations:
       Inpacted_Service : ODB
       Trigger : used disk space >= 95%
       responsable: Andrius Kubickas
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Check free space of ODB server drive D (installed Oracle DB for Quantum). If need more space ask Dominykas to order more resources.
+      Action: Check free space of ODB server drive {{ $labels.volume }} (installed Oracle DB for Quantum). If need more space ask Dominykas to order more resources.
   - alert: 4.5 ODB_IT_db_activity_yellow
     expr: oracledb_up {job="oracledb_exporter_odbit"} == 0 or absent(oracledb_up {job="oracledb_exporter_odbit"})
     for: 10m
@@ -708,7 +708,7 @@ groups:
     expr: oracledb_up {job="oracledb_exporter_odbit"} == 0 or absent(oracledb_up {job="oracledb_exporter_odbit"})
     for: 20m
     labels:
-      severity: event.orange
+      severity: event.orange.odb
     annotations:
       Inpacted_Service : ODB_IT
       Trigger : db activity > 15 min
@@ -720,7 +720,7 @@ groups:
     expr: oracledb_up {job="oracledb_exporter_odbit"} == 0 or absent(oracledb_up {job="oracledb_exporter_odbit"})
     for: 40m
     labels:
-      severity: event.red
+      severity: event.red.odb
     annotations:
       Inpacted_Service : ODB_IT
       Trigger : db activity > 20 min
@@ -744,7 +744,7 @@ groups:
     expr: oracledb_resource_current_utilization{job="oracledb_exporter_odbit", resource_name="temporary_table_locks"} > 1
     for: 10m
     labels:
-      severity: event.orange
+      severity: event.orange.odb
     annotations:
       Inpacted_Service : ODB_IT
       Trigger : blocking sessions count >= 2 and time >= 5 min
@@ -756,7 +756,7 @@ groups:
     expr: oracledb_resource_current_utilization{job="oracledb_exporter_odbit", resource_name="temporary_table_locks"} > 2
     for: 10m
     labels:
-      severity: event.red
+      severity: event.red.odb
     annotations:
       Inpacted_Service : ODB_IT
       Trigger : 	blocking sessions count >= 3 and time >= 5 min
@@ -764,8 +764,8 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action:	Ask Tomas to check ODB-IT server ODBIT instance blocked sessions and kill session of the blocker.
-  - alert: 4.7. ODB_IT_C_disk_space_yellow
-    expr: label_replace(({__name__=~"^windows_logical_disk_size_bytes.*", job=~"ODB_it_metrics", volume="C:"} - {__name__=~"^windows_logical_disk_free_bytes.*", job=~"ODB_it_metrics",volume="C:"}) / {__name__=~"^windows_logical_disk_size_bytes.*", job=~"ODB_it_metrics", volume="C:"} * 100, "name", "$1", "__name__", "(.*)") > 85
+  - alert: 4.7. ODB_IT_disk_space_yellow
+    expr: (1 - windows_logical_disk_free_bytes{job=~"ODB_it_metrics"} / windows_logical_disk_size_bytes{job=~"ODB_it_metrics"}) * 100 > 85
     for: 10m
     labels:
       severity: event.yellow.odb
@@ -775,31 +775,31 @@ groups:
       responsable: Tomas Zemblys
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Check free space of ODB-IT server drive C (installed Oracle DB). If need more space ask Dominykas to order more resources.
-  - alert: 4.7. ODB_IT_C_disk_space_orange
-    expr: label_replace(({__name__=~"^windows_logical_disk_size_bytes.*", job=~"ODB_it_metrics", volume="C:"} - {__name__=~"^windows_logical_disk_free_bytes.*", job=~"ODB_it_metrics",volume="C:"}) / {__name__=~"^windows_logical_disk_size_bytes.*", job=~"ODB_it_metrics", volume="C:"} * 100, "name", "$1", "__name__", "(.*)") > 90
+      Action: Check free space of ODB_IT server drive {{ $labels.volume }} (installed Oracle DB). If need more space ask Dominykas to order more resources.
+  - alert: 4.7. ODB_IT_disk_space_orange
+    expr: (1 - windows_logical_disk_free_bytes{job=~"ODB_it_metrics"} / windows_logical_disk_size_bytes{job=~"ODB_it_metrics"}) * 100 > 90
     for: 10m
     labels:
-      severity: event.orange
+      severity: event.orange.odb
     annotations:
       Inpacted_Service : ODB_IT
       Trigger : used disk space >= 90%
       responsable: Tomas Zemblys
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Check free space of ODB server drive C (installed Oracle DB). If need more space ask Dominykas to order more resources.
-  - alert: 4.7. ODB_IT_C_disk_space_red
-    expr: label_replace(({__name__=~"^windows_logical_disk_size_bytes.*", job=~"ODB_it_metrics", volume="C:"} - {__name__=~"^windows_logical_disk_free_bytes.*", job=~"ODB_it_metrics",volume="C:"}) / {__name__=~"^windows_logical_disk_size_bytes.*", job=~"ODB_it_metrics", volume="C:"} * 100, "name", "$1", "__name__", "(.*)") > 95 
+      Action: Check free space of ODB_IT server drive {{ $labels.volume }} (installed Oracle DB). If need more space ask Dominykas to order more resources.
+  - alert: 4.7. ODB_IT_disk_space_red
+    expr: (1 - windows_logical_disk_free_bytes{job=~"ODB_it_metrics"} / windows_logical_disk_size_bytes{job=~"ODB_it_metrics"}) * 100 > 95 
     for: 10m
     labels:
-      severity: event.red
+      severity: event.red.odb
     annotations:
       Inpacted_Service : ODB_IT
       Trigger : used disk space >= 95%
       responsable: Andrius Kubickas
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Ask Tomas to check free space of ODB server drive C (installed Oracle DB). If need more space ask Dominykas to order more resources.
+      Action: Ask Tomas to check free space of ODB_IT server drive {{ $labels.volume }} (installed Oracle DB). If need more space ask Dominykas to order more resources.
   - alert: 4.8. WB_AMOS_PROD_db_activity_yellow
     expr: oracledb_up{job="oracledb_exporter_wb_amos_prod"} == 0 or absent(oracledb_up{job="oracledb_exporter_wb_amos_prod"})
     for: 10m
@@ -816,7 +816,7 @@ groups:
     expr: oracledb_up{job="oracledb_exporter_wb_amos_prod"} == 0 or absent(oracledb_up{job="oracledb_exporter_wb_amos_prod"})
     for: 20m
     labels:
-      severity: event.orange
+      severity: event.orange.odb
     annotations:
       Inpacted_Service : wb_amos_prod
       Trigger : db activity > 15 min
@@ -828,7 +828,7 @@ groups:
     expr: oracledb_up{job="oracledb_exporter_wb_amos_prod"} == 0 or absent(oracledb_up{job="oracledb_exporter_wb_amos_prod"})
     for: 40m
     labels:
-      severity: event.red
+      severity: event.red.odb
     annotations:
       Inpacted_Service : wb_amos_prod
       Trigger : db activity > 20 min
@@ -852,7 +852,7 @@ groups:
     expr: oracledb_resource_current_utilization{job="oracle_db_exporter_wb_amos_prod", resource_name="temporary_table_locks"} > 1
     for: 10m
     labels:
-      severity: event.orange
+      severity: event.orange.odb
     annotations:
       Inpacted_Service : wb_amos_prod
       Trigger : blocking sessions count >= 2 and time >= 5 min
@@ -864,7 +864,7 @@ groups:
     expr: oracledb_resource_current_utilization{job="oracle_db_exporter_wb_amos_prod", resource_name="temporary_table_locks"} > 2
     for: 10m
     labels:
-      severity: event.red
+      severity: event.red.odb
     annotations:
       Inpacted_Service : wb_amos_prod
       Trigger : 	blocking sessions count >= 3 and time >= 5 min
@@ -872,42 +872,90 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action:	Ask Tomas to check WB-AMOS-DB-PROD server WBS instance blocked sessions and kill session of the blocker.
-  - alert: 4.10. WB_AMOS_PROD_E_disk_space_yellow
-    expr:  label_replace(({__name__=~"^windows_logical_disk_size_bytes.*", job="AMOS Wheels and Brakes", name="wb-amos-db-prod", volume="E:"} - {__name__=~"^windows_logical_disk_free_bytes.*", job="AMOS Wheels and Brakes", name="wb-amos-db-prod", volume="E:"}) / {__name__=~"^windows_logical_disk_size_bytes.*", job="AMOS Wheels and Brakes", name="wb-amos-db-prod", volume="E:"} * 100, "name", "$1", "__name__", "(.*)") > 85
+  - alert: 4.10. WB_AMOS_disk_space_yellow
+    expr: (1 - windows_logical_disk_free_bytes{job=~"AMOS Wheels and Brakes"} / windows_logical_disk_size_bytes{job=~"AMOS Wheels and Brakes"}) * 100 > 85
     for: 10m
     labels:
       severity: event.yellow.odb
     annotations:
-      Inpacted_Service : wb_amos_prod
+      Inpacted_Service : wb_amos
       Trigger : used disk space >= 85% 
       responsable: Tomas Zemblys
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Check free space of WB-AMOS-DB-PROD server drive E (Oracle DB datafiles). If need more space ask Dominykas to order more resources.
-  - alert: 4.10. WB_AMOS_PROD_E_disk_space_orange
-    expr: label_replace(({__name__=~"^windows_logical_disk_size_bytes.*", job="AMOS Wheels and Brakes", name="wb-amos-db-prod", volume="E:"} - {__name__=~"^windows_logical_disk_free_bytes.*", job="AMOS Wheels and Brakes", name="wb-amos-db-prod", volume="E:"}) / {__name__=~"^windows_logical_disk_size_bytes.*", job="AMOS Wheels and Brakes", name="wb-amos-db-prod", volume="E:"} * 100, "name", "$1", "__name__", "(.*)") > 90 
+      Action: Check free space of {{ $labels.instance }} server drive {{ $labels.volume }} (Oracle DB datafiles). If need more space ask Dominykas to order more resources.
+  - alert: 4.10. WB_AMOS_disk_space_orange
+    expr: (1 - windows_logical_disk_free_bytes{job=~"AMOS Wheels and Brakes"} / windows_logical_disk_size_bytes{job=~"AMOS Wheels and Brakes"}) * 100 > 90 
     for: 10m
     labels:
-      severity: event.orange
+      severity: event.orange.odb
     annotations:
-      Inpacted_Service : wb_amos_prod
+      Inpacted_Service : wb_amos
       Trigger : used disk space >= 90%
       responsable: Tomas Zemblys
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Check free space of WB-AMOS-DB-PROD server drive E (Oracle DB datafiles). If need more space ask Dominykas to order more resources.
-  - alert: 4.10. WB_AMOS_PROD_E_disk_space_red
-    expr:  label_replace(({__name__=~"^windows_logical_disk_size_bytes.*", job="AMOS Wheels and Brakes", name="wb-amos-db-prod", volume="E:"} - {__name__=~"^windows_logical_disk_free_bytes.*", job="AMOS Wheels and Brakes", name="wb-amos-db-prod", volume="E:"}) / {__name__=~"^windows_logical_disk_size_bytes.*", job="AMOS Wheels and Brakes", name="wb-amos-db-prod", volume="E:"} * 100, "name", "$1", "__name__", "(.*)") > 95 
+      Action: Check free space of {{ $labels.instance }} server drive {{ $labels.volume }} (Oracle DB datafiles). If need more space ask Dominykas to order more resources.
+  - alert: 4.10. WB_AMOS_NONPROD_disk_space_red
+    expr: (1 - windows_logical_disk_free_bytes{job=~"AMOS Wheels and Brakes", instance!~"wb-amos-(db|app)-prod"} / windows_logical_disk_size_bytes{job=~"AMOS Wheels and Brakes", instance!~"wb-amos-(db|app)-prod"}) * 100 > 95 
     for: 10m
     labels:
-      severity: event.red
+      severity: event.red.odb
+    annotations:
+      Inpacted_Service : wb_amos_nonprod
+      Trigger : used disk space >= 95%
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Tomas to check free space of {{ $labels.instance }} server drive {{ $labels.volume }} (Oracle DB datafiles). If need more space ask Dominykas to order more resources.
+  - alert: 4.10. WB_AMOS_PROD_disk_space_red
+    expr: (1 - windows_logical_disk_free_bytes{job=~"AMOS Wheels and Brakes", instance=~"wb-amos-(db|app)-prod"} / windows_logical_disk_size_bytes{job=~"AMOS Wheels and Brakes", instance=~"wb-amos-(db|app)-prod"}) * 100 > 95 
+    for: 10m
+    labels:
+      severity: event.red.amos.prod
     annotations:
       Inpacted_Service : wb_amos_prod
       Trigger : used disk space >= 95%
       responsable: Andrius Kubickas
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Ask Tomas to check free space of WB-AMOS-DB-PROD server drive E (Oracle DB datafiles). If need more space ask Dominykas to order more resources.
+      Action: Ask Tomas to check free space of {{ $labels.instance }} server drive {{ $labels.volume }} (Oracle DB datafiles). If need more space ask Dominykas to order more resources.
+  - alert: 4.11 ODB_NONPROD_disk_space_yellow
+    expr: (1 - windows_logical_disk_free_bytes{job=~"ODB(12_)?(dev|uat)_metrics"} / windows_logical_disk_size_bytes{job=~"ODB(12_)?(dev|uat)_metrics"}) * 100 > 85
+    for: 10m
+    labels:
+      severity: event.yellow.odb
+    annotations:
+      Inpacted_Service : ODB NONPROD {{ $labels.instance }}
+      Trigger : used disk space >= 85% 
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check free space of {{ $labels.instance }} server drive {{ $labels.volume }} (Oracle DB datafiles). If need more space ask Dominykas to order more resources.
+  - alert: 4.11 ODB_NONPROD_disk_space_orange
+    expr: (1 - windows_logical_disk_free_bytes{job=~"ODB(12_)?(dev|uat)_metrics"} / windows_logical_disk_size_bytes{job=~"ODB(12_)?(dev|uat)_metrics"}) * 100 > 90 
+    for: 10m
+    labels:
+      severity: event.orange.odb
+    annotations:
+      Inpacted_Service : ODB NONPROD {{ $labels.instance }}
+      Trigger : used disk space >= 90%
+      responsable: Tomas Zemblys
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check free space of {{ $labels.instance }} server drive {{ $labels.volume }} (Oracle DB datafiles). If need more space ask Dominykas to order more resources.
+  - alert: 4.11 ODB_NONPROD_disk_space_red
+    expr: (1 - windows_logical_disk_free_bytes{job=~"ODB(12_)?(dev|uat)_metrics"} / windows_logical_disk_size_bytes{job=~"ODB(12_)?(dev|uat)_metrics"}) * 100 > 95 
+    for: 10m
+    labels:
+      severity: event.red.odb
+    annotations:
+      Inpacted_Service : ODB NONPROD {{ $labels.instance }}
+      Trigger : used disk space >= 95%
+      responsable: Andrius Kubickas
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Tomas to check free space of {{ $labels.instance }} server drive {{ $labels.volume }} (Oracle DB datafiles). If need more space ask Dominykas to order more resources.
 - name: 5. Gitlab
   rules:
   - alert: 5.1 gitlab_http_respose_yellow
