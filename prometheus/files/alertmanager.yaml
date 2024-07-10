@@ -58,6 +58,21 @@ route:
       severity: event.red
     receiver: event.red
   - match:
+      severity: event.yellow.odb
+    receiver: team.yellow
+  - match:
+      severity: event.orange.odb
+    receiver: team.orange
+  - match:
+      severity: event.red.odb
+    receiver: team.red
+  - match:
+      severity: event.red.odb.prod
+    receiver: event.red.odb.prod
+  - match:
+      severity: event.red.amos.prod
+    receiver: event.red.amos.prod
+  - match:
       severity: event.yellow.qliksense
     receiver: event.yellow.qliksense
   - match:
@@ -199,6 +214,62 @@ receivers:
   - to: 'helpdesk@fltechnics.com'
     send_resolved: true
   - to: 'it.monitoring@fltechnics.com'
+    send_resolved: true
+
+- name: 'team.yellow'
+  email_configs:
+  - to: 'it.monitoring@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'team.orange'
+  email_configs:
+  - to: 'it.monitoring@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-orange.subject" . }}'
+    html: '{{ template "email-orange.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'team.red'
+  email_configs:
+  - to: 'it.monitoring@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-red.subject" . }}'
+    html: '{{ template "email-red.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.red.odb.prod'
+  webhook_configs:
+  - url: 'http://192.168.231.235:8081/send?phone_no=37064365433,37065817826,37063613776,37068976557,37068539071,37065374215'
+    send_resolved: true
+  email_configs:
+  - to: 'it.monitoring@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-red.subject" . }}'
+    html: '{{ template "email-red.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.red.amos.prod'
+  webhook_configs:
+  - url: 'http://192.168.231.235:8081/send?phone_no=37064365433,37065817826'
+    send_resolved: true
+  email_configs:
+  - to: 'it.monitoring@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-red.subject" . }}'
+    html: '{{ template "email-red.html" . }}'
+    require_tls: false
     send_resolved: true
 
 - name: 'event.yellow.solarwinds'
