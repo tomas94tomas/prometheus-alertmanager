@@ -3227,8 +3227,8 @@ groups:
       severity: warning
     annotations:
       description: device {{$labels.device}} on node {{$labels.instance}} is running
-        65% within the next 24 hours (mounted at {{$labels.mountpoint}})
-      summary: Node disk is running on 70%
+        85% within the last 10 minutes (mounted at {{$labels.mountpoint}})
+      summary: Node disk is running on 85%
   - alert: HostUnusualNetworkThroughputIn
     expr: sum by (instance) (rate(node_network_receive_bytes_total[2m])) / 1024 / 1024 > 100
     for: 5m
