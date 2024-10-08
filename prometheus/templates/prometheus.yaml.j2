@@ -378,7 +378,7 @@ scrape_configs:
   - job_name: 'ODBdev_metrics'
     metrics_path: "/metrics"
     static_configs:
-    - targets: ['192.168.50.129:9182']
+    - targets: ['192.168.151.126:9182']
     metric_relabel_configs:
     - regex: 'id'
       action: labeldrop
@@ -386,7 +386,7 @@ scrape_configs:
   - job_name: 'ODBuat_metrics'
     metrics_path: "/metrics"
     static_configs:
-    - targets: ['192.168.208.10:9182']
+    - targets: ['192.168.208.126:9182']
     metric_relabel_configs:
     - regex: 'id'
       action: labeldrop
@@ -447,6 +447,20 @@ scrape_configs:
       - targets: ['192.168.231.235:9171']
         labels:
           name: 'oracle_db_exporter'
+
+  - job_name: 'oracle_db_exporter_sensus_v2_live'
+    metrics_path: "/metrics"
+    static_configs:
+      - targets: ['192.168.231.235:9175']
+        labels:
+          name: 'oracle_db_exporter_sensus_v2_live'
+
+  - job_name: 'oracle_db_exporter_sensus_v2_uat'
+    metrics_path: "/metrics"
+    static_configs:
+      - targets: ['192.168.231.235:9174']
+        labels:
+          name: 'oracle_db_exporter_sensus_v2_uat'
 
   - job_name: 'oracledb_exporter_dev'
     metrics_path: "/metrics"

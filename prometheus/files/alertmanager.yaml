@@ -180,6 +180,16 @@ route:
   - match:
       severity: event.test_email
     receiver: event.test_email
+  - match:
+      alertname: "2.5 QlikSense_Capacity_50_Percent_Mid_Month"
+    receiver: event.red.qliksense.capacity
+  - match:
+      alertname: "2.5 QlikSense_Capacity_65_Percent_19th_Day"
+    receiver: event.red.qliksense.capacity
+  - match:
+      alertname: "2.5 QlikSense_Capacity_80_Percent_25th_Day"
+    receiver: event.red.qliksense.capacity.80percent  
+
 
 # Inhibition rules allow to mute a set of alerts given that another alert is
 # firing.
@@ -805,10 +815,35 @@ receivers:
 
 - name: 'event.test_email'
   email_configs:
-  - to: 'aidas.petryla@fltechnics.com'
+  - to: 't.dzeventlauskas@fltechnics.com'
     from: 'grafana@fltechnics.com'
     headers:
       Subject: '{{ template "email-red.subject" . }}'
     html: '{{ template "email-red.html" . }}'
     require_tls: false
     send_resolved: true
+
+- name: 'event.red.qliksense.capacity'
+  webhook_configs:
+   - url: 'http://192.168.231.235:8081/send?phone_no=37060191319,37052525015,37068991215'
+     send_resolved: true
+  email_configs:
+    - to: 't.dzeventlauskas@fltechnics.com, justyna.lavrynovic@fltechnics.com, domantas.karasa@fltechnics.com'
+      from: 'grafana@fltechnics.com'
+      headers:
+        Subject: '{{ template "email-yellow.subject" . }}'
+      html: '{{ template "email-yellow.html" . }}'
+      require_tls: false
+
+- name: 'event.red.qliksense.capacity.80percent'
+  webhook_configs:
+   - url: 'http://192.168.231.235:8081/send?phone_no=37060191319,37052525015,37068991215,37064365433'
+     send_resolved: true
+  email_configs:
+    - to: 't.dzeventlauskas@fltechnics.com, justyna.lavrynovic@fltechnics.com, domantas.karasa@fltechnics.com, andrius.kubickas@fltechnics.com'
+      from: 'grafana@fltechnics.com'
+      headers:
+        Subject: '{{ template "email-red.subject" . }}'
+      html: '{{ template "email-red.html" . }}'
+      require_tls: false
+

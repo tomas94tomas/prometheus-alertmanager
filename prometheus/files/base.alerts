@@ -292,6 +292,48 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Rasita or Tomas to check failed scheduler tasks.  
+  - alert: 2.5 QlikSense_Capacity_50_Percent_Mid_Month
+    expr: (sum(mssql_qlik_analyzer_capacity_usedtime{job="sql_exporter"}) / sum(mssql_qlik_analyzer_capacity_totaltime{job="sql_exporter"})) >= 0.5 and (day_of_month() == 15)
+    for: 1m
+    labels:
+      severity: event.red.qliksense.capacity
+    annotations:
+     summary: "QlikSense Capacity Usage Alert"
+     description: "The used capacity has reached 50% and it is already past the middle of the month."
+     Inpacted_Service: Qlik Sense
+     Trigger: "QlikSense Capacity License used minutes = {{ $value }}"
+     responsable: Justyna Lavrynovic
+     timestamp: >
+       time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+     Action: "Check users with 'Analyzer' license. Deallocate few users with oldest used date. Allocate these free licenses for users with biggest capacity minutes."
+  - alert: 2.5 QlikSense_Capacity_65_Percent_19th_Day
+    expr: (sum(mssql_qlik_analyzer_capacity_usedtime{job="sql_exporter"}) / sum(mssql_qlik_analyzer_capacity_totaltime    {job="sql_exporter"})) >= 0.65 and (day_of_month() == 19)
+    for: 1m
+    labels:
+      severity: event.red.qliksense.capacity
+    annotations:
+      summary: "QlikSense Capacity Usage Alert"
+      description: "The used capacity has reached 65% and it is already past the 19th day of the month."
+      Inpacted_Service: Qlik Sense
+      Trigger: "QlikSense Capacity License used minutes = {{ $value }}"
+      responsable: Justyna Lavrynovic
+      timestamp: >
+       time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: "Check users with 'Analyzer' license. Deallocate few users with oldest used date. Allocate these free licenses for users with biggest capacity minutes."
+  - alert: 2.5 QlikSense_Capacity_80_Percent_25th_Day
+    expr: (sum(mssql_qlik_analyzer_capacity_usedtime{job="sql_exporter"}) / sum(mssql_qlik_analyzer_capacity_totaltime{job="sql_exporter"}))  >= 0.8 and (day_of_month() == 25)
+    for: 1m
+    labels:
+      severity: event.red.qliksense.capacity.80percent
+    annotations:
+     summary: "QlikSense Capacity Usage Alert"
+     description: "The used capacity has reached 80% and it is already past the 25th day of the month."
+     Inpacted_Service: Qlik Sense
+     Trigger: "QlikSense Capacity License used minutes = {{ $value }}"
+     responsable: Justyna Lavrynovic
+     timestamp: >
+       time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+     Action: "Check users with 'Analyzer' license. Deallocate few users with oldest used date. Allocate these free licenses for users with biggest capacity minutes."
 - name: 3. MSSQL
   rules:
   - alert: 3.1 FLTSQL_master_db_activity_yellow
