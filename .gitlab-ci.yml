@@ -23,7 +23,7 @@ ansible-syntax:
 deploy:
   stage: deploy
   only:
-    - /^version.*$/
+    - /^Dev.*$/
   services:
     - docker:dind
   before_script:
@@ -51,9 +51,15 @@ trigger_test_email_alert:
       --header 'Content-Type: application/json'
       --data '[{
       "labels": {
-      "alertname": "test_email",
-      "severity": "event.test_email"
-      }
+      "alertname": "QlikSense_Capacity_Test_Alert",
+      "severity": "event.red.qliksense.capacity"
+      },
+      "annotations": {
+          "summary": "Test QlikSense Capacity Alert",
+          "description": "This is a test alert for QlikSense Capacity usage.",
+          "Trigger": "Test capacity alert",
+          "responsable": "Justyna Lavrynovic"
+        }
       }]' $ALERTMANAGER_URL/api/v2/alerts
 
 trigger_test_sms_alert:
