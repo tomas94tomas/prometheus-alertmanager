@@ -165,7 +165,7 @@ scrape_configs:
   - job_name: 'Sensus hosts'
     static_configs:
 
-{% for host in groups['Sensus hosts'] %}
+{% for host in groups['Sensus-hosts'] %}
       - targets: ['{{ hostvars[host]['ansible_host'] | default (host) }}:9100']
         labels:
           name: '{{ hostvars[host]['inventory_hostname'] }}'

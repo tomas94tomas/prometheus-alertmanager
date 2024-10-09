@@ -85,5 +85,5 @@ odb.flts.lan ansible_host=192.168.50.180
 flt-mysql-dev ansible_host=192.168.231.22
 flt-mysql-live ansible_host=192.168.231.28
 
-[Sensus hosts]
+[Sensus-hosts]
 flt-sensus2-live-app ansible_host=192.168.231.31
