@@ -293,14 +293,7 @@ receivers:
 
 - name: 'event.yellow.qliksense'
   email_configs:
-  - to: 'tomas.zemblys@fltechnics.com'
-    from: 'grafana@fltechnics.com'
-    headers:
-      Subject: '{{ template "email-yellow.subject" . }}'
-    html: '{{ template "email-yellow.html" . }}'
-    require_tls: false
-    send_resolved: true
-  - to: 'andrius.svylas@fltechnics.com'
+  - to: 'tomas.dzeventlauskas@fltechnics.com'
     from: 'grafana@fltechnics.com'
     headers:
       Subject: '{{ template "email-yellow.subject" . }}'
@@ -731,22 +724,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.orange'
-  webhook_configs:
-  - url: 'http://192.168.231.235:2000/it_alerts_channel'
-    http_config:
-      follow_redirects: true
-      tls_config:
-        insecure_skip_verify: true
-    send_resolved: true
   email_configs:
-  - to: 'dominykas.sivickas@fltechnics.com'
-    from: 'grafana@fltechnics.com'
-    headers:
-      Subject: '{{ template "email-orange.subject" . }}'
-    html: '{{ template "email-orange.html" . }}'
-    require_tls: false
-    send_resolved: true
-  - to: 'andrius.kubickas@fltechnics.com'
+  - to: 'tomas.dzeventlauskas@fltechnics.com'
     from: 'grafana@fltechnics.com'
     headers:
       Subject: '{{ template "email-orange.subject" . }}'
@@ -762,45 +741,10 @@ receivers:
       tls_config:
         insecure_skip_verify: true
     send_resolved: true
-  - url: 'http://192.168.231.235:8081/send?phone_no=37064365433'
+  - url: 'http://192.168.231.235:8081/send?phone_no=37060191319'
     send_resolved: true
   email_configs:
-  - to: 'dominykas.sivickas@fltechnics.com'
-    from: 'grafana@fltechnics.com'
-    headers:
-      Subject: '{{ template "email-red.subject" . }}'
-    html: '{{ template "email-red.html" . }}'
-    require_tls: false
-    send_resolved: true
-  - to: 'andrius.kubickas@fltechnics.com'
-    from: 'grafana@fltechnics.com'
-    headers:
-      Subject: '{{ template "email-red.subject" . }}'
-    html: '{{ template "email-red.html" . }}'
-    require_tls: false
-    send_resolved: true
-  - to: 'vadimas.klepko@fltechnics.com'
-    from: 'grafana@fltechnics.com'
-    headers:
-      Subject: '{{ template "email-red.subject" . }}'
-    html: '{{ template "email-red.html" . }}'
-    require_tls: false
-    send_resolved: true
-  - to: 'tomas.zemblys@fltechnics.com'
-    from: 'grafana@fltechnics.com'
-    headers:
-      Subject: '{{ template "email-red.subject" . }}'
-    html: '{{ template "email-red.html" . }}'
-    require_tls: false
-    send_resolved: true
-  - to: 'lina.baliuniene@fltechnics.com'
-    from: 'grafana@fltechnics.com'
-    headers:
-      Subject: '{{ template "email-red.subject" . }}'
-    html: '{{ template "email-red.html" . }}'
-    require_tls: false
-    send_resolved: true
-  - to: 'titas.pirugis@fltechnics.com'
+  - to: 'tomas.dzeventlauskas@fltechnics.com'
     from: 'grafana@fltechnics.com'
     headers:
       Subject: '{{ template "email-red.subject" . }}'
