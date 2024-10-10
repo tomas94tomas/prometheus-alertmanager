@@ -293,7 +293,14 @@ receivers:
 
 - name: 'event.yellow.qliksense'
   email_configs:
-  - to: 't.dzeventlauskas@fltechnics.com'
+  - to: 'justyna.lavrynovic@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+  - to: 'domantas.karasa@fltechnics.com'
     from: 'grafana@fltechnics.com'
     headers:
       Subject: '{{ template "email-yellow.subject" . }}'
@@ -724,8 +731,18 @@ receivers:
     send_resolved: true
 
 - name: 'event.orange'
+  webhook_configs:
+  - url: 'http://192.168.231.235:8081/send?phone_no=37064365433,37068991215'
+    send_resolved: true
   email_configs:
-  - to: 't.dzeventlauskas@fltechnics.com'
+  - to: 'justyna.lavrynovic@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-orange.subject" . }}'
+    html: '{{ template "email-orange.html" . }}'
+    require_tls: false
+    send_resolved: true
+  - to: 'domantas.karasa@fltechnics.com'
     from: 'grafana@fltechnics.com'
     headers:
       Subject: '{{ template "email-orange.subject" . }}'
@@ -741,10 +758,24 @@ receivers:
       tls_config:
         insecure_skip_verify: true
     send_resolved: true
-  - url: 'http://192.168.231.235:8081/send?phone_no=37060191319'
+  - url: 'http://192.168.231.235:8081/send?phone_no=37064365433,37063484600,37068991215'
     send_resolved: true
   email_configs:
-  - to: 't.dzeventlauskas@fltechnics.com'
+  - to: 'andrius.kubickas@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-red.subject" . }}'
+    html: '{{ template "email-red.html" . }}'
+    require_tls: false
+    send_resolved: true
+  - to: 'justyna.lavrynovic@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-red.subject" . }}'
+    html: '{{ template "email-red.html" . }}'
+    require_tls: false
+    send_resolved: true
+  - to: 'domantas.karasa@fltechnics.com'
     from: 'grafana@fltechnics.com'
     headers:
       Subject: '{{ template "email-red.subject" . }}'
