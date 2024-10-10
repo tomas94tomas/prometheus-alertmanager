@@ -293,7 +293,7 @@ receivers:
 
 - name: 'event.yellow.qliksense'
   email_configs:
-  - to: 'tomas.dzeventlauskas@fltechnics.com'
+  - to: 't.dzeventlauskas@fltechnics.com'
     from: 'grafana@fltechnics.com'
     headers:
       Subject: '{{ template "email-yellow.subject" . }}'
@@ -725,7 +725,7 @@ receivers:
 
 - name: 'event.orange'
   email_configs:
-  - to: 'tomas.dzeventlauskas@fltechnics.com'
+  - to: 't.dzeventlauskas@fltechnics.com'
     from: 'grafana@fltechnics.com'
     headers:
       Subject: '{{ template "email-orange.subject" . }}'
@@ -744,7 +744,7 @@ receivers:
   - url: 'http://192.168.231.235:8081/send?phone_no=37060191319'
     send_resolved: true
   email_configs:
-  - to: 'tomas.dzeventlauskas@fltechnics.com'
+  - to: 't.dzeventlauskas@fltechnics.com'
     from: 'grafana@fltechnics.com'
     headers:
       Subject: '{{ template "email-red.subject" . }}'
