@@ -23,7 +23,7 @@ ansible-syntax:
 deploy:
   stage: deploy
   only:
-    - /^Dev.*$/
+    - /^version.*$/
   services:
     - docker:dind
   before_script:
