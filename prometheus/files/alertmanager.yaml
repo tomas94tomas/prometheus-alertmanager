@@ -795,13 +795,6 @@ receivers:
       send_resolved: true
     - url: 'https://aviasolutions.webhook.office.com/webhookb2/cdb08d48-c05f-4336-a36a-e34667dcf6e2@6cafff92-3b55-4909-8bc6-a786cd612d40/IncomingWebhook/c796273fccc44ca3a5431b420c0d1fa5/40c455d1-7f3e-4920-960f-3d3a4de62fb4/V2E2JKv6Mb3UGvozpeogZtRsjDBHAUwH8Wuc6MOqjH0Lo1'
       send_resolved: true
-      http_config:
-        headers:
-          Content-Type: application/json
-      message: |
-        {
-          "text": "{{ .CommonAnnotations.text }}"
-        }
   email_configs:
     - to: 't.dzeventlauskas@fltechnics.com'
       from: 'grafana@fltechnics.com'
@@ -809,7 +802,3 @@ receivers:
         Subject: '{{ template "email-red.subject" . }}'
       html: '{{ template "email-red.html" . }}'
       require_tls: false
-  annotations:
-    summary: "QlikSense Capacity Usage Alert"
-    description: "QlikSense capacity has reached 80% on the 25th of the month."
-    text: "Alert: QlikSense capacity has exceeded 80% on {{ $labels.instance }}. Please check the service status and take necessary action."
