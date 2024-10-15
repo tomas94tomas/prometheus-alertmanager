@@ -793,7 +793,11 @@ receivers:
   webhook_configs:
     - url: 'http://192.168.231.235:8081/send?phone_no=37060191319'
       send_resolved: true
-    - url: 'https://aviasolutions.webhook.office.com/webhookb2/cdb08d48-c05f-4336-a36a-e34667dcf6e2@6cafff92-3b55-4909-8bc6-a786cd612d40/IncomingWebhook/c796273fccc44ca3a5431b420c0d1fa5/40c455d1-7f3e-4920-960f-3d3a4de62fb4/V2E2JKv6Mb3UGvozpeogZtRsjDBHAUwH8Wuc6MOqjH0Lo1'
+    - url: 'http://192.168.231.235:2000/it_alerts_channel'
+      http_config:
+      follow_redirects: true
+      tls_config:
+        insecure_skip_verify: true
       send_resolved: true
   email_configs:
     - to: 't.dzeventlauskas@fltechnics.com'
