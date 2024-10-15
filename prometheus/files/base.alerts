@@ -321,7 +321,7 @@ groups:
        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: "Check users with 'Analyzer' license. Deallocate few users with oldest used date. Allocate these free licenses for users with biggest capacity minutes."
   - alert: 2.5 QlikSense_Capacity_80_Percent_25th_Day
-    expr: (sum(mssql_qlik_analyzer_capacity_usedtime{job="sql_exporter"}) / sum(mssql_qlik_analyzer_capacity_totaltime{job="sql_exporter"}))  >= 0.3
+    expr: (sum(mssql_qlik_analyzer_capacity_usedtime{job="sql_exporter"}) / sum(mssql_qlik_analyzer_capacity_totaltime{job="sql_exporter"}))  >= 0.8 and (day_of_month() == 25)
     for: 1m
     labels:
       severity: event.red.qliksense.capacity.80percent
