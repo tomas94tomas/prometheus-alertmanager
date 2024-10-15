@@ -746,10 +746,6 @@ receivers:
 - name: 'event.red'
   webhook_configs:
   - url: 'http://192.168.231.235:2000/it_alerts_channel'
-    http_config:
-      follow_redirects: true
-      tls_config:
-        insecure_skip_verify: true
     send_resolved: true
   - url: 'http://192.168.231.235:8081/send?phone_no=37064365433'
     send_resolved: true
