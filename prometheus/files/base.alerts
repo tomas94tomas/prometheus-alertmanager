@@ -326,14 +326,15 @@ groups:
     labels:
       severity: event.red.qliksense.capacity.80percent
     annotations:
-     summary: "QlikSense Capacity Usage Alert"
-     description: "The used capacity has reached 80% and it is already past the 25th day of the month."
-     Inpacted_Service: Qlik Sense
-     Trigger: "QlikSense Capacity License used minutes = {{ $value }}"
-     responsable: Justyna Lavrynovic, Domantas Karasa (substitute)
-     timestamp: >
-       time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-     Action: "Check users with 'Analyzer' license. Deallocate few users with oldest used date. Allocate these free licenses for users with biggest capacity minutes."
+      summary: "QlikSense Capacity Usage Alert"
+      description: "The used capacity has reached 80% and it is already past the 25th day of the month."
+      impacted_service: "Qlik Sense"
+      trigger: "QlikSense Capacity License used minutes = {{ $value }}"
+      responsable: "Justyna Lavrynovic, Domantas Karasa (substitute)"
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      action: "Check users with 'Analyzer' license. Deallocate few users with oldest used date. Allocate these free licenses for users with biggest capacity minutes."
+      text: "QlikSense capacity has exceeded 80% on {{ $labels.instance }}. Please check the service status and take action."
 - name: 3. MSSQL
   rules:
   - alert: 3.1 FLTSQL_master_db_activity_yellow
