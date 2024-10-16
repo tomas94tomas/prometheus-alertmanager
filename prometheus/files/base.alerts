@@ -163,7 +163,7 @@ groups:
     expr: probe_http_status_code{instance="https://bi.fltechnics.com", job="QLIKSENSE_HTTPS"} == 0
     for: 10m
     labels:
-      severity: event.orange
+      severity: event.orange.qliksense
     annotations:
       Inpacted_Service: Qlik Sense 
       Trigger: Exporter have status 0 or 200 of QlikSense system {{ $labels.vhost }} HTTP error for 10m
@@ -175,7 +175,7 @@ groups:
     expr: probe_http_status_code{instance="https://bi.fltechnics.com", job="QLIKSENSE_HTTPS"} == 0
     for: 30m
     labels:
-      severity: event.red
+      severity: event.red.qliksense
     annotations:
       Inpacted_Service : Qlik Sense 
       Trigger: Exporter have status 0 or 200 of QlikSense system {{ $labels.vhost }} HTTP error for 30m
@@ -200,7 +200,7 @@ groups:
     expr: qlik_db_state < 1
     for: 30m
     labels:
-      severity: event.orange
+      severity: event.orange.qliksense.db
     annotations:
       Inpacted_Service: Qlik Sense 
       Trigger: QlikSense DB instance is down  VALUE = {{ $value }}
@@ -212,7 +212,7 @@ groups:
     expr: qlik_db_state < 1
     for: 60m
     labels:
-      severity: event.red
+      severity: event.red.qliksense
     annotations:
       Inpacted_Service: Qlik Sense 
       Trigger: QlikSense DB instance is down  VALUE = {{ $value }}
@@ -236,7 +236,7 @@ groups:
     expr: mssql_qlik_analyzer_capacity_lefttime{job="sql_exporter"} <= 200 or mssql_qlik_analyzer_capacity_lefttime{job="sql_exporter"} offset 18m <= 200 or on () mssql_qlik_analyzer_capacity_lefttime{job="sql_exporter"}  <= 200
     for: 60m
     labels:
-      severity: event.orange
+      severity: event.orange.qliksense
     annotations:
       Inpacted_Service: Qlik Sense 
       Trigger: QlikSense Capacity License left minutes = {{ $value }}
@@ -248,7 +248,7 @@ groups:
     expr: mssql_qlik_analyzer_capacity_lefttime{job="sql_exporter"} <= 200 or mssql_qlik_analyzer_capacity_lefttime{job="sql_exporter"} offset 18m <= 200 or on () mssql_qlik_analyzer_capacity_lefttime{job="sql_exporter"}  <= 200
     for: 90m
     labels:
-      severity: event.red
+      severity: event.red.qliksense
     annotations:
       Inpacted_Service: Qlik Sense 
       Trigger: QlikSense Capacity License left minutes = {{ $value }}
@@ -256,35 +256,11 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check users with "Analyzer" license. Deallocate few users with oldest used date. Allocate these free licenses for users with biggest capacity minutes.
-  - alert: 2.4 QlikSense_failed_scheduler_tasks_yellow
-    expr: qlik_sense_task_failed{job="sql_exporter"} > 0
-    for: 30m
-    labels:
-      severity: event.yellow.qliksense
-    annotations:
-      Inpacted_Service: Qlik Sense 
-      Trigger: QlikSense Failed scheduler tasks = {{ $value }} 
-      responsable: Justyna Lavrynovic, Domantas Karasa (substitute)
-      timestamp: >
-        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Check failed scheduler tasks and try to run these tasks. Identify scheduler task report and try load data manually. Try to solve connection problem for data retrieve or inform employee who can do it. 
-  - alert: 2.4 QlikSense_failed_scheduler_tasks_orange
-    expr: qlik_sense_task_failed{job="sql_exporter"} > 0
-    for: 60m
-    labels:
-      severity: event.orange
-    annotations:
-      Inpacted_Service: Qlik Sense 
-      Trigger: QlikSense Failed scheduler tasks = {{ $value }} 
-      responsable: Justyna Lavrynovic, Domantas Karasa (substitute)
-      timestamp: >
-        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Check failed scheduler tasks and try to run these tasks. Identify scheduler task report and try load data manually. Try to solve connection problem for data retrieve or inform employee who can do it. 
   - alert: 2.4 QlikSense_failed_scheduler_tasks_red
     expr: qlik_sense_task_failed{job="sql_exporter"} > 0
-    for: 90m
+    for: 8h
     labels:
-      severity: event.red
+      severity: event.red.qliksense.tasks
     annotations:
       Inpacted_Service: Qlik Sense 
       Trigger: QlikSense Failed scheduler tasks = {{ $value }} 
