@@ -363,7 +363,6 @@ receivers:
   webhook_configs:
   - url: 'http://192.168.231.235:2000/it_alerts_channel'
   - url: 'http://192.168.231.235:8081/send?phone_no=37063484600,37068991215,37064365433'
-    send_resolved: true
   email_configs:
   - to: 'andrius.kubickas@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -390,7 +389,6 @@ receivers:
 - name: 'event.red.qliksense.tasks'
   webhook_configs:
   - url: 'http://192.168.231.235:2000/it_alerts_channel'
-    send_resolved: true
   email_configs:
   - to: 'andrius.kubickas@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -882,7 +880,6 @@ receivers:
 - name: 'event.red.qliksense.capacity'
   webhook_configs:
    - url: 'http://192.168.231.235:8081/send?phone_no=37060191319,37063484600,37068991215'
-     send_resolved: true
   email_configs:
     - to: 't.dzeventlauskas@fltechnics.com, justyna.lavrynovic@fltechnics.com, domantas.karasa@fltechnics.com'
       from: 'grafana@fltechnics.com'
@@ -894,9 +891,7 @@ receivers:
 - name: 'event.red.qliksense.capacity.80percent'
   webhook_configs:
    - url: 'http://192.168.231.235:8081/send?phone_no=37060191319,37063484600,37068991215,37064365433'
-     send_resolved: true
    - url: 'http://192.168.231.235:2000/it_alerts_channel'
-     send_resolved: true
   email_configs:
     - to: 't.dzeventlauskas@fltechnics.com, justyna.lavrynovic@fltechnics.com, domantas.karasa@fltechnics.com, andrius.kubickas@fltechnics.com'
       from: 'grafana@fltechnics.com'
