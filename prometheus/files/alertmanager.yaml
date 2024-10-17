@@ -849,8 +849,6 @@ receivers:
 
 - name: 'event.red'
   webhook_configs:
-  - url: 'http://192.168.231.235:2000/it_alerts_channel'
-    send_resolved: true
   - url: 'http://192.168.231.235:8081/send?phone_no=37064365433'
     send_resolved: true
   email_configs:
