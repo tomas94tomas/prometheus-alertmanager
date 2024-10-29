@@ -155,7 +155,7 @@ groups:
     annotations:
       Inpacted_Service : Qlik Sense 
       Trigger : Exporter have status 0 or 200 of QlikSense system {{ $labels.vhost }} HTTP error for 1m
-      responsable: Tomas Zemblys
+      responsable: Justyna Lavrynovic, Domantas Karasa (substitute)
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check DB availability and Qlik Sense applications services statuses and startup DB or run services.
@@ -163,11 +163,11 @@ groups:
     expr: probe_http_status_code{instance="https://bi.fltechnics.com", job="QLIKSENSE_HTTPS"} == 0
     for: 10m
     labels:
-      severity: event.orange
+      severity: event.orange.qliksense
     annotations:
       Inpacted_Service: Qlik Sense 
       Trigger: Exporter have status 0 or 200 of QlikSense system {{ $labels.vhost }} HTTP error for 10m
-      responsable: Tomas Zemblys
+      responsable: Justyna Lavrynovic, Domantas Karasa (substitute)
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check DB availability and Qlik Sense applications services statuses and startup DB or run services.
@@ -175,11 +175,11 @@ groups:
     expr: probe_http_status_code{instance="https://bi.fltechnics.com", job="QLIKSENSE_HTTPS"} == 0
     for: 30m
     labels:
-      severity: event.red
+      severity: event.red.qliksense
     annotations:
       Inpacted_Service : Qlik Sense 
       Trigger: Exporter have status 0 or 200 of QlikSense system {{ $labels.vhost }} HTTP error for 30m
-      responsable: Tomas Zemblys
+      responsable: Justyna Lavrynovic, Domantas Karasa (substitute)
       summary: The Web UI {{ $labels.vhost }} is DOWN or Prometheus could not scrape.
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
@@ -192,7 +192,7 @@ groups:
     annotations:
       Inpacted_Service: Qlik Sense 
       Trigger: QlikSense DB instance is down  VALUE = {{ $value }}
-      responsable: Tomas Zemblys
+      responsable: Justyna Lavrynovic, Domantas Karasa (substitute)
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check if available DB. If DB is not available then start DB or restore DB. If DB available then check Qlik Sense services is running or not. If flt-qlik-prod (192.168.50.104) VM or flt-qlik-prodr1 (192.168.50.52) VM is down ask ASG to turn on VM.
@@ -200,11 +200,11 @@ groups:
     expr: qlik_db_state < 1
     for: 30m
     labels:
-      severity: event.orange
+      severity: event.orange.qliksense.db
     annotations:
       Inpacted_Service: Qlik Sense 
       Trigger: QlikSense DB instance is down  VALUE = {{ $value }}
-      responsable: Tomas Zemblys
+      responsable: Justyna Lavrynovic, Domantas Karasa (substitute)
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check Qlik Sense application services is running or not. If services is running ask Tomas to check DB availability.
@@ -212,11 +212,11 @@ groups:
     expr: qlik_db_state < 1
     for: 60m
     labels:
-      severity: event.red
+      severity: event.red.qliksense
     annotations:
       Inpacted_Service: Qlik Sense 
       Trigger: QlikSense DB instance is down  VALUE = {{ $value }}
-      responsable: Tomas Zemblys
+      responsable: Justyna Lavrynovic, Domantas Karasa (substitute)
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Tomas and Eligijus to check Qlik Sense application services is running and Qlik Sense DB is available or not. Ask Tomas or Eligijus to send communication for service downtime.
@@ -228,7 +228,7 @@ groups:
     annotations:
       Inpacted_Service: Qlik Sense 
       Trigger: QlikSense Capacity License left minutes = {{ $value }}
-      responsable: Tomas Zemblys
+      responsable: Justyna Lavrynovic, Domantas Karasa (substitute)
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check users with "Analyzer" license. Deallocate few users with oldest used date. Allocate these free licenses for users with biggest capacity minutes.
@@ -236,11 +236,11 @@ groups:
     expr: mssql_qlik_analyzer_capacity_lefttime{job="sql_exporter"} <= 200 or mssql_qlik_analyzer_capacity_lefttime{job="sql_exporter"} offset 18m <= 200 or on () mssql_qlik_analyzer_capacity_lefttime{job="sql_exporter"}  <= 200
     for: 60m
     labels:
-      severity: event.orange
+      severity: event.orange.qliksense
     annotations:
       Inpacted_Service: Qlik Sense 
       Trigger: QlikSense Capacity License left minutes = {{ $value }}
-      responsable: Tomas Zemblys
+      responsable: Justyna Lavrynovic, Domantas Karasa (substitute)
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: 	Check users with "Analyzer" license. Deallocate few users with oldest used date. Allocate these free licenses for users with biggest capacity minutes.
@@ -248,47 +248,23 @@ groups:
     expr: mssql_qlik_analyzer_capacity_lefttime{job="sql_exporter"} <= 200 or mssql_qlik_analyzer_capacity_lefttime{job="sql_exporter"} offset 18m <= 200 or on () mssql_qlik_analyzer_capacity_lefttime{job="sql_exporter"}  <= 200
     for: 90m
     labels:
-      severity: event.red
+      severity: event.red.qliksense
     annotations:
       Inpacted_Service: Qlik Sense 
       Trigger: QlikSense Capacity License left minutes = {{ $value }}
-      responsable: Tomas Zemblys
+      responsable: Justyna Lavrynovic, Domantas Karasa (substitute)
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check users with "Analyzer" license. Deallocate few users with oldest used date. Allocate these free licenses for users with biggest capacity minutes.
-  - alert: 2.4 QlikSense_failed_scheduler_tasks_yellow
-    expr: qlik_sense_task_failed{job="sql_exporter"} > 0
-    for: 30m
-    labels:
-      severity: event.yellow.qliksense
-    annotations:
-      Inpacted_Service: Qlik Sense 
-      Trigger: QlikSense Failed scheduler tasks = {{ $value }} 
-      responsable: Tomas Zemblys
-      timestamp: >
-        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Check failed scheduler tasks and try to run these tasks. Identify scheduler task report and try load data manually. Try to solve connection problem for data retrieve or inform employee who can do it. 
-  - alert: 2.4 QlikSense_failed_scheduler_tasks_orange
-    expr: qlik_sense_task_failed{job="sql_exporter"} > 0
-    for: 60m
-    labels:
-      severity: event.orange
-    annotations:
-      Inpacted_Service: Qlik Sense 
-      Trigger: QlikSense Failed scheduler tasks = {{ $value }} 
-      responsable: Tomas Zemblys
-      timestamp: >
-        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
-      Action: Check failed scheduler tasks and try to run these tasks. Identify scheduler task report and try load data manually. Try to solve connection problem for data retrieve or inform employee who can do it. 
   - alert: 2.4 QlikSense_failed_scheduler_tasks_red
     expr: qlik_sense_task_failed{job="sql_exporter"} > 0
-    for: 90m
+    for: 8h
     labels:
-      severity: event.red
+      severity: event.red.qliksense.tasks
     annotations:
       Inpacted_Service: Qlik Sense 
       Trigger: QlikSense Failed scheduler tasks = {{ $value }} 
-      responsable: Tomas Zemblys
+      responsable: Justyna Lavrynovic, Domantas Karasa (substitute)
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Rasita or Tomas to check failed scheduler tasks.  
@@ -302,12 +278,12 @@ groups:
      description: "The used capacity has reached 50% and it is already past the middle of the month."
      Inpacted_Service: Qlik Sense
      Trigger: "QlikSense Capacity License used minutes = {{ $value }}"
-     responsable: Justyna Lavrynovic
+     responsable: Justyna Lavrynovic, Domantas Karasa (substitute)
      timestamp: >
        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
      Action: "Check users with 'Analyzer' license. Deallocate few users with oldest used date. Allocate these free licenses for users with biggest capacity minutes."
   - alert: 2.5 QlikSense_Capacity_65_Percent_19th_Day
-    expr: (sum(mssql_qlik_analyzer_capacity_usedtime{job="sql_exporter"}) / sum(mssql_qlik_analyzer_capacity_totaltime    {job="sql_exporter"})) >= 0.65 and (day_of_month() == 19)
+    expr: (sum(mssql_qlik_analyzer_capacity_usedtime{job="sql_exporter"}) / sum(mssql_qlik_analyzer_capacity_totaltime {job="sql_exporter"})) >= 0.65 and (day_of_month() == 19)
     for: 1m
     labels:
       severity: event.red.qliksense.capacity
@@ -316,12 +292,12 @@ groups:
       description: "The used capacity has reached 65% and it is already past the 19th day of the month."
       Inpacted_Service: Qlik Sense
       Trigger: "QlikSense Capacity License used minutes = {{ $value }}"
-      responsable: Justyna Lavrynovic
+      responsable: Justyna Lavrynovic, Domantas Karasa (substitute)
       timestamp: >
        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: "Check users with 'Analyzer' license. Deallocate few users with oldest used date. Allocate these free licenses for users with biggest capacity minutes."
   - alert: 2.5 QlikSense_Capacity_80_Percent_25th_Day
-    expr: (sum(mssql_qlik_analyzer_capacity_usedtime{job="sql_exporter"}) / sum(mssql_qlik_analyzer_capacity_totaltime{job="sql_exporter"}))  >= 0.8 and (day_of_month() == 25)
+    expr: (sum(mssql_qlik_analyzer_capacity_usedtime{job="sql_exporter"}) / sum(mssql_qlik_analyzer_capacity_totaltime{job="sql_exporter"})) >= 0.8 and (day_of_month() == 25)
     for: 1m
     labels:
       severity: event.red.qliksense.capacity.80percent
