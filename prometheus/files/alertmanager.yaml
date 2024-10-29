@@ -160,6 +160,12 @@ route:
       severity: event.yellow.test
     receiver: event.yellow.test
   - match:
+      severity: event.yellow.eams
+    receiver: event.yellow.eams
+  - match:
+      severity: event.yellow.fltsql
+    receiver: event.yellow.fltsql
+  - match:
       severity: event.orange.qliksense
     receiver: event.orange.qliksense
   - match:
@@ -169,14 +175,14 @@ route:
       severity: event.orange.test
     receiver: event.orange.test
   - match:
-      severity: event.red.test
-    receiver: event.red.test
-  - match:
-      severity: event.yellow.eams
-    receiver: event.yellow.eams
-  - match:
       severity: event.orange.eams
     receiver: event.orange.eams
+  - match:
+      severity: event.orange.fltsql
+    receiver: event.orange.fltsql
+  - match:
+      severity: event.red.test
+    receiver: event.red.test
   - match:
       severity: event.red.eams
     receiver: event.red.eams
@@ -186,6 +192,9 @@ route:
   - match:
       severity: event.red.qliksense.tasks
     receiver: event.red.qliksense.tasks
+  - match:
+      severity: event.red.fltsql
+    receiver: event.red.fltsql
   - match:
       severity: event.test_sms
     receiver: event.test_sms
