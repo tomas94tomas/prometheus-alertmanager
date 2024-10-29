@@ -906,3 +906,54 @@ receivers:
         Subject: '{{ template "email-red.subject" . }}'
       html: '{{ template "email-red.html" . }}'
       require_tls: false
+
+- name: 'event.yellow.fltsql'
+  email_configs:
+  - to: 'reports.noreply@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.orange.fltsql'
+  webhook_configs:
+  - url: 'http://192.168.231.235:8081/send?phone_no=37064365433'
+    send_resolved: true
+  email_configs:
+  - to: 'andrius.kubickas@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-orange.subject" . }}'
+    html: '{{ template "email-orange.html" . }}'
+    require_tls: false
+    send_resolved: true
+  - to: 'reports.noreply@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
+- name: 'event.red.fltsql'
+  webhook_configs:
+  - url: 'http://192.168.231.235:8081/send?phone_no=37064365433'
+    send_resolved: true
+  email_configs:
+  - to: 'andrius.kubickas@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-red.subject" . }}'
+    html: '{{ template "email-red.html" . }}'
+    require_tls: false
+    send_resolved: true
+  - to: 'reports.noreply@fltechnics.com'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-yellow.subject" . }}'
+    html: '{{ template "email-yellow.html" . }}'
+    require_tls: false
+    send_resolved: true
+
