@@ -316,7 +316,7 @@ groups:
     expr: mssql_fltsql_db_service_state == 0 or absent(mssql_fltsql_db_service_state)
     for: 10m
     labels:
-      severity: event.yellow.mssql
+      severity: event.yellow.fltsql
     annotations:
       Inpacted_Service : MSSQL
       Trigger : MSSQL db activity > 10 min
@@ -328,7 +328,7 @@ groups:
     expr: mssql_fltsql_db_service_state == 0 or absent(mssql_fltsql_db_service_state)
     for: 15m
     labels:
-      severity: event.orange
+      severity: event.orange.fltsql
     annotations:
       Inpacted_Service : MSSQL
       Trigger : MSSQL db activity > 10 min
@@ -340,7 +340,7 @@ groups:
     expr: mssql_fltsql_db_service_state == 0 or absent(mssql_fltsql_db_service_state)
     for: 20m
     labels:
-      severity: event.red
+      severity: event.red.fltsql
     annotations:
       Inpacted_Service : MSSQL
       Trigger : MSSQL db activity > 10 min
