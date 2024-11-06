@@ -87,4 +87,3 @@ flt-mysql-live ansible_host=192.168.231.28
 
 [Sensus-hosts]
 flt-sensus2-live-app ansible_host=192.168.231.31
-flt-sensus-live ansible_host=192.168.231.140
