@@ -487,6 +487,13 @@ scrape_configs:
         labels:
           name: 'oracle_db_exporter_sensus_v1_live'
 
+  - job_name: 'linux-server-exporter-sensus'
+    metrics_path: "/metrics"
+    static_configs:
+      - targets: ['192.168.231.235:9101']
+        labels:
+          name: 'linux-server-exporter-sensus'
+
   - job_name: 'oracle_db_exporter_sensus_v2_live'
     metrics_path: "/metrics"
     static_configs:
