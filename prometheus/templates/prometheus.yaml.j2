@@ -166,7 +166,7 @@ scrape_configs:
     static_configs:
 
 {% for host in groups['Sensus-hosts'] %}
-      - targets: ['{{ hostvars[host]['ansible_host'] | default (host) }}:9182']
+      - targets: ['{{ hostvars[host]['ansible_host'] | default (host) }}:9100']
         labels:
           name: '{{ hostvars[host]['inventory_hostname'] }}'
 {% endfor %}
@@ -486,6 +486,27 @@ scrape_configs:
       - targets: ['192.168.231.235:9177']
         labels:
           name: 'oracle_db_exporter_sensus_v1_live'
+
+  - job_name: 'linux-server-exporter-sensus'
+    metrics_path: "/metrics"
+    static_configs:
+      - targets: ['192.168.231.235:9101']
+        labels:
+          name: 'linux-server-exporter-sensus'
+
+  - job_name: 'linux_server_exporter_sensus2_live_db'
+    metrics_path: "/metrics"
+    static_configs:
+      - targets: ['192.168.231.235:9102']
+        labels:
+          name: 'linux_server_exporter_sensus2_live_db'
+          
+  - job_name: 'linux_server_exporter_sensus_oracle_live'
+    metrics_path: "/metrics"
+    static_configs:
+      - targets: ['192.168.231.235:9103']
+        labels:
+          name: 'linux_server_exporter_sensus_oracle_live'
 
   - job_name: 'oracle_db_exporter_sensus_v2_live'
     metrics_path: "/metrics"
