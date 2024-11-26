@@ -62,8 +62,8 @@ FLT-FLTapp
 FLT-FLTSql
 
 [RND]
-FLT-BI2 ansible_host=192.168.231.177
-FLT-Flint ansible_host=192.168.231.191
+#FLT-BI2 ansible_host=192.168.231.177
+#FLT-Flint ansible_host=192.168.231.191
 FLT-MM-BS ansible_host=192.168.50.54
 
 [linux_ext]
