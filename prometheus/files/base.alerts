@@ -2604,6 +2604,150 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Ask Karolis Dimitrevičius about Sensus availability, communication
+  - alert: 26.3 Sensus_v1_db_activity_yellow
+    expr: oracledb_up {job="oracle_db_exporter_sensus_v1_live"} == 0 or absent(oracledb_up {job="oracle_db_exporter_sensus_v1_live"})
+    for: 10m
+    labels:
+      severity: event.yellow.odb
+    annotations:
+      Inpacted_Service : Sensus_v1
+      Trigger : db activity > 10 min
+      responsable: Domantas Karasa
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available Oracle DB CCTL instance. If DB is not available then start DB or restore DB. If DB available then check Oracle DB CCTL instance services is running or not on ODB server. If Sensus_v1 (192.168.231.140) VM is down ask Sensus to turn on VM.
+  - alert: 26.3 Sensus_v1_db_activity_orange
+    expr: oracledb_up {job="oracle_db_exporter_sensus_v1_live"} == 0 or absent(oracledb_up {job="oracle_db_exporter_sensus_v1_live"})
+    for: 15m
+    labels:
+      severity: event.orange.odb
+    annotations:
+      Inpacted_Service : Sensus_v1
+      Trigger : db activity > 15 min
+      responsable: Domantas Karasa
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available Oracle DB CCTL instance. If DB is not available then start DB or restore DB. If DB available then check Oracle DB CCTL instance services is running or not on ODB server. If Sensus_v1 (192.168.231.140) VM is down ask Sensus to turn on VM.
+  - alert: 26.3 Sensus_v1_db_activity_red
+    expr: oracledb_up {job="oracle_db_exporter_sensus_v1_live"} == 0 or absent(oracledb_up {job="oracle_db_exporter_sensus_v1_live"})
+    for: 20m
+    labels:
+      severity: event.red.odb.prod
+    annotations:
+      Inpacted_Service : Sensus_v1
+      Trigger : db activity > 20 min
+      responsable: Domantas Karasa
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Domantas to check Sensus_v1 (192.168.231.140) VM Oracle DB instance is available or not. Ask Domantas send communication for service downtime.
+  - alert: 26.4 Sensus_v2_db_activity_yellow
+    expr: oracledb_up {job="oracle_db_exporter_sensus_v2_live"} == 0 or absent(oracledb_up {job="oracle_db_exporter_sensus_v2_live"})
+    for: 10m
+    labels:
+      severity: event.yellow.odb
+    annotations:
+      Inpacted_Service : Sensus_v2
+      Trigger : db activity > 10 min
+      responsable: Domantas Karasa
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available Oracle DB CCTL instance. If DB is not available then start DB or restore DB. If DB available then check Oracle DB CCTL instance services is running or not on ODB server. If Sensus_v2 (192.168.231.33) VM is down ask Sensus to turn on VM.
+  - alert: 26.4 Sensus_v2_db_activity_orange
+    expr: oracledb_up {job="oracle_db_exporter_sensus_v2_live"} == 0 or absent(oracledb_up {job="oracle_db_exporter_sensus_v2_live"})
+    for: 15m
+    labels:
+      severity: event.orange.odb
+    annotations:
+      Inpacted_Service : Sensus_v2
+      Trigger : db activity > 15 min
+      responsable: Domantas Karasa
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check if available Oracle DB CCTL instance. If DB is not available then start DB or restore DB. If DB available then check Oracle DB CCTL instance services is running or not on ODB server. If Sensus_v2 (192.168.231.33) VM is down ask Sensus to turn on VM.
+  - alert: 26.4 Sensus_v2_db_activity_red
+    expr: oracledb_up {job="oracle_db_exporter_sensus_v2_live"} == 0 or absent(oracledb_up {job="oracle_db_exporter_sensus_v2_live"})
+    for: 20m
+    labels:
+      severity: event.red.odb.prod
+    annotations:
+      Inpacted_Service : Sensus_v2
+      Trigger : db activity > 20 min
+      responsable: Domantas Karasa
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Ask Domantas to check Sensus_v2 (192.168.231.33) VM Oracle DB instance is available or not. Ask Domantas send communication for service downtime.
+  - alert: 26.5 Sensus_v1_blocked_sessions_yellow
+    expr: oracledb_resource_current_utilization{job="oracle_db_exporter_sensus_v1_live", resource_name="temporary_table_locks"} > 0
+    for: 10m
+    labels:
+      severity: event.yellow.odb
+    annotations:
+      Inpacted_Service : Sensus_v1
+      Trigger : temporary_table_locks > 0 for 10 min
+      responsable: Domantas Karasa
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check blocked sessions of Sensus_v1 (192.168.231.140) server instance. Kill session of the blocker.
+  - alert: 26.5 Sensus_v1_blocked_sessions_orange
+    expr: oracledb_resource_current_utilization{job="oracle_db_exporter_sensus_v1_live", resource_name="temporary_table_locks"} > 1
+    for: 10m
+    labels:
+      severity: event.orange.odb
+    annotations:
+      Inpacted_Service : Sensus_v1
+      Trigger : temporary_table_locks > 1 for 10 min
+      responsable: Domantas Karasa
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check blocked sessions of Sensus_v1 (192.168.231.140) server instance. Kill session of the blocker.
+  - alert: 26.5 Sensus_v1_blocked_sessions_red
+    expr: oracledb_resource_current_utilization{job="oracle_db_exporter_sensus_v1_live", resource_name="temporary_table_locks"} > 2
+    for: 10m
+    labels:
+      severity: event.red.odb.prod
+    annotations:
+      Inpacted_Service : Sensus_v1
+      Trigger : temporary_table_locks > 2 for 10 min
+      responsable: Domantas Karasa
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check blocked sessions of Sensus_v1 (192.168.231.140) server instance. Kill session of the blocker.
+  - alert: 26.6 Sensus_v2_blocked_sessions_yellow
+    expr: oracledb_resource_current_utilization{job="oracle_db_exporter_sensus_v2_live", resource_name="temporary_table_locks"} > 0
+    for: 10m
+    labels:
+      severity: event.yellow.odb
+    annotations:
+      Inpacted_Service : Sensus_v2
+      Trigger : temporary_table_locks > 0 for 10 min
+      responsable: Domantas Karasa
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check blocked sessions of Sensus_v2 (192.168.231.33) server instance. Kill session of the blocker.
+  - alert: 26.6 Sensus_v2_blocked_sessions_orange
+    expr: oracledb_resource_current_utilization{job="oracle_db_exporter_sensus_v2_live", resource_name="temporary_table_locks"} > 1
+    for: 10m
+    labels:
+      severity: event.orange.odb
+    annotations:
+      Inpacted_Service : Sensus_v2
+      Trigger : temporary_table_locks > 1 for 10 min
+      responsable: Domantas Karasa
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check blocked sessions of Sensus_v2 (192.168.231.33) server instance. Kill session of the blocker.
+  - alert: 26.6 Sensus_v2_blocked_sessions_red
+    expr: oracledb_resource_current_utilization{job="oracle_db_exporter_sensus_v2_live", resource_name="temporary_table_locks"} > 2
+    for: 10m
+    labels:
+      severity: event.red.odb.prod
+    annotations:
+      Inpacted_Service : Sensus_v2
+      Trigger : temporary_table_locks > 2 for 10 min
+      responsable: Domantas Karasa
+      timestamp: >
+        time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
+      Action: Check blocked sessions of Sensus_v2 (192.168.231.33) server instance. Kill session of the blocker.
 - name: 27. OPEN-FLT
   rules:
   - alert: 27.1 open_http_respose_yellow

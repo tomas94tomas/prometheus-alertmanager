@@ -226,21 +226,29 @@ inhibit_rules:
 
 receivers:
 - name: 'team-default'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'it.monitoring@fltechnics.com'
     send_resolved: true
 
 - name: 'team-warning'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'it.monitoring@fltechnics.com'
     send_resolved: true
 
 - name: 'team-jira'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'konstantin.gagac@fltechnics.com'
     send_resolved: true
 
 - name: 'team-critical'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'helpdesk@fltechnics.com'
     send_resolved: true
@@ -248,6 +256,8 @@ receivers:
     send_resolved: true
 
 - name: 'team.yellow'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'it.monitoring@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -258,6 +268,8 @@ receivers:
     send_resolved: true
 
 - name: 'team.orange'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'it.monitoring@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -268,6 +280,8 @@ receivers:
     send_resolved: true
 
 - name: 'team.red'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'it.monitoring@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -279,6 +293,7 @@ receivers:
 
 - name: 'event.red.odb.prod'
   webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   - url: 'http://192.168.231.235:8081/send?phone_no=37064365433,37065817826,37063613776,37068976557,37068539071,37065374215'
     send_resolved: true
   email_configs:
@@ -292,6 +307,7 @@ receivers:
 
 - name: 'event.red.amos.prod'
   webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   - url: 'http://192.168.231.235:8081/send?phone_no=37064365433,37065817826'
     send_resolved: true
   email_configs:
@@ -304,6 +320,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.yellow.solarwinds'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'tomas.zemblys@fltechnics.com'
     headers:
@@ -313,6 +331,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.yellow.qliksense'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'justyna.lavrynovic@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -351,6 +371,7 @@ receivers:
 
 - name: 'event.orange.qliksense.db'
   webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   - url: 'http://192.168.231.235:8081/send?phone_no=37063484600,37068991215'
   email_configs:
   - to: 'justyna.lavrynovic@fltechnics.com'
@@ -422,6 +443,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.yellow.mssql'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'tomas.zemblys@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -432,6 +455,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.yellow.gitlab'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'dominykas.sivickas@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -442,6 +467,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.yellow.teampass'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'dominykas.sivickas@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -452,6 +479,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.yellow.files'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'konstantinas.starkutis@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -462,6 +491,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.yellow.ramco'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'karolis.dimitrevicius@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -472,6 +503,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.yellow.nomad'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'dominykas.sivickas@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -482,6 +515,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.yellow.consul'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'dominykas.sivickas@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -492,6 +527,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.yellow.vault'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'dominykas.sivickas@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -502,6 +539,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.yellow.traefik'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'dominykas.sivickas@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -512,6 +551,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.yellow.nexus'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'dominykas.sivickas@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -522,6 +563,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.yellow.kb'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'dominykas.sivickas@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -532,6 +575,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.yellow.jira'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'konstantin.gagac@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -542,6 +587,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.yellow.bi2'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'vadimas.klepko@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -552,6 +599,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.yellow.bi2_DB'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'vadimas.klepko@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -562,6 +611,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.yellow.mssql.bi2'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'vadimas.klepko@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -579,6 +630,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.yellow.flint'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'vadimas.klepko@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -589,6 +642,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.yellow.parcel'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'vadimas.klepko@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -599,6 +654,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.yellow.contracts-playbook'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'vadimas.klepko@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -609,6 +666,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.yellow.safety'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'vadimas.klepko@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -619,6 +678,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.yellow.smailer'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'vadimas.klepko@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -629,6 +690,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.yellow.bi2v2'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'vadimas.klepko@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -639,6 +702,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.yellow.sensus'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'karolis.dimitrevicius@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -649,6 +714,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.yellow.open'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'karolis.dimitrevicius@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -659,6 +726,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.yellow.backups'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'dominykas.sivickas@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -669,6 +738,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.yellow.carreservation'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'titas.pirgus@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -679,6 +750,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.yellow.boeingfleet'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'leonas.vedeikis@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -689,6 +762,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.yellow.magicinfo'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'konstantinas.starkutis@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -699,6 +774,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.yellow.m365'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'dominykas.sivickas@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -709,6 +786,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.yellow.airbus'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'leonas.vedeikis@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -719,6 +798,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.yellow.ad'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'arnas.terekas@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -729,6 +810,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.yellow.doclogix'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'it.monitoring@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -739,6 +822,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.yellow.elearning'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'it.monitoring@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -749,6 +834,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.yellow.test'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'dominykas.sivickas@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -759,6 +846,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.orange.test'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:  
   - to: 'dominykas.sivickas@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -769,6 +858,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.red.test'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:  
   - to: 'dominykas.sivickas@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -779,6 +870,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.yellow.eams'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'karolis.kondra@fltechnics.com'
     from: 'alerts@fltechnics.com'
@@ -789,6 +882,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.orange.eams'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:  
   - to: 'valdemar.seibak@fltechnics.com, karolis.kondra@fltechnics.com'
     from: 'alerts@fltechnics.com'
@@ -800,6 +895,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.red.eams'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:  
   - to: 'andrej.volodko@fltechnics.com, valdemar.seibak@fltechnics.com, karolis.kondra@fltechnics.com'
     from: 'alerts@fltechnics.com'
@@ -811,6 +908,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.yellow.centric'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'andrius.kubickas@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -822,6 +921,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.orange.centric'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'andrius.kubickas@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -833,6 +934,8 @@ receivers:
     send_resolved: true
 
 - name: 'event.red.centric'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'andrius.kubickas@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -845,6 +948,7 @@ receivers:
 
 - name: 'event.orange'
   webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   - url: 'http://192.168.231.235:8081/send?phone_no=37064365433'
     send_resolved: true
   email_configs:
@@ -858,6 +962,7 @@ receivers:
 
 - name: 'event.red'
   webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   - url: 'http://192.168.231.235:8081/send?phone_no=37064365433'
     send_resolved: true
   email_configs:
@@ -871,10 +976,13 @@ receivers:
 
 - name: 'event.test_sms'
   webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   - url: 'http://192.168.231.235:8081/send?phone_no=37066988311'
     send_resolved: true
 
 - name: 'event.test_email'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 't.dzeventlauskas@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -886,7 +994,8 @@ receivers:
 
 - name: 'event.red.qliksense.capacity'
   webhook_configs:
-   - url: 'http://192.168.231.235:8081/send?phone_no=37060191319,37063484600,37068991215'
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
+  - url: 'http://192.168.231.235:8081/send?phone_no=37060191319,37063484600,37068991215'
   email_configs:
     - to: 't.dzeventlauskas@fltechnics.com, justyna.lavrynovic@fltechnics.com, domantas.karasa@fltechnics.com'
       from: 'grafana@fltechnics.com'
@@ -908,6 +1017,8 @@ receivers:
       require_tls: false
 
 - name: 'event.yellow.fltsql'
+  webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   email_configs:
   - to: 'reports.noreply@fltechnics.com'
     from: 'grafana@fltechnics.com'
@@ -919,6 +1030,7 @@ receivers:
 
 - name: 'event.orange.fltsql'
   webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   - url: 'http://192.168.231.235:8081/send?phone_no=37064365433'
     send_resolved: true
   email_configs:
@@ -939,6 +1051,7 @@ receivers:
 
 - name: 'event.red.fltsql'
   webhook_configs:
+  - url: 'http://192.168.231.235:2000/it_alerts_channel'
   - url: 'http://192.168.231.235:8081/send?phone_no=37064365433'
     send_resolved: true
   email_configs:
