@@ -407,6 +407,14 @@ scrape_configs:
     - regex: 'id'
       action: labeldrop
 
+  - job_name: 'WIAMS-TechDocs_metrics'
+    metrics_path: "/metrics"
+    static_configs:
+    - targets: ['192.168.44.84:9182']
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
+
   - job_name: 'ODBdev_metrics'
     metrics_path: "/metrics"
     static_configs:
