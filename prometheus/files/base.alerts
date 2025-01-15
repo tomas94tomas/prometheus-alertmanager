@@ -3274,6 +3274,7 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check server Disk Uasge
+      
 - name: 40. WIAMS
   rules:
   - alert: 40.1 WIAMS_high_CPU_usage
@@ -3289,7 +3290,6 @@ groups:
         Current value: {{ $value }}%.
       Action: "Check the situation of CPU processes"
 	  
-  rules:
   - alert: 40.2 WIAMS_high_RAM_usage
     expr: (1 - windows_os_virtual_memory_free_bytes{job="WIAMS-TechDocs_metrics"} / windows_os_virtual_memory_bytes{job="WIAMS-TechDocs_metrics"}) * 100 > 90
     for: 5m
@@ -3303,7 +3303,6 @@ groups:
         Current value: {{ $value }}%.
       Action: "Check the situation of RAM processes"
 	  
-  rules:
   - alert: 40.3 WIAMS_C_Volume_capacity_reached
     expr: (1 - windows_logical_disk_free_bytes{job="WIAMS-TechDocs_metrics", volume="C:"} / windows_logical_disk_size_bytes{job="WIAMS-TechDocs_metrics", volume="C:"}) * 100 > 95
     for: 5m
@@ -3317,7 +3316,6 @@ groups:
         Current value: {{ $value }}%.
       Action: "Check the situation of Volume C partition"
 	  
-  rules:
   - alert: 40.4 WIAMS_D_Volume_capacity_reached
     expr: (1 - windows_logical_disk_free_bytes{job="WIAMS-TechDocs_metrics", volume="D:"} / windows_logical_disk_size_bytes{job="WIAMS-TechDocs_metrics", volume="D:"}) * 100 > 95
     for: 5m
