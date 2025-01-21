@@ -210,6 +210,15 @@ route:
   - match:
       alertname: "2.5 QlikSense_Capacity_80_Percent_25th_Day"
     receiver: event.red.qliksense.capacity.80percent  
+  - match:
+      alertname: event.red.wiams.cpu
+    receiver: event.red.wiams.cpu 
+  - match:
+      alertname: event.red.wiams.ram
+    receiver: event.red.wiams.ram
+  - match:
+      alertname: event.red.wiams.hard
+    receiver: event.red.wiams.hard  
 
 
 # Inhibition rules allow to mute a set of alerts given that another alert is
@@ -1070,3 +1079,29 @@ receivers:
     require_tls: false
     send_resolved: true
 
+- name: 'event.red.wiams.cpu'
+  email_configs:
+  - to: 'ithelp@wrightinternational.ca'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-red.subject" . }}'
+    html: '{{ template "email-red.html" . }}'
+    require_tls: false
+
+- name: 'event.red.wiams.ram'
+  email_configs:
+  - to: 'ithelp@wrightinternational.ca'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-red.subject" . }}'
+    html: '{{ template "email-red.html" . }}'
+    require_tls: false
+
+- name: 'event.red.wiams.hard'
+  email_configs:
+  - to: 'ithelp@wrightinternational.ca'
+    from: 'grafana@fltechnics.com'
+    headers:
+      Subject: '{{ template "email-red.subject" . }}'
+    html: '{{ template "email-red.html" . }}'
+    require_tls: false

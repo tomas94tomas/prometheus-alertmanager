@@ -105,6 +105,11 @@ scrape_configs:
     - regex: 'id'
       action: labeldrop
 
+  - job_name: "Nomad Dev metrics"
+    static_configs:
+      - targets:
+        - "192.168.231.235:9107" 
+
   - job_name: 'IT Unit Support'
     static_configs:
 
@@ -402,6 +407,14 @@ scrape_configs:
     - regex: 'id'
       action: labeldrop
 
+  - job_name: 'WIAMS-TechDocs_metrics'
+    metrics_path: "/metrics"
+    static_configs:
+    - targets: ['192.168.44.84:9182']
+    metric_relabel_configs:
+    - regex: 'id'
+      action: labeldrop
+
   - job_name: 'ODBdev_metrics'
     metrics_path: "/metrics"
     static_configs:
@@ -411,22 +424,6 @@ scrape_configs:
       action: labeldrop
 
   - job_name: 'ODBuat_metrics'
-    metrics_path: "/metrics"
-    static_configs:
-    - targets: ['192.168.208.126:9182']
-    metric_relabel_configs:
-    - regex: 'id'
-      action: labeldrop
-    
-  - job_name: 'ODB12_dev_metrics'
-    metrics_path: "/metrics"
-    static_configs:
-    - targets: ['192.168.151.126:9182']
-    metric_relabel_configs:
-    - regex: 'id'
-      action: labeldrop
-
-  - job_name: 'ODB12_uat_metrics'
     metrics_path: "/metrics"
     static_configs:
     - targets: ['192.168.208.126:9182']
@@ -504,7 +501,7 @@ scrape_configs:
   - job_name: 'linux_server_exporter_sensus_oracle_live'
     metrics_path: "/metrics"
     static_configs:
-      - targets: ['192.168.231.235:9103']
+      - targets: ['192.168.50.184:9100']
         labels:
           name: 'linux_server_exporter_sensus_oracle_live'
 

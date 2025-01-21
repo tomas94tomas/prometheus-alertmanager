@@ -3274,6 +3274,61 @@ groups:
       timestamp: >
         time: {{ with query "time()" }}{{ . | first | value | humanizeTimestamp }}{{ end }}
       Action: Check server Disk Uasge
+      
+- name: 40. WIAMS
+  rules:
+    - alert: 40.1 WIAMS_high_CPU_usage
+      expr: 100 * (1 - sum(rate(windows_cpu_time_total{job="WIAMS-TechDocs_metrics", mode="idle"}[5m])) / sum(rate(windows_cpu_time_total{job="WIAMS-TechDocs_metrics"}[5m]))) > 90
+      for: 5m
+      labels:
+        severity: event.red.wiams.cpu
+      annotations:
+        responsible: Titas Pirugis
+        summary: "High CPU usage detected on {{ $labels.instance }}"
+        description: |
+          CPU utilization is above 90% for more than 5 minutes on instance {{ $labels.instance }}.
+          Current value: {{ $value }}%.
+        action: "Check the situation of CPU processes"
+      
+    - alert: 40.2 WIAMS_high_RAM_usage
+      expr: (1 - windows_os_virtual_memory_free_bytes{job="WIAMS-TechDocs_metrics"} / windows_os_virtual_memory_bytes{job="WIAMS-TechDocs_metrics"}) * 100 > 90
+      for: 5m
+      labels:
+        severity: event.red.wiams.ram
+      annotations:
+        responsible: Titas Pirugis
+        summary: "High RAM usage detected on {{ $labels.instance }}"
+        description: |
+          RAM utilization is above 90% for more than 5 minutes on instance {{ $labels.instance }}.
+          Current value: {{ $value }}%.
+        action: "Check the situation of RAM processes"
+      
+    - alert: 40.3 WIAMS_C_Volume_capacity_reached
+      expr: (1 - windows_logical_disk_free_bytes{job="WIAMS-TechDocs_metrics", volume="C:"} / windows_logical_disk_size_bytes{job="WIAMS-TechDocs_metrics", volume="C:"}) * 100 > 95
+      for: 5m
+      labels:
+        severity: event.red.wiams.hard
+      annotations:
+        responsible: Titas Pirugis
+        summary: "High hard disk usage detected on {{ $labels.instance }}"
+        description: |
+          C Volume utilization is above 90% for more than 5 minutes on instance {{ $labels.instance }}.
+          Current value: {{ $value }}%.
+        action: "Check the situation of Volume C partition"
+      
+    - alert: 40.4 WIAMS_D_Volume_capacity_reached
+      expr: (1 - windows_logical_disk_free_bytes{job="WIAMS-TechDocs_metrics", volume="D:"} / windows_logical_disk_size_bytes{job="WIAMS-TechDocs_metrics", volume="D:"}) * 100 > 95
+      for: 5m
+      labels:
+        severity: event.red.wiams.hard
+      annotations:
+        responsible: Titas Pirugis
+        summary: "High hard disk usage detected on {{ $labels.instance }}"
+        description: |
+          D Volume utilization is above 90% for more than 5 minutes on instance {{ $labels.instance }}.
+          Current value: {{ $value }}%.
+        action: "Check the situation of Volume D partition"
+      
 - name: Linux Server Events
   rules:
   - record: instance:node_cpu:rate:sum
