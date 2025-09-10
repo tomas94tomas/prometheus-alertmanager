@@ -1,0 +1,111 @@
+image: $NEXUS_REGISTRY/devops:latest
+stages:
+  - ansible-lint_syntax
+  - deploy
+  - test_alerts
+
+default:
+  tags:
+    - RND-INFRA
+
+ansible-lint:
+  stage: ansible-lint_syntax
+  script:
+    - pip install ansible-lint
+    - ansible-galaxy collection install community.docker
+    - ansible-lint *.yml
+
+ansible-syntax:
+  stage: ansible-lint_syntax
+  script:
+    - ansible-playbook --inventory hosts --syntax-check *.yml
+
+deploy:
+  stage: deploy
+  only:
+    - /^version.*$/
+  services:
+    - docker:dind
+  before_script:
+    - echo "$SSH_PRIVATE_KEY" > ssh_key
+    - chmod 400 ssh_key
+    - eval $(ssh-agent -s)
+    - ssh-add ssh_key
+    - rm ssh_key
+  script:
+    - ansible-playbook -i hosts prometheus.yml -u root --extra-vars "alertmanager_web_password=$alertmanager_web_password prometheus_web_password=$prometheus_web_password" -e "alertmanager_web_password=$alertmanager_web_password prometheus_web_password=$prometheus_web_password rnd_consul_dev_token=$rnd_consul_dev_token rnd_consul_live_token=$rnd_consul_live_token rnd_consul_uat_token=$rnd_consul_uat_token rnd_vault_dev_token=$rnd_vault_dev_token rnd_vault_live_token=$rnd_vault_live_token gitlab_token=$gitlab_token prometheus_basic_auth=$prometheus_basic_auth alertmanager_basic_auth=$alertmanager_basic_auth"
+
+trigger_test_email_alert:
+  stage: test_alerts
+  when: manual
+  allow_failure: true
+  variables:
+    ALERTMANAGER_URL: "https://alertmanager.fltechnics.com"
+  before_script:
+    - apt update && apt install --no-install-recommends -y curl
+  script:
+    - >
+      curl -w '\n' -i
+      --user "admin:$alertmanager_web_password"
+      -X POST
+      --header 'Content-Type: application/json'
+      --data '[{
+      "labels": {
+      "alertname": "QlikSense_Capacity_Test_Alert",
+      "severity": "event.red.qliksense.capacity"
+      },
+      "annotations": {
+          "summary": "Test QlikSense Capacity Alert",
+          "description": "This is a test alert for QlikSense Capacity usage.",
+          "Trigger": "Test capacity alert",
+          "responsable": "Justyna Lavrynovic"
+        }
+      }]' $ALERTMANAGER_URL/api/v2/alerts
+
+trigger_test_sms_alert:
+  stage: test_alerts
+  when: manual
+  allow_failure: true
+  variables:
+    ALERTMANAGER_URL: "https://alertmanager.fltechnics.com"
+  before_script:
+    - apt update && apt install --no-install-recommends -y curl
+  script:
+    - >
+      curl -w '\n' -i
+      --user "admin:$alertmanager_web_password"
+      -X POST
+      --header 'Content-Type: application/json'
+      --data '[{
+      "labels": {
+      "alertname": "test_sms",
+      "severity": "event.test_sms"
+      }
+      }]' $ALERTMANAGER_URL/api/v2/alerts
+
+trigger_test_teams_alert:
+  stage: test_alerts
+  when: manual
+  allow_failure: true
+  variables:
+    ALERTMANAGER_URL: "https://alertmanager.fltechnics.com"
+  before_script:
+    - apt update && apt install --no-install-recommends -y curl
+  script:
+    - >
+      curl -w '\n' -i
+      --user "admin:$alertmanager_web_password"
+      -X POST
+      --header 'Content-Type: application/json'
+      --data '[{
+      "labels": {
+      "alertname": "QlikSense_Capacity_Teams_Test_Alert",
+      "severity": "event.red.qliksense.capacity.80percent"
+      },
+      "annotations": {
+          "summary": "Test QlikSense Capacity Teams Alert",
+          "description": "This is a test alert for QlikSense Capacity usage for Teams.",
+          "Trigger": "Test capacity alert for Teams",
+          "responsable": "Justyna Lavrynovic"
+        }
+      }]' $ALERTMANAGER_URL/api/v2/alerts

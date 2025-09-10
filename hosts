@@ -1,0 +1,90 @@
+[DevOps_Infrastructure]
+FLT-GitLab ansible_host=192.168.231.136 ansible_port=2222
+FLT-Nexus ansible_host=192.168.231.180 ansible_port=2222
+FLT-DevOps-Proxy ansible_host=192.168.231.183 ansible_port=2222
+FLT-CICD-RND ansible_host=192.168.231.55
+FLT-Prometheus ansible_host=192.168.231.235
+FLT-App-Proxy ansible_host=192.168.231.18
+FLT-App-Samba ansible_host=192.168.50.9
+FLT-Live-Traefik-1 ansible_host=192.168.231.23
+
+[rnd-live-servers]
+flt-rnd-consul-server-live ansible_host=192.168.231.3
+flt-rnd-consul-server1-live ansible_host=192.168.231.25
+flt-rnd-consul-server2-live ansible_host=192.168.231.27
+flt-rnd-nomad-server-live ansible_host=192.168.231.10
+flt-rnd-nomad-server1-live ansible_host=192.168.231.24
+flt-rnd-nomad-server2-live ansible_host=192.168.231.26
+flt-rnd-client1-live ansible_host=192.168.231.4
+flt-rnd-client2-live ansible_host=192.168.231.5
+flt-rnd-client3-live ansible_host=192.168.231.21
+
+[rnd-uat-servers]
+flt-rnd-consul-server-uat ansible_host=192.168.231.8
+flt-rnd-nomad-server-uat ansible_host=192.168.231.9
+flt-rnd-client1-uat ansible_host=192.168.231.7
+flt-rnd-client2-uat ansible_host=192.168.231.6
+
+[rnd-dev-servers]
+flt-rnd-consul-server-dev ansible_host=192.168.231.11
+flt-rnd-nomad-server-dev ansible_host=192.168.231.12
+flt-rnd-client0-dev ansible_host=192.168.231.13
+flt-rnd-client1-dev ansible_host=192.168.231.20
+
+[IT-unit]
+Quantum-client ansible_host=192.168.50.120 
+Quantum-ODB ansible_host=192.168.50.180
+teminal19 ansible_host=192.168.50.159 
+PWFLTLT1TERMNL1 ansible_host=192.168.50.6
+Kantech ansible_host=192.168.50.154
+MagicInfo ansible_host=192.168.50.45
+FLT-qlik-prod ansible_host=192.168.50.104
+FLT-qlik-prodr1 ansible_host=192.168.50.52
+FLT-PSS ansible_host=192.168.50.158
+AirNavX-PUB ansible_host=192.168.50.201
+AirNavX-Data ansible_host=192.168.50.202
+FLT-Boeing ansible_host=192.168.50.22
+FLT-Web-DEV ansible_host=192.168.231.117
+FLT-Files ansible_host=192.168.50.100
+PWFLTLT0PSTARH1 ansible_host=192.168.50.5
+#Quantum2 ansible_host=192.168.50.121
+#Quantum2-ODB ansible_host=192.168.50.182
+
+[AMOS_WB]
+wb-amos-app-prod ansible_host=192.168.243.23
+wb-amos-db-prod  ansible_host=192.168.243.27
+wb-amos-app-uat ansible_host=192.168.244.124
+wb-amos-db-uat ansible_host=192.168.244.123
+wb-amos-app-test ansible_host=192.168.244.121 
+wb-amos-db-test ansible_host=192.168.244.122
+
+[RND-Windows]
+FLT-FLTapp 
+FLT-FLTSql
+
+[RND]
+#FLT-BI2 ansible_host=192.168.231.177
+#FLT-Flint ansible_host=192.168.231.191
+FLT-MM-BS ansible_host=192.168.50.54
+
+[linux_ext]
+FLT-GitLab-ext ansible_host=185.11.27.16 ansible_port=3500
+FLT-Prometheus-ext ansible_host=185.11.27.16 ansible_port=3501
+FLT-Nexus-ext ansible_host=185.11.27.180 ansible_port=2222
+FLT-Jenkins-ext ansible_host=185.11.27.179 ansible_port=2222
+FLT-DevOps-Proxy-ext ansible_host=185.11.27.183 ansible_port=2222
+
+[linux:children]
+prometheus
+
+[OracleDB]
+odb.flts.lan ansible_host=192.168.50.180
+#flt-odb-eamsdev.flts.lan ansible_host=192.168.50.129
+#odb-eams-uat.flts.lan ansible_host=192.168.208.10
+
+[MySQL-DB]
+flt-mysql-dev ansible_host=192.168.231.22
+flt-mysql-live ansible_host=192.168.231.28
+
+[Sensus-hosts]
+flt-sensus2-live-app ansible_host=192.168.231.31
